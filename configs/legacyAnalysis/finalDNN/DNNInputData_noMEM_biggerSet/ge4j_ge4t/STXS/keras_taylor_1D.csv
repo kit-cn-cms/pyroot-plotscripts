@@ -1,0 +1,16 @@
+variable,ttHbb_STXS_0,ttHbb_STXS_1,ttHbb_STXS_2,ttHbb_STXS_3,ttHbb_STXS_4
+Reco_tHq_h_pt,0.068,0.113,0.103,0.129,0.073
+Reco_JABDT_tHq_log_h_pt,0.062,0.058,0.046,0.034,0.023
+Reco_JABDT_tHq_log_min_hdau1_pt_hdau2_pt,0.056,0.034,0.051,0.050,0.052
+Reco_tHW_h_pt,0.037,0.100,0.080,0.109,0.063
+Reco_tHW_h_dr,0.064,0.066,0.110,0.123,0.185
+Reco_JABDT_tHW_log_h_pt,0.061,0.065,0.052,0.038,0.055
+Reco_ttH_h_dr,0.152,0.150,0.134,0.124,0.150
+Reco_ttH_h_m,0.025,0.044,0.040,0.074,0.061
+Reco_JABDT_ttH_log_h_pt,0.094,0.092,0.084,0.073,0.094
+Reco_JABDT_ttH_log_toplep_m,0.046,0.044,0.046,0.057,0.053
+Evt_Pt_TaggedJetsAverage,0.165,0.101,0.116,0.064,0.054
+Evt_Dr_TaggedJetsAverage,0.036,0.022,0.024,0.016,0.013
+Evt_M_TaggedJetsAverage,0.053,0.043,0.043,0.036,0.044
+Evt_Pt_minDrTaggedJets,0.024,0.031,0.031,0.036,0.046
+Evt_Pt_JetsAverage,0.056,0.037,0.039,0.036,0.035
