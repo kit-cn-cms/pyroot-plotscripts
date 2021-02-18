@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'finalDNN_unblinded/2018_CPscan'
+    name = 'finalDNN_unblinded/2017_CPscan_ttH'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -39,7 +39,7 @@ def main(pyrootdir, opts):
     nSigSamples   = 1
 
     # dataera
-    dataera = "2018"
+    dataera = "2017"
 
     # Name of final discriminator, should not contain underscore
     discrName = ''
@@ -50,15 +50,15 @@ def main(pyrootdir, opts):
     # define MEM discriminator variable
     memexp = "(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)"
     # configs
-    config          = "legacyAnalysis/samples_2018_CPScan"
+    config          = "legacyAnalysis/samples_2017_CPScan_ttH"
     variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/finalDNN/finalDNN_optimized_classifier_CPScan_newModel"
-    syst_cfg        = "legacyAnalysis/systs_2018"
+    plot_cfg        = "legacyAnalysis/finalDNN/finalDNN_optimized_classifier_CPScan_newModel_ttH"
+    syst_cfg        = "legacyAnalysis/systs_2017_ttH"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
     sfCorrection = {}
-    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2018_deepJet_combined.root"
+    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2017_deepJet_combined.root"
     # variables for the correction
     sfCorrection["corrections"] = {}
     sfCorrection["corrections"]["HT_vs_NJet"] = ["Evt_HT_jets", "N_Jets"]
@@ -72,12 +72,12 @@ def main(pyrootdir, opts):
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_new_plotscript_2018.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_new_plotscript_2017.csv"
 
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        False,
+        "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
@@ -105,8 +105,8 @@ def main(pyrootdir, opts):
         "skipMergeSysts":       opts.skipMergeSysts,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = ""#pyrootdir+"/configs/legacyAnalysis/treeJson_2018.json"
-    # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2018/",True]] 
+    plotJson = ""#pyrootdir+"/configs/legacyAnalysis/treeJson_2017.json"
+    # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
                   "checkpointFiles":  pyrootdir+"/configs/legacyAnalysis/finalDNN/DNNInputData/"}
@@ -205,9 +205,9 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts_nom(20000)
+        pP.setMaxEvts_nom(100000)
         # pP.setMaxEvts_nom(200000)
-        pP.setMaxEvts_systs(200000)
+        pP.setMaxEvts_systs(500000)
         # pP.request_runtime = 60*60*5
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
@@ -282,7 +282,7 @@ def main(pyrootdir, opts):
                 # pseudo data without ttbb 5FS
                 # pP.addData( samples = configData.samples[:-1], 
                 #             discrName = discrName)
-                pP.addData( samples = configData.samples[:-nSigSamples], 
+                pP.addData( samples = configData.samples, 
                             discrName = discrName)
                 #pP.addData(samples = configData.samples)
             else:

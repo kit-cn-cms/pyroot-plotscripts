@@ -12,59 +12,26 @@ import generate_phasespace_corrections
 
 # samples
 # input path 
-path  = "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2016/"
+path  = "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2017/"
 
-ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
-             path+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
-             path+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'
-
-path_ttbb = path+"/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"+';'+ \
-            path+"/TTbb_4f_TTTo2l2nu_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"+';'+ \
-            path+"/TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
-
-path_ttbbSL = path+"/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
-path_ttbbDL = path+"/TTbb_4f_TTTo2l2nu_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
-
-VJetsPathS = path+'/DYJets*madgraph*/*nominal*.root'+';'+ \
-             path+'/WJets*madgraph*/*nominal*.root'
-
-ttVPathS = path+'/TTW*/*nominal*.root'+';'+ \
-           path+'/TTZToLLNuNu*/*nominal*.root'+';'+ \
-           path+'/TTZToQQ*/*nominal*.root'
-
-ttWPath = path+'/TTW*/*nominal*.root'
-ttZPathS = path+'/TTZ*/*nominal*.root'
-
-dibosonPathS = path+'/WW_*/*nominal*.root'+';'+ \
-               path+'/WZ_*/*nominal*.root'+';'+ \
-               path+'/ZZ_*/*nominal*.root'
-
-stpath = path+'/ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/*nominal*.root'+';'+ \
-         path+'/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
-         path+'/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
-         path+'/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
-         path+'/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'
-stpath = path+"/ST*/*nominal*.root"
-
-#STH
+#TH
 THWpath = path+'/THW_*ctcvcp*/*nominal*.root'
 THQpath = path+'/THQ_*ctcvcp*/*nominal*.root'
 
-ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
-	      path+'/ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'
 
-ttZpath =  path+'/TTZToQQ*/*nominal*.root'+';'+ \
-           path+'/TTZToLLNuNu_M-10*/*nominal*.root'+';'
+ttHpath = path+'/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8*/*nominal*.root'+';'+ \
+	      path+'/ttHToNonbb_M125*/*nominal*.root'
 
 friendTrees = {
-    "MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH/2016/",
-    "cpWeights":    "/nfs/dust/cms/group/ttx-kit/friendTrees_tHWeights/2016/",
+    "MEMDB":        "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH/2017/",
     }
+
 # SELECTIONS
 
 # need to veto muon events in electron dataset to avoid double counting and vice versa
-sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1 && Triggered_HLT_Ele27_WPTight_Gsf_vX)"
-sel_singlemu="((N_LooseElectrons==0 && N_TightMuons==1) && (Triggered_HLT_IsoMu24_vX || Triggered_HLT_IsoTkMu24_vX))"
+#sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1)"# && (Triggered_HLT_Ele32_WPTight_Gsf_2017SeedsX==1 && Triggered_HLT_Ele32_WPTight_Gsf_L1DoubleEG_vX==1))"
+sel_singleel="((N_LooseMuons==0 && N_TightElectrons==1) && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX || ( Triggered_HLT_Ele32_WPTight_Gsf_L1DoubleEG_vX && Triggered_HLT_Ele32_WPTight_Gsf_2017SeedsX )))"
+sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && (Triggered_HLT_IsoMu27_vX))"
 # jet tag base selection
 sel_jettag = "(N_Jets>=4 && N_BTagsM>=3)"
 
@@ -102,8 +69,8 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
 
 # pile up weights
-pileupWeightUp   = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Up*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
-pileupWeightDown = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Down*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
+pileupWeightUp   = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Up*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL"
+pileupWeightDown = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Down*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL"
 
 # lepton scale factors
 electronSFs = "((N_TightElectrons==1)&&(Electron_IdentificationSF[0]>0.)&&(Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0]"
@@ -158,18 +125,14 @@ weightReplacements = {
 weightReplacements.update(generate_phasespace_corrections.main())
 
 # Lumi weight
-lumi = '35.9'
+lumi = '41.5'
 
-#tHq_XS_scale = "*(0.7927/0.07425)"
-#tHW_XS_scale = "*(0.1472/0.01517)"
-
-# DANGERZONE: derived in 2018
-# ttbb_4FS_scale = "*(1.2143)"
+# DANGERZONE: derived in January 2020
 ttbb_4FS_scale = "*(1.0)"
 ttbb_5FS_scale = "*(1.0)"
 
-tH_SM_rwgt = "*(Weight_rwgt_12/Weight_GEN_nom)"
-tH_5_rwgt = "*(Weight_rwgt_5/Weight_GEN_nom)"
+#tHq_XS_scale = "*(0.7927/0.07425)"
+#tHW_XS_scale = "*(0.1472/0.01517)"
 
 # nominal weight
 nominalweight="NomWeight:=("+defaultWeight+"*"+"("+electronSFs+"+"+muonSFs+")"+"*"+"("+electronTrigger+"+"+muonTrigger+")"+")*(DoWeights==1)+(DoWeights==0)*1.0"
@@ -181,60 +144,42 @@ sampleDict=plotClasses.SampleDictionary()
 sampleDict.doPrintout()
 doReadTrees=True
 
+
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots=[
-    plotClasses.Sample('SingleMu',ROOT.kBlack,
-            path+'/SingleMuon*/*nominal*.root',
-            sel_singlemu+sel_MET,
-            'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
+#     plotClasses.Sample('SingleMu',ROOT.kBlack,
+#             path+'/SingleMuon*/*nominal*.root',
+#             sel_singlemu+sel_MET,
+#             'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
 
-    plotClasses.Sample('SingleEl',ROOT.kBlack,
-            path+'/SingleElectron*/*nominal*.root',
-            sel_singleel+sel_MET,
-            'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
+#     plotClasses.Sample('SingleEl',ROOT.kBlack,
+#             path+'/SingleElectron*/*nominal*.root',
+#             sel_singleel+sel_MET,
+#             'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
 ]
+h_decays= {
+    "hbb": hbbSel,
+    "hcc": hccSel,
+    "htt": httSel,
+    "hgg": hggSel,
+    "hgluglu": hglugluSel,
+    "hww": hwwSel,
+    "hzz": hzzSel,
+    "hzg": hzgSel
+}
 
 
-samples = [
-    plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
-            path+'/ttH_4f_ctcvcp_TuneCP5_13TeV_madgraph_pythia8/*nominal*.root',
-            lumi+sel_MET+hbbSel,
-            'ttH_hbb',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
-    plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
-            path+'/ttH_4f_ctcvcp_TuneCP5_13TeV_madgraph_pythia8/*nominal*.root',
-            lumi+sel_MET+nonhbbSel,
-            'ttH_hnonbb',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+samples = []
 
-            
-    plotClasses.Sample('tHW(bb) (SM)',ROOT.kBlue+3,
-            THWpath,
-            lumi+sel_MET+hbbSel,
-            'tHW_hbb',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
 
-    plotClasses.Sample('tHW(nonbb) (SM)',ROOT.kBlue+3,
-            THWpath,
-            lumi+sel_MET+nonhbbSel,
-            'tHW_hnonbb',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
-
-    plotClasses.Sample('tHq(bb) (SM)',ROOT.kBlue+6,
-            THQpath,
-            lumi+sel_MET+hbbSel,
-            'tHq_hbb',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
-
-    plotClasses.Sample('tHq(nonbb) (SM)',ROOT.kBlue+6,
-            THQpath,
-            lumi+sel_MET+nonhbbSel,
-            'tHq_hnonbb',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
-
+for dec in h_decays:
+    samples += [
+    plotClasses.Sample('t#bar{t}+H ('+dec+')',ROOT.kBlue+1,
+            path+'/TTH_4f_ctcvcp_TuneCP5_13TeV_madgraph_pythia8/*nominal*.root',
+            lumi+sel_MET+h_decays[dec],
+            'ttH_'+dec,
+            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),     
     ]
-
-
 
 processes = []
 for sample in samples:
@@ -244,22 +189,7 @@ datacard_processes  = [p for p in processes if not p == "ttbb_5FS"]
 
 
 plottingsamples = [
-    plotClasses.Sample("t#bar{t}+V", ROOT.kCyan, "", "",
-        "ttV", addsamples = ["ttbarZ","ttbarW"],
-        samDict = sampleDict, readTrees = doReadTrees),
-
-    plotClasses.Sample("V+jets", 18, "", "",
-        "vjets", addsamples = ["wjets", "zjets"],
-        samDict = sampleDict, readTrees = doReadTrees),
-
-    plotClasses.Sample("t#bar{t}+H", ROOT.kBlue+1, "", "",
-        "ttH", addsamples = ["ttH_hbb", "ttH_hcc", "ttH_htt", "ttH_hgg", "ttH_hgluglu", "ttH_hww", "ttH_hzz", "ttH_hzg"],
-        samDict = sampleDict, readTrees = doReadTrees),
-#    plotClasses.Sample("misc.", 18, "", "",
-#        "misc", addsamples ["ttbarZ", "ttbarW", "wjets", "zjets", "diboson"],
-#        samDict = sampleDict, readTrees = doReadTrees)
      ]
 
 # sort subset of processes in plots. descending order
-sortedProcesses = ["ttlf", "ttcc", "ttbb", "ttbb_5FS", "ttbb_4FS"]
-
+sortedProcesses = []

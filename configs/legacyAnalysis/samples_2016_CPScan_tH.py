@@ -168,9 +168,6 @@ lumi = '35.9'
 ttbb_4FS_scale = "*(1.0)"
 ttbb_5FS_scale = "*(1.0)"
 
-tH_SM_rwgt = "*(Weight_rwgt_12/Weight_GEN_nom)"
-tH_5_rwgt = "*(Weight_rwgt_5/Weight_GEN_nom)"
-
 # nominal weight
 nominalweight="NomWeight:=("+defaultWeight+"*"+"("+electronSFs+"+"+muonSFs+")"+"*"+"("+electronTrigger+"+"+muonTrigger+")"+")*(DoWeights==1)+(DoWeights==0)*1.0"
 
@@ -183,57 +180,37 @@ doReadTrees=True
 
 # data samples (name, color, path to files, selection, nickname_without_special_characters,optional: number of events for cross check)
 samplesDataControlPlots=[
-    plotClasses.Sample('SingleMu',ROOT.kBlack,
-            path+'/SingleMuon*/*nominal*.root',
-            sel_singlemu+sel_MET,
-            'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
-
-    plotClasses.Sample('SingleEl',ROOT.kBlack,
-            path+'/SingleElectron*/*nominal*.root',
-            sel_singleel+sel_MET,
-            'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
 ]
 
+h_decays= {
+    "hbb": hbbSel,
+    "hcc": hccSel,
+    "htt": httSel,
+    "hgg": hggSel,
+    "hgluglu": hglugluSel,
+    "hww": hwwSel,
+    "hzz": hzzSel,
+    "hzg": hzgSel
+}
 
-samples = [
-    plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
-            path+'/ttH_4f_ctcvcp_TuneCP5_13TeV_madgraph_pythia8/*nominal*.root',
-            lumi+sel_MET+hbbSel,
-            'ttH_hbb',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
-    plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
-            path+'/ttH_4f_ctcvcp_TuneCP5_13TeV_madgraph_pythia8/*nominal*.root',
-            lumi+sel_MET+nonhbbSel,
-            'ttH_hnonbb',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
-            
-    plotClasses.Sample('tHW(bb) (SM)',ROOT.kBlue+3,
+samples = []
+
+
+for dec in h_decays:
+    samples += [
+    plotClasses.Sample('tHW ('+dec+')',ROOT.kBlue+3,
             THWpath,
-            lumi+sel_MET+hbbSel,
-            'tHW_hbb',
+            lumi+sel_MET+h_decays[dec],
+            'tHW_'+dec,
             samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
 
-    plotClasses.Sample('tHW(nonbb) (SM)',ROOT.kBlue+3,
-            THWpath,
-            lumi+sel_MET+nonhbbSel,
-            'tHW_hnonbb',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
-
-    plotClasses.Sample('tHq(bb) (SM)',ROOT.kBlue+6,
+    plotClasses.Sample('tHq ('+dec+')',ROOT.kBlue+3,
             THQpath,
-            lumi+sel_MET+hbbSel,
-            'tHq_hbb',
+            lumi+sel_MET+h_decays[dec],
+            'tHq_'+dec,
             samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
-
-    plotClasses.Sample('tHq(nonbb) (SM)',ROOT.kBlue+6,
-            THQpath,
-            lumi+sel_MET+nonhbbSel,
-            'tHq_hnonbb',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
-
     ]
-
 
 
 processes = []
@@ -244,22 +221,8 @@ datacard_processes  = [p for p in processes if not p == "ttbb_5FS"]
 
 
 plottingsamples = [
-    plotClasses.Sample("t#bar{t}+V", ROOT.kCyan, "", "",
-        "ttV", addsamples = ["ttbarZ","ttbarW"],
-        samDict = sampleDict, readTrees = doReadTrees),
-
-    plotClasses.Sample("V+jets", 18, "", "",
-        "vjets", addsamples = ["wjets", "zjets"],
-        samDict = sampleDict, readTrees = doReadTrees),
-
-    plotClasses.Sample("t#bar{t}+H", ROOT.kBlue+1, "", "",
-        "ttH", addsamples = ["ttH_hbb", "ttH_hcc", "ttH_htt", "ttH_hgg", "ttH_hgluglu", "ttH_hww", "ttH_hzz", "ttH_hzg"],
-        samDict = sampleDict, readTrees = doReadTrees),
-#    plotClasses.Sample("misc.", 18, "", "",
-#        "misc", addsamples ["ttbarZ", "ttbarW", "wjets", "zjets", "diboson"],
-#        samDict = sampleDict, readTrees = doReadTrees)
      ]
 
 # sort subset of processes in plots. descending order
-sortedProcesses = ["ttlf", "ttcc", "ttbb", "ttbb_5FS", "ttbb_4FS"]
+sortedProcesses = []
 
