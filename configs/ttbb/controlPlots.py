@@ -137,12 +137,12 @@ def plots_controlregion(cat,selection,label):
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Pt_4","5th highest jet p_{T} [GeV]",30,30.,150.),"Jet_Pt[4]",selection,label),
         plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Pt_5","6th highest jet p_{T} [GeV]",35,30.,100.),"Jet_Pt[5]",selection,label),
 
-        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_0","#eta of first jet",24,-2.4,2.4),"Jet_Eta[0]",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_1","#eta of second jet",24,-2.4,2.4),"Jet_Eta[1]",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_2","#eta of third jet",24,-2.4,2.4),"Jet_Eta[2]",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_3","#eta of fourth jet",24,-2.4,2.4),"Jet_Eta[3]",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_4","#eta of fifth jet",24,-2.4,2.4),"Jet_Eta[4]",selection,label),
-        plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_5","#eta of sixth jet",24,-2.4,2.4),"Jet_Eta[5]",selection,label),
+        #plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_0","#eta of first jet",24,-2.4,2.4),"Jet_Eta[0]",selection,label),
+        #plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_1","#eta of second jet",24,-2.4,2.4),"Jet_Eta[1]",selection,label),
+        #plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_2","#eta of third jet",24,-2.4,2.4),"Jet_Eta[2]",selection,label),
+        #plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_3","#eta of fourth jet",24,-2.4,2.4),"Jet_Eta[3]",selection,label),
+        #plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_4","#eta of fifth jet",24,-2.4,2.4),"Jet_Eta[4]",selection,label),
+        #plotClasses.Plot(ROOT.TH1D(cat+"_Jet_Eta_5","#eta of sixth jet",24,-2.4,2.4),"Jet_Eta[5]",selection,label),
         ]
     return plots
 

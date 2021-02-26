@@ -3,7 +3,7 @@ import os
 import nafSubmit
 from glob import glob
 
-fastLane = False
+fastLane = True
 thisdir = os.path.dirname(os.path.realpath((__file__)))
 standAloneDir = os.path.join(thisdir, "..", "..", "standaloneTools")
 if not standAloneDir in sys.path:

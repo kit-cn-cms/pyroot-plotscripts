@@ -34,7 +34,7 @@ path_ttbb_old = path+"/TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8
                 path+"/TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
 
 # separate ttjets samples
-path_ttjets = "/nfs/dust/cms/group/ttx-kit/ntuples_ttbb/2018_noTag/"
+path_ttjets = "/nfs/dust/cms/group/ttx-kit/ntuples_ttbb/2018_incl/"
 
 path_ttbar = path_ttjets+'/incl_TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
              path_ttjets+'/incl_TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'+";"+ \
@@ -74,7 +74,7 @@ ttZpath =  path+'/TTZToQQ*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu_M-10*/*nominal*.root'+';'
 
 friendTrees = {
-    "genInfo": "/nfs/dust/cms/group/ttx-kit/ntuples_ttbb/friendTrees/addbb/2018_noTag/"
+    "genInfo": "/nfs/dust/cms/group/ttx-kit/ntuples_ttbb/friendTrees/addbb/2018_incl/"
     }
 
 # SELECTIONS
@@ -206,14 +206,14 @@ def setup_signal_samples():
     samples = [
          plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kGreen+2,
                  path_ttbb,
-                 lumi+'*(GenEvt_I_TTPlusBB==3)*'+genSel+ttbb_4FS_scale+sel_MET,
+                 lumi+'*'+genSel+ttbb_4FS_scale+sel_MET,
                  'ttbb',
                  samDict=sampleDict, readTrees=doReadTrees,
                  plot = True, typ = "signal"),
 
          plotClasses.Sample('t#bar{t}+b#bar{b} (5FS)',ROOT.kAzure,
                  path_ttbar,
-                 lumi+'*(GenEvt_I_TTPlusBB==3)*'+genSel+ttbb_4FS_scale+sel_MET,
+                 lumi+'*'+genSel+ttbb_4FS_scale+sel_MET,
                  'ttbb_5FS',
                  samDict=sampleDict, readTrees=doReadTrees,
                  plot = True, typ = "signal"),
@@ -224,17 +224,17 @@ def setup_signal_samples():
                  'bkg_ttbb',
                  samDict=sampleDict, readTrees=doReadTrees),
 
-         plotClasses.Sample('t#bar{t}+2b',ROOT.kOrange,
+         plotClasses.Sample('t#bar{t}+bj',ROOT.kOrange+1,
                  path_ttbb_old,
-                 lumi+'*(GenEvt_I_TTPlusBB==2)'+ttbb_4FS_scale+sel_MET,
-                 'tt2b',
+                 lumi+'*(GenEvt_I_TTPlusBB<=2)*(('+genSel+")==0)"+ttbb_4FS_scale+sel_MET,
+                 'ttbj',
                  samDict=sampleDict, readTrees=doReadTrees),
 
-         plotClasses.Sample('t#bar{t}+b',ROOT.kOrange+1,
-                 path_ttbb_old,
-                 lumi+'*(GenEvt_I_TTPlusBB==1)'+ttbb_4FS_scale+sel_MET,
-                 'ttb',
-                 samDict=sampleDict, readTrees=doReadTrees),
+         #plotClasses.Sample('t#bar{t}+b',ROOT.kOrange+1,
+         #        path_ttbb_old,
+         #        lumi+'*(GenEvt_I_TTPlusBB==1)'+ttbb_4FS_scale+sel_MET,
+         #        'ttb',
+         #        samDict=sampleDict, readTrees=doReadTrees),
         ]
 
     extendSystematics = {}
@@ -335,9 +335,9 @@ def get_pseudo_data_samples():
 
 def get_plottingsamples():
     plottingsamples = [
-        plotClasses.Sample("t#bar{t}+bj", ROOT.kOrange+1, "", "",
-            "ttbj", addsamples = ["tt2b", "ttb"],
-            samDict = sampleDict, readTrees = doReadTrees),
+        #plotClasses.Sample("t#bar{t}+bj", ROOT.kOrange+1, "", "",
+        #    "ttbj", addsamples = ["tt2b", "ttb"],
+        #    samDict = sampleDict, readTrees = doReadTrees),
 
         #plotClasses.Sample("t#bar{t}+B", ROOT.kOrange, "", "",
         #    "ttB", addsamples = ["ttbb", "tt2b", "ttb"],

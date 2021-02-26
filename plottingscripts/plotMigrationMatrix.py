@@ -40,7 +40,7 @@ def printLumiLabel(pad, lumi):
 
 
 
-matrixName = "ttbb__migrationMatrix_dRbb"
+matrixName = "ttbb__migrationMatrix_"+sys.argv[2]
 m = f.Get(matrixName)
 print(m)
 m.GetXaxis().SetTitle("reco. level #DeltaR(bb)")

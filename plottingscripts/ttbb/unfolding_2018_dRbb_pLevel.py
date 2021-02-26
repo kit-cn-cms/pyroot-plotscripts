@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'ttbbUnfolding/2018_dRbb_dpg'
+    name = 'ttbbUnfolding_pLevel/2018_dRbb_dpg'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -56,7 +56,7 @@ def main(pyrootdir, opts):
     syst_cfg        = "ttbb/systs_ttbb"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
-    unfold_cfg      = "ttbb/unfold_dRbb"
+    unfold_cfg      = "ttbb/unfold_dRbb_pLevel"
 
     sfCorrection = {}
     sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2018_deepJet_combined.root"
@@ -207,7 +207,7 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         # pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts_nom(200000)
+        pP.setMaxEvts_nom(150000)
         # pP.setMaxEvts_nom(200000)
         pP.setMaxEvts_systs(1000000)
         # pP.request_runtime = 60*60*5
