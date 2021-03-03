@@ -206,10 +206,9 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts_nom(50000)
+        pP.setMaxEvts_nom(100000)
         # pP.setMaxEvts_nom(200000)
-        pP.setMaxEvts_systs(200000)
-        # pP.request_runtime = 60*60*5
+        pP.setMaxEvts_systs(300000)        # pP.request_runtime = 60*60*5
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
         pP.setSFCorrection(sfCorrection)

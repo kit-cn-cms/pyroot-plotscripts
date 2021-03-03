@@ -84,7 +84,7 @@ def main(pyrootdir, opts):
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        True,
-        "makeInputDatacards":   False, # create datacards also for all defined plots
+        "makeInputDatacards":   True, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
