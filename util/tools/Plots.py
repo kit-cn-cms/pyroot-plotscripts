@@ -779,11 +779,11 @@ class DrawHistograms:
 
         line.SetTitle("")
 
-        line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.4)
+        line.GetXaxis().SetLabelSize(line.GetXaxis().GetLabelSize()*2.6)
         line.GetYaxis().SetLabelSize(line.GetYaxis().GetLabelSize()*2.2)
         line.GetXaxis().SetTitle(canvaslabel)
 
-        line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3)
+        line.GetXaxis().SetTitleSize(line.GetXaxis().GetTitleSize()*3.2)
         line.GetYaxis().SetTitleSize(line.GetYaxis().GetTitleSize()*2.5)
 
         line.GetYaxis().SetTitleOffset(0.5)

@@ -1,0 +1,177 @@
+
+import sys
+import os
+filedir = os.path.dirname(os.path.realpath(__file__))
+pyrootdir = os.path.dirname(filedir)
+basedir = os.path.dirname(pyrootdir)
+sys.path.append(pyrootdir)
+sys.path.append(basedir)
+
+import util.tools.plotClasses as plotClasses
+import util.variableHistoInterface as vhi
+import ROOT
+from array import array
+from copy import deepcopy
+
+
+memexp = ""
+
+    
+def plots_ge6j_ge3t(data = None):
+    label = "\geq 6 jets, \geq 3 b-tags"
+    interfaces = []
+    selection = "(N_Jets>=6&&N_BTagsM>=3)&&(1.)"
+
+    plots = [
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_jet1_btagValue","btag value of first Z b-jet",30,0.0,1.0),"dnnZ_ft_RecoX_jet1_btagValue",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_jet1_E","energy of first Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_jet1_E",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_jet1_Eta","#eta of first Z b-jet",30,-2.4,2.4),"dnnZ_ft_RecoX_jet1_Eta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_jet1_Pt","p_{T} of first Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_jet1_Pt",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_jet2_btagValue","btag value of second Z b-jet",30,0.0,1.0),"dnnZ_ft_RecoX_jet2_btagValue",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_jet2_E","energy of second Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_jet2_E",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_jet2_Eta","#eta of second Z b-jet",30,-2.4,2.4),"dnnZ_ft_RecoX_jet2_Eta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_jet2_Pt","p_{T} of second Z b-jet",30,0.,500.),"dnnZ_ft_RecoX_jet2_Pt",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_X_E","reconstructed Z boson energy",30,0.,1000.),"dnnZ_ft_RecoX_X_E",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_X_Eta","reconstructed Z boson #eta",30,-2.4,2.4),"dnnZ_ft_RecoX_X_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_X_M","reconstructed Z boson mass [GeV]",50,40.,170.),"dnnZ_ft_RecoX_X_M",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_X_Pt","reconstructed Z boson p_{T}",30,0.,500.),"dnnZ_ft_RecoX_X_Pt",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_dEta","#Delta #eta of Z b-jets",30,0.0,4.0),"dnnZ_ft_RecoX_X_dEta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_dPhi","#Delta #phi of Z b-jets",30,0.0,3.141),"dnnZ_ft_RecoX_X_dPhi",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_dR","#DeltaR of Z b-jets",30,0.0,4.0),"dnnZ_ft_RecoX_X_dR",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_DNNOutput","Z boson reconstruction DNN output",50,0.,1.0),"dnnZ_ft_RecoX_DNNOutput",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnZ_ft_RecoX_transformedDNNOutput","transformed Z boson reconstruction DNN output",50,-6.,6.0),"dnnZ_ft_RecoX_transformedDNNOutput",selection,label),
+       
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_jet1_btagValue","btag value of first H b-jet",30,0.0,1.0),"dnnH_ft_RecoX_jet1_btagValue",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_jet1_E","energy of first H b-jet",30,0.,500.),"dnnH_ft_RecoX_jet1_E",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_jet1_Eta","#eta of first H b-jet",30,-2.4,2.4),"dnnH_ft_RecoX_jet1_Eta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_jet1_Pt","p_{T} of first H b-jet",30,0.,500.),"dnnH_ft_RecoX_jet1_Pt",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_jet2_btagValue","btag value of second H b-jet",30,0.0,1.0),"dnnH_ft_RecoX_jet2_btagValue",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_jet2_E","energy of second H b-jet",30,0.,500.),"dnnH_ft_RecoX_jet2_E",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_jet2_Eta","#eta of second H b-jet",30,-2.4,2.4),"dnnH_ft_RecoX_jet2_Eta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_jet2_Pt","p_{T} of second H b-jet",30,0.,500.),"dnnH_ft_RecoX_jet2_Pt",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_X_E","reconstructed H boson energy",30,0.,1000.),"dnnH_ft_RecoX_X_E",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_X_Eta","reconstructed H boson #eta",30,-2.4,2.4),"dnnH_ft_RecoX_X_Eta",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_X_M","reconstructed H boson mass [GeV]",50,70.,200.),"dnnH_ft_RecoX_X_M",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_X_Pt","reconstructed H boson p_{T}",30,0.,500.),"dnnH_ft_RecoX_X_Pt",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_dEta","#Delta #eta of H b-jets",30,0.0,4.0),"dnnH_ft_RecoX_X_dEta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_dPhi","#Delta #phi of H b-jets",30,0.0,3.141),"dnnH_ft_RecoX_X_dPhi",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_dR","#DeltaR of H b-jets",30,0.0,4.0),"dnnH_ft_RecoX_X_dR",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_DNNOutput","H boson reconstruction DNN output",50,0.,1.0),"dnnH_ft_RecoX_DNNOutput",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnH_ft_RecoX_transformedDNNOutput","transformed H boson reconstruction DNN output",50,-6.,6.0),"dnnH_ft_RecoX_transformedDNNOutput",selection,label),
+
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnbb_ft_RecoX_jet1_btagValue","btag value of first b-jet",30,0.0,1.0),"dnnbb_ft_RecoX_jet1_btagValue",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnbb_ft_RecoX_jet1_E","energy of first b-jet",30,0.,500.),"dnnbb_ft_RecoX_jet1_E",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnbb_ft_RecoX_jet1_Eta","#eta of first b-jet",30,-2.4,2.4),"dnnbb_ft_RecoX_jet1_Eta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnbb_ft_RecoX_jet1_Pt","p_{T} of first b-jet",30,0.,500.),"dnnbb_ft_RecoX_jet1_Pt",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnbb_ft_RecoX_jet2_btagValue","btag value of second b-jet",30,0.0,1.0),"dnnbb_ft_RecoX_jet2_btagValue",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnbb_ft_RecoX_jet2_E","energy of second b-jet",30,0.,500.),"dnnbb_ft_RecoX_jet2_E",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnbb_ft_RecoX_jet2_Eta","#eta of second b-jet",30,-2.4,2.4),"dnnbb_ft_RecoX_jet2_Eta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnbb_ft_RecoX_jet2_Pt","p_{T} of second b-jet",30,0.,500.),"dnnbb_ft_RecoX_jet2_Pt",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnbb_ft_RecoX_X_E","reconstructed energy",30,0.,1000.),"dnnbb_ft_RecoX_X_E",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnbb_ft_RecoX_X_Eta","reconstructed #eta",30,-2.4,2.4),"dnnbb_ft_RecoX_X_Eta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnbb_ft_RecoX_X_M","reconstructed mass [GeV]",50,0.,250.),"dnnbb_ft_RecoX_X_M",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnbb_ft_RecoX_X_Pt","reconstructed p_{T}",30,0.,500.),"dnnbb_ft_RecoX_X_Pt",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnbb_ft_RecoX_dEta","#Delta #eta of b-jets",30,0.0,4.0),"dnnbb_ft_RecoX_X_dEta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnbb_ft_RecoX_dPhi","#Delta #phi of b-jets",30,0.0,3.141),"dnnbb_ft_RecoX_X_dPhi",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnbb_ft_RecoX_dR","#DeltaR of b-jets",30,0.0,4.0),"dnnbb_ft_RecoX_X_dR",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnbb_ft_RecoX_DNNOutput","reconstruction DNN output",50,0.,1.0),"dnnbb_ft_RecoX_DNNOutput",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnbb_ft_RecoX_transformedDNNOutput","transformed reconstruction DNN output",50,-6.,6.0),"dnnbb_ft_RecoX_transformedDNNOutput",selection,label),
+        
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnncc_ft_RecoX_jet1_btagValue","btag value of first c-jet",30,0.0,1.0),"dnncc_ft_RecoX_jet1_btagValue",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnncc_ft_RecoX_jet1_E","energy of first c-jet",30,0.,500.),"dnncc_ft_RecoX_jet1_E",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnncc_ft_RecoX_jet1_Eta","#eta of first c-jet",30,-2.4,2.4),"dnncc_ft_RecoX_jet1_Eta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnncc_ft_RecoX_jet1_Pt","p_{T} of first c-jet",30,0.,500.),"dnncc_ft_RecoX_jet1_Pt",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnncc_ft_RecoX_jet2_btagValue","btag value of second c-jet",30,0.0,1.0),"dnncc_ft_RecoX_jet2_btagValue",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnncc_ft_RecoX_jet2_E","energy of second c-jet",30,0.,500.),"dnncc_ft_RecoX_jet2_E",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnncc_ft_RecoX_jet2_Eta","#eta of second c-jet",30,-2.4,2.4),"dnncc_ft_RecoX_jet2_Eta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnncc_ft_RecoX_jet2_Pt","p_{T} of second c-jet",30,0.,500.),"dnncc_ft_RecoX_jet2_Pt",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnncc_ft_RecoX_X_E","reconstructed energy",30,0.,1000.),"dnncc_ft_RecoX_X_E",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnncc_ft_RecoX_X_Eta","reconstructed #eta",30,-2.4,2.4),"dnncc_ft_RecoX_X_Eta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnncc_ft_RecoX_X_M","reconstructed mass [GeV]",50,0.,250.),"dnncc_ft_RecoX_X_M",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnncc_ft_RecoX_X_Pt","Reconstructed p_{T}",30,0.,500.),"dnncc_ft_RecoX_X_Pt",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnncc_ft_RecoX_dEta","#Delta #eta of c-jets",30,0.0,4.0),"dnncc_ft_RecoX_X_dEta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnncc_ft_RecoX_dPhi","#Delta #phi of c-jets",30,0.0,3.141),"dnncc_ft_RecoX_X_dPhi",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnncc_ft_RecoX_dR","#DeltaR of c-jets",30,0.0,4.0),"dnncc_ft_RecoX_X_dR",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnncc_ft_RecoX_DNNOutput","reconstruction DNN output",50,0.,1.0),"dnncc_ft_RecoX_DNNOutput",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnncc_ft_RecoX_transformedDNNOutput","transformed reconstruction DNN output",50,-6.,6.0),"dnncc_ft_RecoX_transformedDNNOutput",selection,label),
+
+
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnttTobb_ft_RecoX_jet1_btagValue","btag value of first b-jet",30,0.0,1.0),"dnnttTobb_ft_RecoX_jet1_btagValue",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnttTobb_ft_RecoX_jet1_E","energy of first b-jet",30,0.,500.),"dnnttTobb_ft_RecoX_jet1_E",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnttTobb_ft_RecoX_jet1_Eta","#eta of first b-jet",30,-2.4,2.4),"dnnttTobb_ft_RecoX_jet1_Eta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnttTobb_ft_RecoX_jet1_Pt","p_{T} of first b-jet",30,0.,500.),"dnnttTobb_ft_RecoX_jet1_Pt",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnttTobb_ft_RecoX_jet2_btagValue","btag value of second b-jet",30,0.0,1.0),"dnnttTobb_ft_RecoX_jet2_btagValue",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnttTobb_ft_RecoX_jet2_E","energy of second b-jet",30,0.,500.),"dnnttTobb_ft_RecoX_jet2_E",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnttTobb_ft_RecoX_jet2_Eta","#eta of second b-jet",30,-2.4,2.4),"dnnttTobb_ft_RecoX_jet2_Eta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnttTobb_ft_RecoX_jet2_Pt","p_{T} of second b-jet",30,0.,500.),"dnnttTobb_ft_RecoX_jet2_Pt",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnttTobb_ft_RecoX_X_E","reconstructed energy",30,0.,1000.),"dnnttTobb_ft_RecoX_X_E",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnttTobb_ft_RecoX_X_Eta","reconstructed #eta",30,-2.4,2.4),"dnnttTobb_ft_RecoX_X_Eta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnttTobb_ft_RecoX_X_M","reconstructed mass [GeV]",50,0.,250.),"dnnttTobb_ft_RecoX_X_M",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnttTobb_ft_RecoX_X_Pt","reconstructed p_{T}",30,0.,500.),"dnnttTobb_ft_RecoX_X_Pt",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnttTobb_ft_RecoX_dEta","#Delta #eta of b-jets",30,0.0,4.0),"dnnttTobb_ft_RecoX_X_dEta",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnttTobb_ft_RecoX_dPhi","#Delta #phi of b-jets",30,0.0,3.141),"dnnttTobb_ft_RecoX_X_dPhi",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnttTobb_ft_RecoX_dR","#DeltaR of b-jets",30,0.0,4.0),"dnnttTobb_ft_RecoX_X_dR",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnttTobb_ft_RecoX_DNNOutput","reconstruction DNN output",50,0.,1.0),"dnnttTobb_ft_RecoX_DNNOutput",selection,label),
+        #plotClasses.Plot(ROOT.TH1D("ljets_ge6j_ge3t_dnnttTobb_ft_RecoX_transformedDNNOutput","transformed reconstruction DNN output",50,-6.,6.0),"dnnttTobb_ft_RecoX_transformedDNNOutput",selection,label),
+
+        ]
+
+    if data:
+        add_data_plots(plots=plots,data=data)
+    return plots
+    
+
+    
+
+def getDiscriminatorPlots(data = None, discrname = ''):
+    discriminatorPlots = []
+    #discriminatorPlots += plots_ge4j_ge3t(data)
+    discriminatorPlots += plots_ge6j_ge3t(data)
+    #discriminatorPlots += plots_ge4j_ge4t(data)
+
+    return discriminatorPlots
+
+
+def init_plots(interfaces, data = None):
+    plots = [] #init list of plotClasses objects to return
+    dictionary = {}
+    for interf in interfaces:
+
+        # check if initialization uses bin edges or min/max vals
+        # if 'subdict' contains the keyword 'bin_edges', an array
+        # of type float is created from the corresponding python list.
+        # Else, the min/maxvals are used 
+        if not interf.bin_edges is None:
+            bins  = array("f", interf.bin_edges)
+            nbins = len(bins)-1 # last bin edge in array is overflow bin => subtract for nbins
+            interf.nhistobins = nbins # update number of bins
+            plots.append(
+                plotClasses.Plot(
+                    ROOT.TH1F(interf.histoname,interf.histotitle,nbins,bins),
+                    interf.varname,interf.selection,interf.category_label))
+
+        elif not (interf.minxval is None or interf.maxxval is None):
+            nbins = interf.nhistobins
+            xmax  = interf.maxxval
+            xmin  = interf.minxval
+            plots.append(
+                plotClasses.Plot(
+                    ROOT.TH1F(interf.histoname,interf.histotitle,nbins,xmin, xmax),
+                    interf.varname,interf.selection,interf.category_label))
+        else:
+            print("FATAL ERROR: Unable to load bin edges or min/max values for histogram!")
+            print(interf)
+            raise ValueError
+        dictionary[interf.label] = interf.getDictionary()
+
+    if not data is None:
+        data.categories.update(dictionary)
+
+    return plots
+
+def add_data_plots(plots, data):
+    plotnames = []
+    for plot in plots:
+        plotnames.append(plot.name)
+    data.datavariables.extend(plotnames)
+    

@@ -22,6 +22,18 @@ def getAddVars():
         "Evt_Eta_PrimaryLepton:=TightLepton_Eta[0]",
         "Evt_MET_Pt",
         #"newTransformedOutput:=((1.-dnnX_ft_RecoX_DNNOutput)/(dnnX_ft_RecoX_DNNOutput))",
+        
+        "GenEvt_I_TTPlusBB",
+        "GenEvt_I_TTPlusCC",
+        "GenWeight_fsr_Def_down",
+        "GenWeight_fsr_Def_up",
+        "GenWeight_isr_Def_down",
+        "GenWeight_isr_Def_up",
+        "Weight_GEN_nom",
+        "Weight_MuonTriggerSF",
+        "Weight_pu69p2",
+        "Weight_pu69p2Down",
+        "Weight_pu69p2Up",
 
         ]
 

@@ -29,14 +29,23 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    #name = 'new_ntuples/recoDNN/multiclassJAN/recoX/bkg_merging/cTag_infos/v2'
-    name = 'new_ntuples/recoDNN/multiclassJAN/recoX/bkg_merging/cTag_infos/v2_opt_5'
+    #name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/JAN_ttZ_ttH/v3'
+    #name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/chi2_ttZ_ttH/v3'
+    #name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/multiclassJAN/v3'
+    #name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/chi2_ttX_JAN_rest/v3'
+
+    # names for optimized binning
+    name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/JAN_ttZ_ttH_opt/v3_3_opt'
+    #name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/chi2_ttZ_ttH_opt/v3_2_opt'
+    #name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/multiclassJAN_opt/v3_2_opt'
+    #name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/chi2_ttX_JAN_rest_opt/v3_2_opt'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "ttX"
+    signalProcess = "ttZ"
+    #signalProcess = "ttH"
     nSigSamples   = 1
 
     # dataera
@@ -44,17 +53,29 @@ def main(pyrootdir, opts):
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
+
     nom_histname_template = "$PROCESS__$CHANNEL"
     syst_histname_template = nom_histname_template + "__$SYSTEMATIC"
+
+    nom_histname_template_datacards = "$PROCESS__"+discrName+"_$CHANNEL"
+    syst_histname_template_datacards = nom_histname_template_datacards + "__$SYSTEMATIC"
+
     histname_separator = "__"
 
     # define MEM discriminator variable
     memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
     # configs
-    config          = "legacyTTZ/samples_ttX_matchable_advanced"
+    config          = "legacyTTZ/samples_comparison_chi2_ttX"
     variable_cfg    = "legacyTTZ/additionalVariables"
-    #plot_cfg        = "legacyTTZ/plots"
-    plot_cfg        = "legacyTTZ/JAN_plots_opt"
+    #plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/JAN_ttZ_ttH_plotConfig"
+    #plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/chi2_ttZ_ttH_plotConfig"
+    #plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/multiclassJAN_plotConfig"
+    #plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/chi2_ttX_JAN_rest_plotConfig"
+    ########################################################################################
+    plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/JAN_ttZ_ttH_plotConfig_opt"
+    #plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/chi2_ttZ_ttH_plotConfig_opt"
+    #plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/multiclassJAN_plotConfig_opt"
+    #plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/chi2_ttX_JAN_rest_plotConfig_opt"
     syst_cfg        = "legacyTTZ/systs_v1"
     replace_cfg     = None
 
@@ -70,7 +91,7 @@ def main(pyrootdir, opts):
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = ""#pyrootdir + "/data/rateFactors/rateFactors_2017_split.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/rateFactors_2017_split.csv"
 
     # script options
     analysisOptions = {
@@ -80,15 +101,15 @@ def main(pyrootdir, opts):
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        False,
+        "makeDataCards":        True,
         "makeInputDatacards":   False, # create datacards also for all defined plots
-        "addData":              False,  # adding real data 
+        "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
         "signalScaling":        -1,
         "lumiLabel":            True,
         "cmslabel":             "private Work",
-        "ratio":                "#frac{data}{MC Background}",
+        "ratio":                "#frac{pseudo data}{MC Background}",
         "shape":                False,
         "logarithmic":          False,
         "splitLegend":          False,
@@ -106,8 +127,13 @@ def main(pyrootdir, opts):
     plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                   "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/recoDNNData/new_ntuples/multiclassJAN/bkg_merging/cTag_infos/v1"}
-    dnnInterface = None
+                   "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/cnnData/new_ntuples/Comparison_chi2_ttX/JAN_ttZ_ttH/v1_3_combined"}
+    #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+    #               "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/cnnData/new_ntuples/Comparison_chi2_ttX/chi2_ttZ_ttH/v1_3_combined"}
+    #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+    #               "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/cnnData/new_ntuples/Comparison_chi2_ttX/multiclassJAN/v1_3_combined"}
+    #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+    #               "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/cnnData/new_ntuples/Comparison_chi2_ttX/chi2_ttX_JAN_rest/v1_3_combined"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
@@ -202,7 +228,7 @@ def main(pyrootdir, opts):
         pP.setJson(plotJson)
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
-        #pP.setDNNInterface(dnnInterface)
+        pP.setDNNInterface(dnnInterface)
         pP.setMaxEvts_nom(100000)
         pP.setMaxEvts_systs(100000)
         #pP.setRateFactorsFile(rateFactorsFile)
@@ -310,8 +336,8 @@ def main(pyrootdir, opts):
                 datacardmaker       = datacardmaker,
                 signalTag           = analysis.signalProcess,
                 skipDatacards       = analysis.skipDatacards,
-                nominal_key         = nom_histname_template,
-                syst_key            = syst_histname_template
+                nominal_key         = nom_histname_template_datacards,
+                syst_key            = syst_histname_template_datacards
                 )
     
     if analysis.makePlots:
