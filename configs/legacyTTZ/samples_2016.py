@@ -11,11 +11,11 @@ import util.tools.plotClasses as plotClasses
 
 # samples
 # input path 
-path  = "/nfs/dust/cms/group/ttx-kit/ntuples_ttZ/2017"
+path  = "/nfs/dust/cms/group/ttx-kit/ntuples_ttZ/2016"
 
 ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
              path+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+";"+\
-             path+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8_new_pmx/*nominal*.root'
+             path+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'
 
 VJetsPathS = path+'/DYJets*/*nominal*.root'+';'+ \
              path+'/WJets*/*nominal*.root'
@@ -34,7 +34,6 @@ dibosonPathS = path+'/WW_*/*nominal*.root'+';'+ \
 
 stpath = path+'/ST_*/*nominal*.root'
 
-
 ttHbbPath    = path+'/ttHTobb*/*nominal*.root'
 ttHnonbbPath = path+'/ttHToNonbb*/*nominal*.root'
 
@@ -42,11 +41,6 @@ ttHpath = path+'/ttHTobb*/*nominal*.root'+';'+ \
           path+'/ttHToNonbb*/*nominal*.root'
 
 friendTrees = {
-    #"ctag": "/nfs/dust/cms/user/vdlinden/legacyTTZ/ntuples/friendTrees/2017/ctagging"
-    #"dnnZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/reconstructed_Z_v1",
-    #"dnnH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/reconstructed_Higgs_v1",
-    #"matchZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/matchZ_v1",
-    #"matchH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/matchHiggs_v1",
     }
 
 # SELECTIONS
@@ -125,7 +119,7 @@ weightReplacements = {
     }
 
 # Lumi weight
-lumi = '41.5'
+lumi = '59.7'
 
 # correct vjets cross sections
 kfactor_zjets = "*1.23"
@@ -133,9 +127,9 @@ kfactor_wjets = "*1.21"
 kfactor_vjets = "*1.22"
 
 # correct ttbb cross-sections
-ttbb_FH_scale = "(17.3731/16.2728)"
-ttbb_SL_scale = "(15.7438/15.7286)"
-ttbb_DL_scale = "(3.5531/3.8024)"
+ttbb_FH_scale = "(17.3107/16.2728)"
+ttbb_SL_scale = "(15.7315/15.7286)"
+ttbb_DL_scale = "(3.5378/3.8024)"
 ttbb_4FS_scale = "*((N_GenTopLep==0)*"+ttbb_FH_scale+"+(N_GenTopLep==1)*"+ttbb_SL_scale+"+(N_GenTopLep==2)*"+ttbb_DL_scale+")"
 
 # nominal weight
@@ -156,7 +150,7 @@ samplesDataControlPlots=[
             'SingleMu', samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('SingleEl',ROOT.kBlack,
-            path+'/SingleElectron*/*nominal*.root',
+            path+'/EGamma*/*nominal*.root',
             sel_singleel+sel_MET+"*"+sel_jettag,
             'SingleEl', samDict=sampleDict, readTrees=doReadTrees)
 ]
@@ -269,7 +263,7 @@ major_backgrounds = [
             samDict=sampleDict, readTrees=doReadTrees),
 
     plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kAzure+3,
-            path+"/TTbb*/*nominal*.root",
+            path+"/TTbb_4f*/*nominal*.root",
             lumi+evenSel+'*(GenEvt_I_TTPlusCC==0)*(GenEvt_I_TTPlusBB>=1)'+ttbb_4FS_scale+sel_MET+sel_StrangeMuWeights,
             'ttbb',
             samDict=sampleDict, readTrees=doReadTrees),

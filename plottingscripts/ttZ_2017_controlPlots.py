@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'controlPlots/2017/v2'
+    name = 'controlPlots/2017/v3'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -48,13 +48,13 @@ def main(pyrootdir, opts):
     histname_separator = "__"
 
     # define MEM discriminator variable
-    memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
+    memexp = ''
     # configs
-    config          = "legacyTTZ/samples_new"
+    config          = "legacyTTZ/samples_2017"
     variable_cfg    = "legacyTTZ/additionalVariables"
-    plot_cfg        = "legacyTTZ/input_plots_new"
+    plot_cfg        = "legacyTTZ/controlPlots"
     syst_cfg        = "legacyTTZ/systs_2017"
-    replace_cfg     = "legacyTTZ/pdf_relic_names"
+    replace_cfg     = None
 
 
     sfCorrection = {}
@@ -67,7 +67,7 @@ def main(pyrootdir, opts):
 
 
     # file for rate factors
-    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_2017_with_correction.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_new_plotscript_2017.csv"
 
     # script options
     analysisOptions = {
@@ -200,8 +200,8 @@ def main(pyrootdir, opts):
         #pP.setDataBases(plotDataBases)
         #pP.setMEMDataBase(memDataBase)
         #pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts_nom(100000)
-        pP.setMaxEvts_systs(100000)
+        pP.setMaxEvts_nom(200000)
+        pP.setMaxEvts_systs(500000)
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
         pP.setSFCorrection(sfCorrection)
@@ -271,14 +271,11 @@ def main(pyrootdir, opts):
         with monitor.Timer("addRealData"):
             if analysis.usePseudoData:
                 print("adding data_obs histograms as pseudo data")
-                # pseudo data without ttH
-                pP.addData( samples = configData.samples, 
+                pseudoDataSamples = [s for s in configData.samples if not ("ttZ_" in s.nick or "ttH_" in s.nick or "5FS" in s.nick)]
+                pP.addData( samples = pseudoDataSamples, 
                             discrName = discrName)
-                # pseudo data with signal
-                #pP.addData(samples = configData.samples)
             else:
                 print("adding data_obs histograms as real data")
-                # real data with ttH
                 pP.addData( samples = configData.controlSamples, 
                             discrName = discrName)
 
