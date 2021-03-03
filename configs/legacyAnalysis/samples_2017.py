@@ -511,7 +511,7 @@ plottingsamples = [
 
     plotClasses.Sample("t#bar{t}+H", ROOT.kBlue+1, "", "",
         "ttH", addsamples = ["ttH_hbb", "ttH_hcc", "ttH_htt", "ttH_hgg", "ttH_hgluglu", "ttH_hww", "ttH_hzz", "ttH_hzg"],
-        samDict = sampleDict, readTrees = doReadTrees),
+        samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
     plotClasses.Sample("tHq (SM)", ROOT.kBlue+6, "", "",
         "tHq", addsamples = ["tHq_hbb", "tHq_hcc", "tHq_htt", "tHq_hgg", "tHq_hgluglu", "tHq_hww", "tHq_hzz", "tHq_hzg"],
         samDict = sampleDict, readTrees = doReadTrees, typ = "bkg"),
