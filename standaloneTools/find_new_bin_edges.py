@@ -60,9 +60,9 @@ def do_rebinning(combinedHist, threshold):
     #     # first two bins by replacing the last_added_edge with
     #     # the underflow_edge 
     #     bin_edges[-1] = underflow_edge
-
+    bin_edges = sorted(bin_edges)
     print("\tnew bin edges: [{}]".format(",".join([str(round(b,4)) for b in bin_edges])))
-    return sorted(bin_edges)
+    return bin_edges
 
 
 def prepare_rebinning(rootfile, histolist, threshold = 0.1):
@@ -107,7 +107,7 @@ def rebin_histos_in_rootfile(inputfile, options):
         print("Doing channel '{}'".format(cat))
         consider_for_rebinning = []
         for p in procs:
-            tmp = key.replace("$PROCESS", p).replace("$CHANNEL", cat)
+            tmp = key.replace("PROCESS", p).replace("CHANNEL", cat)
             print(tmp)
             if tmp in keylist:
                 consider_for_rebinning.append(tmp)
@@ -129,10 +129,10 @@ def parse_arguments():
     parser = OptionParser()
 
     parser.add_option("-k", "--nomkey",
-                        help = "use this string to select histogram keys, e.g. '$PROCESS__$CHANNEL' (this is the default)",
+                        help = "use this string to select histogram keys, e.g. 'PROCESS__CHANNEL' (this is the default)",
                         dest = "nomkey",
                         type = "str",
-                        default = '$PROCESS__$CHANNEL'
+                        default = 'PROCESS__CHANNEL'
                     )
     parser.add_option( "-c", "--channel",
                         help = """Do rebinning for this channel, e.g. 'ljets_ge4j_ge4t_ttH_node'.
