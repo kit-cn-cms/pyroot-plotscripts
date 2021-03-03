@@ -278,7 +278,7 @@ std::map<std::string, Plot1DInfoStruct> plotinfo1D;
 std::map<std::string, Plot2DInfoStruct> plotinfo2D;
 std::map<std::string, std::unique_ptr<TH1>> histos1D;
 std::map<std::string, std::unique_ptr<TH2>> histos2D;
-""".format(',\n'.join('\t"{}"'.format(c) for c in catnames))
+""".format(',\n'.join(['\t"{}"'.format(c) for c in catnames]))
   for plot in plots:
       if plot.dim == 2:
           title  = plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
