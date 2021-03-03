@@ -8,7 +8,8 @@ import plotClasses
 ROOT.gROOT.SetBatch(True)
 
 # -- generating the head of the script ------------------------------------------------------------
-def getHead(basepath, dataBases, memDB_path, addCodeInterfaces=[], useNormHeader = None):
+def getHead(basepath, dataBases, memDB_path, addCodeInterfaces=[], \
+              additional_includes = []):
   
   includes = ['"TChain.h"', '"TBranch.h"', '"TLorentzVector.h"', '"TFile.h"',
                 '"TH1F.h"', '"TH2F.h"', '<iostream>', '<string>', '<sstream>',
@@ -16,8 +17,7 @@ def getHead(basepath, dataBases, memDB_path, addCodeInterfaces=[], useNormHeader
                 '<map>', '"TStopwatch.h"', '<TString.h>', '<TH2D.h>',
                 '"LHAPDF/LHAPDF.h"', '"TGraphAsymmErrors.h"', '"TStopwatch.h"',
                 '<tuple>']
-  if useNormHeader:
-    includes.append('"{}"'.format(useNormHeader))
+  includes += ['"{}"'.format(x) for x in additional_includes]
   retstr = ""
 
   for include in includes:
@@ -51,14 +51,14 @@ def getHead(basepath, dataBases, memDB_path, addCodeInterfaces=[], useNormHeader
   for cls in includedClasses:
     includepath = include_template.format(cls)
     path = os.path.join(scriptdirpath,includepath)
-    print "checking path to include: " + path
+    print ("checking path to include: '{}'".format(path))
     if os.path.exists(path):
       if counter == 0:
         retstr += "// following files can be found in {}\n".format(scriptdirpath)
       retstr += '#include "{}"\n'.format(includepath)
       counter += 1
     else:
-      print "WARNING: could not find file '{}', will not include it!".format(path)
+      print ("WARNING: could not find file '{}', will not include it!".format(path))
 
   retstr+="""
 using namespace std;
@@ -197,62 +197,114 @@ def InitSFCorrection(sfCorrection):
 # -------------------------------------------------------------------------------------------------
 
 
+def initSystematicsPerProcess(weight_syst_dict, outpath = "systematic_uncertainties.h"):
+  print("="*130)
+  print("entering 'initSystematicsPerProcess'")
+  s = """
+#if !defined(PROCESS_SYSTEMATICS)
+#define PROCESS_SYSTEMATICS
 
+#include <vector>
+#include <map>
+#include <string>
+#include <iostream>
+
+namespace ProcessSystematics
+{{
+  std::map< std::string, std::vector<std::string> > systematics_map={{
+    {combinations}
+  }};
+
+
+  void load_systematics(const std::string& process_name, std::vector<std::string>& target){{
+        
+        if(systematics_map.find(process_name) != systematics_map.end()){{
+            for( auto& systematic: systematics_map[process_name]){{
+                target.push_back(systematic);
+            }}
+        }}
+        else{{
+            std::cerr << "Could not find systematics for process '" << process_name << std::endl;
+            target.push_back("");
+        }}
+
+    }}
+
+}} // namespace ProcessSystematics
+
+
+#endif // PROCESS_SYSTEMATICS
+  """
+  combinations = []
+  for name in weight_syst_dict:
+    systs = [""] + weight_syst_dict[name]
+    comb = '\t{{ "{process}", {{ {syst_names} }} \n\t}}'\
+                      .format(process = name,
+                              syst_names = ',\n'.join(['\t"{}"'.format(x) for x in systs])
+                              )
+    combinations.append(comb)
+  to_insert = ",\n".join(combinations)
+
+  s = s.format(combinations = to_insert)
+
+  with open(outpath, "w") as f:
+    f.write(s)
+
+def initSystematics():
+  rstr = """
+  std::vector<std::string> systematics;
+
+  ProcessSystematics::load_systematics(processname, systematics);
+  
+  if(skipWeightSysts){
+    systematics = {
+      variation
+    };
+  };
+  """
+  return rstr
 
 # -- initializing histograms ----------------------------------------------------------------------
-def initHistos(catnames, systnames, plots, nom_histname_template, syst_histname_template, edge_precision=4):
-    rstr = """
+def initHistos(catnames, plots, nom_histname_template, syst_histname_template, edge_precision=4):
+  rstr = """
 double variable = -999;
 double variable1 = -999;
 double variable2 = -999;
 
-std::vector<std::string> systematics = {{
+std::vector<std::string> categs = {{
 {}
 }};
-
-""".format(",\n".join(['\t"{}"'.format(x) for x in systnames]))
-    rstr += """
-if(skipWeightSysts){
-  systematics = {
-    variation
-  };
-};
-"""
-# std::vector<std::string> categs = {\n"
-# for cat in catnames:
-#     rstr += "    \""+cat+"\",\n"
-# rstr = rstr[:-2]+"\n};\n"
-    rstr += """std::map<std::string, Plot1DInfoStruct> plotinfo1D;
+std::map<std::string, Plot1DInfoStruct> plotinfo1D;
 std::map<std::string, Plot2DInfoStruct> plotinfo2D;
 std::map<std::string, std::unique_ptr<TH1>> histos1D;
 std::map<std::string, std::unique_ptr<TH2>> histos2D;
-"""
-    for plot in plots:
-        if plot.dim == 2:
-            title  = plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
-            name   = plot.histo.GetName()
-            nbinsX = plot.histo.GetNbinsX()
-            bin_edges_x = []
-            for i in range(1, nbinsX+2):
-              bin_edges_x.append(str(round(plot.histo.GetXaxis().GetBinLowEdge(i),edge_precision)))
-            nbinsY = plot.histo.GetNbinsY()
-            bin_edges_y = []
-            for i in range(1, nbinsY+2):
-              bin_edges_y.append(str(round(plot.histo.GetYaxis().GetBinLowEdge(i),edge_precision)))
-            rstr  += """plotinfo2D["{0}"] = {{"{0}","{1}",{2},{{ {3} }}, {4}, {{ {5} }} }};\n""".format(name, title, 
-                                                                                                        nbinsX, ",".join(bin_edges_x), 
-                                                                                                        nbinsY, ",".join(bin_edges_y)
-                                                                                                        )
-        else:
-            title  = plot.histo.GetTitle()
-            name   = plot.histo.GetName()
-            nbins  = plot.histo.GetNbinsX()
-            bin_edges = []
-            for i in range(1, nbins+2):
-              bin_edges.append(str(round(plot.histo.GetBinLowEdge(i),edge_precision)))
-            rstr  += """plotinfo1D["{0}"] = {{"{0}","{1}",{2},{{ {3} }} }};\n""".format(name, title, nbins, ",".join(bin_edges))
+""".format(',\n'.join('\t"{}"'.format(c) for c in catnames))
+  for plot in plots:
+      if plot.dim == 2:
+          title  = plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
+          name   = plot.histo.GetName()
+          nbinsX = plot.histo.GetNbinsX()
+          bin_edges_x = []
+          for i in range(1, nbinsX+2):
+            bin_edges_x.append(str(round(plot.histo.GetXaxis().GetBinLowEdge(i),edge_precision)))
+          nbinsY = plot.histo.GetNbinsY()
+          bin_edges_y = []
+          for i in range(1, nbinsY+2):
+            bin_edges_y.append(str(round(plot.histo.GetYaxis().GetBinLowEdge(i),edge_precision)))
+          rstr  += """plotinfo2D["{0}"] = {{"{0}","{1}",{2},{{ {3} }}, {4}, {{ {5} }} }};\n""".format(name, title, 
+                                                                                                      nbinsX, ",".join(bin_edges_x), 
+                                                                                                      nbinsY, ",".join(bin_edges_y)
+                                                                                                      )
+      else:
+          title  = plot.histo.GetTitle()
+          name   = plot.histo.GetName()
+          nbins  = plot.histo.GetNbinsX()
+          bin_edges = []
+          for i in range(1, nbins+2):
+            bin_edges.append(str(round(plot.histo.GetBinLowEdge(i),edge_precision)))
+          rstr  += """plotinfo1D["{0}"] = {{"{0}","{1}",{2},{{ {3} }} }};\n""".format(name, title, nbins, ",".join(bin_edges))
 
-    rstr += """
+  rstr += """
 TString histname;
 for(const auto& obj: plotinfo1D){{
   for(const auto& syst: systematics){{
@@ -285,7 +337,7 @@ for(const auto& obj: plotinfo2D){{
 }}""".format( nom_hist_temp   = nom_histname_template,
               syst_hist_temp  = syst_histname_template)
     
-    return rstr
+  return rstr
 
 def initOneDimHisto(name,nbins,xmin=0,xmax=0,title_=''):
   if title_=='':

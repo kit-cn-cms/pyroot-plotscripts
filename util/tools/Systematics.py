@@ -17,7 +17,7 @@ class SystematicsForProcess:
 
 class Systematics:
     def __init__(self,systematicconfig,weightDictionary = {}, replacing_config = None, relevantProcesses = []):
-        print "loading systematics config ..."
+        print("loading systematics config ...")
         self.systematics=pandas.read_csv(systematicconfig,sep=",")
         self.systematics.fillna("-", inplace=True)
         self.relevantProcesses = relevantProcesses
@@ -292,7 +292,7 @@ class Systematics:
                     plotShapes.append(systName)
                 else:
                     plotShapes.append("#"+systName)
-                print systName
+                print (systName)
         return plotShapes
 
     def replaceDummies(self, variationString):

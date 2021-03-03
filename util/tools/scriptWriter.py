@@ -140,6 +140,9 @@ class scriptWriter:
         # initialize variables with variablebox
         self.initVariables(TreeFileMap["trees"])
         
+        # initialize a list of additional header files
+        # that need to be included
+        add_includes = []
         # if a GenWeightNormMap is used, create new header file
         genWeightNormHeader_name = None
         if self.pp.useGenWeightNormMap:
@@ -149,13 +152,25 @@ class scriptWriter:
             header_code = self.genWeightNormalization.declareNormalizationMapHeader()
             with open(genWeightNormHeader_path, "w") as headerfile:
                 headerfile.write(header_code)
+            add_includes.append(genWeightNormHeader_name)
+        # initialize a list of uncertainty for each process
+        # to avoid processes unnecessary templates
+        syst_header = "systematic_uncertainties.h"
+        outpath = os.path.join(self.pp.analysis.workdir, 
+                                syst_header)
+        combinations = {}
+        for proc in self.pp.configData.systematics.relevantProcesses:
+            combinations[proc] = self.pp.configData.systematics.get_weight_systs(proc)
+        scriptfunctions.initSystematicsPerProcess(weight_syst_dict = combinations, 
+                                                outpath = outpath )
+        add_includes.append(syst_header)
         # write program
         # start writing program
-        script = scriptfunctions.getHead(   basepath          = self.pp.analysis.pyrootdir, 
-                                            dataBases         = self.pp.dataBases, 
-                                            memDB_path        = self.pp.memDBpath, 
-                                            addCodeInterfaces = self.pp.addInterfaces,
-                                            useNormHeader     = genWeightNormHeader_name
+        script = scriptfunctions.getHead(   basepath            = self.pp.analysis.pyrootdir, 
+                                            dataBases           = self.pp.dataBases, 
+                                            memDB_path          = self.pp.memDBpath, 
+                                            addCodeInterfaces   = self.pp.addInterfaces,
+                                            additional_includes = add_includes
                                             )
 
         # replace FRIENDTREE placeholders
@@ -187,11 +202,12 @@ class scriptWriter:
 
         # initialize TMVA Readers
         script += self.varManager.writeTMVAReader()
+        
+        script += scriptfunctions.initSystematics()
 
         # initialize histograms in all categories and for all systematics
         script += scriptfunctions.initHistos(
             catnames  = self.pp.categoryNames, 
-            systnames = self.pp.systNames, 
             plots     = self.pp.configData.getDiscriminatorPlots(),
             nom_histname_template = self.pp.nominalHistoKey, 
             syst_histname_template = self.pp.systHistoKey)
