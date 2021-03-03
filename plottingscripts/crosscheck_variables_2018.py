@@ -50,7 +50,7 @@ def main(pyrootdir, opts):
     # define MEM discriminator variable
     memexp = "(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)"
     # configs
-    config          = "legacyAnalysis/samples_2018"
+    config          = "legacyAnalysis/samples_2018_no_hdecays"
     variable_cfg    = "legacyAnalysis/additionalVariables_2018"
     plot_cfg        = "legacyAnalysis/crosscheck_variables/crosscheck_variables_optBinning_2018"
     syst_cfg        = "legacyAnalysis/systs_2018"
@@ -71,12 +71,12 @@ def main(pyrootdir, opts):
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_2018_with_correction.csv"
-
+    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_new_plotscript_2018.csv"
+    
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        True,
+        "usePseudoData":        False,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script

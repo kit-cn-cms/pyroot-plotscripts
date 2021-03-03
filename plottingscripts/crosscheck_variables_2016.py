@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'crosscheck_variables_finalRFs/2017'
+    name = 'crosscheck_variables_finalRFs/2016'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -39,7 +39,7 @@ def main(pyrootdir, opts):
     nSigSamples   = 1
 
     # dataera
-    dataera = "2017"
+    dataera = "2016"
 
     # Name of final discriminator, should not contain underscore
     discrName = 'finaldiscr'
@@ -50,14 +50,14 @@ def main(pyrootdir, opts):
     # define MEM discriminator variable
     memexp = "(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)"
     # configs
-    config          = "legacyAnalysis/samples_2017_no_hdecays"
-    variable_cfg    = "legacyAnalysis/additionalVariables_2017"
+    config          = "legacyAnalysis/samples_2016_no_hdecays"
+    variable_cfg    = "legacyAnalysis/additionalVariables_2016"
     plot_cfg        = "legacyAnalysis/crosscheck_variables/crosscheck_variables_optBinning_2018"
-    syst_cfg        = "legacyAnalysis/systs_2017"
+    syst_cfg        = "legacyAnalysis/systs_2016"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
     sfCorrection = {}
-    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2017_deepJet_combined.root"
+    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2016_deepJet_combined.root"
     # variables for the correction
     sfCorrection["corrections"] = {}
     sfCorrection["corrections"]["HT_vs_NJet"] = ["Evt_HT_jets", "N_Jets"]
@@ -71,7 +71,7 @@ def main(pyrootdir, opts):
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_new_plotscript_2017.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_new_plotscript_2016.csv"
     
     # script options
     analysisOptions = {
@@ -104,8 +104,8 @@ def main(pyrootdir, opts):
         "skipMergeSysts":       opts.skipMergeSysts,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2017.json"
-    # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
+    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_2016.json"
+    # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2016/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     # dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
     #               "checkpointFiles":  pyrootdir+"/configs/legacyAnalysis/DNN_16-03-2020/DNNInputData/"}
