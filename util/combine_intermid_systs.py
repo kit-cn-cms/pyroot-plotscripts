@@ -168,8 +168,6 @@ def merge_systs(nom_key, syst_key, rfile, systname, replace_cfg, cleanup = True)
                     if debug >= 3:
                         print("Removing '{}'".format(wildcard))
                     rfile.Delete("{};*".format(wildcard))
-        else:
-            print("Unable to load values for key '{}'".format(syst_key))
 
 def load_config(cfg_path):
     if not cfg_path:
