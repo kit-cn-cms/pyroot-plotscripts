@@ -402,6 +402,26 @@ class scriptWriter:
         variableManager.run()
         self.varManager = variableManager
 
+    def initWeightMap(self):
+        """initialize a c++ map with the expressions for the weight systematics
+
+        return
+            [str]:  c++ code that sets up a std::map
+        """
+        s = """
+        std::map<std::string, float> weight_expressions;
+
+        if(!skipWeightSysts){{
+        {lines}
+        }}
+        """
+        line = '\tweight_expressions.insert(std::pair<std::string, float>("{name}", {expression}));'
+        syst_dict = self.pp.configData.systematics.get_all_weight_systs_with_expressions()
+        lines = []
+        for name in syst_dict:
+            lines.append(line.format(name = name, expression = syst_dict[name]))
+        
+        return s.format(lines = "\n".join(lines))
 
     def initLoop(self):
         script = ""
@@ -426,6 +446,7 @@ class scriptWriter:
         script += "     timerEvalWeightsAndBDT->Start();\n"
         # calculate varibles and get TMVA outputs
         script += self.varManager.calculateVariables()
+        script += self.initWeightMap()
         script += "     totalTimeEvalWeightsAndBDT+=timerEvalWeightsAndBDT->RealTime();\n"
 
         script += "     timerEvalDNN->Start();\n"
@@ -446,8 +467,8 @@ class scriptWriter:
 
     def eventLoop(self, tree):
         script = ""
-        # this class temporary saves variables, systNames and systWeights
-        # this way these havent got to be given as arguments for every plot initiated
+        # this class temporarily saves variables, systNames and systWeights
+        # this way these don't have to be given as arguments for every plot initiated
         plotClass = scriptfunctions.initPlots(self.varManager, self.pp.systNames, self.systWeights)
         
         for catname, catselection in zip(self.pp.categoryNames, self.pp.categorySelections):
