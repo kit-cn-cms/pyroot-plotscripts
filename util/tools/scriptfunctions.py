@@ -614,16 +614,14 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
     systline_template = " ".join("""helpWeightVec_{histName}.push_back(
         {{  
             {histVectorName}["{histName}{systName}"].get(), 
-            ({systWeight})*(weight_{histName})
+            (weight_expressions["{systName}"])*(weight_{histName})
         }}
     );""".split())
     indent = "        "
     systlines = [indent+systline_template.format(
                                 histVectorName = histVectorName,
                                 histName = histName,
-                                systName = sname,
-                                systWeight = sweight) \
-                for sname, sweight in zip(systNames[1:], systWeights[1:])]
+                                systName = sname) for sname in systNames[1:]]
 
     # Write all individual systnames and systweights in nested vector 
     # to use together with function allowing variadic vector size 
