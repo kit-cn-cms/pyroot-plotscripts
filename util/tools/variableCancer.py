@@ -694,10 +694,11 @@ class Variable:
 
                 self.initError = True
                 print("trying to initialize variable '{}' with itself (var = var) - this does not work".format(self.varName))
-            if "dummyWeight" in self.varName:
-                return "    if(!skipWeightSysts)    "+indent+self.varName+" = "+self.expression+";\n"
-            else:
-                return "    "+indent+self.varName+" = "+self.expression+";\n"
+            # if "dummyWeight" in self.varName:
+            #     return "    if(!skipWeightSysts)    "+indent+self.varName+" = "+self.expression+";\n"
+            # else:
+            #     return "    "+indent+self.varName+" = "+self.expression+";\n"
+            return "    "+indent+self.varName+" = "+self.expression+";\n"
 
 
 
