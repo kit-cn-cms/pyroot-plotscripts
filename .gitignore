@@ -9,3 +9,4 @@ workdir/*
 *.sub
 *.err
 *.csv
+*.pickle
