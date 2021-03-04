@@ -1,5 +1,5 @@
-#if !defined(ONDEDIMHISTOHELPERH)
-#define ONDEDIMHISTOHELPERH
+#if !defined(ONEDIMHISTOHELPERH)
+#define ONEDIMHISTOHELPERH
 
 #include "TH1.h"
 #include "TH1F.h"
@@ -9,13 +9,9 @@
 #include <string>
 #include "BaseHistoHelper.h"
 
-class OneDimHistoHelper : public BaseHistoHelper{
+class OneDimHistoHelper : public BaseHistoHelper<TH1>{
     public:
        
-        OneDimHistoHelper();
-        OneDimHistoHelper(std::map<std::string, std::shared_ptr<TH1>> input_map);
-        OneDimHistoHelper(std::string& input_variation, bool& input_skipWeightSysts, 
-                            std::vector<std::string>& input_systematics) ;
         ~OneDimHistoHelper();
 
         void fillNecessaryHistograms (const std::string& plotname,
@@ -25,11 +21,10 @@ class OneDimHistoHelper : public BaseHistoHelper{
         
         void helperFillHisto(const std::vector<structHelpFillHisto>& paramVec, const double& val) const;
 
-        // BaseHistoHelper::push_back(std::string plotname, std::shared_ptr<TH1> histo);
     private:
         
 };
 
 
 
-#endif // ONDEDIMHISTOHELPERH
+#endif // ONEDIMHISTOHELPERH
