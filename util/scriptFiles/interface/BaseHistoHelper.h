@@ -9,12 +9,12 @@
 #include <string>
 
 
-class BaseHistoHelper{
+template<class T> class BaseHistoHelper{
     public:
         // Helper struct to fill plots more efficiently
         // Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
         struct structHelpFillHisto{
-            TH1* histo;
+            T* histo;
             double weight;
         };
         struct structHelpFillTwoDimHisto{
@@ -22,11 +22,23 @@ class BaseHistoHelper{
             double weight;
         };
 
-        BaseHistoHelper() {}
+        BaseHistoHelper(){
+            std::cout << "initialized empty BaseHistoHelper!" << std::endl;
+        }
+
+        BaseHistoHelper(std::map<std::string, std::shared_ptr<T>> input_map):
+        histo_map(input_map) {}
+
+        BaseHistoHelper(std::string& input_variation, bool& input_skipWeightSysts, 
+                            std::vector<std::string>& input_systematics):
+            variation(input_variation), skipWeightSysts(input_skipWeightSysts),
+            systematics(input_systematics)
+        {  
+        }
         
         virtual ~BaseHistoHelper() {}
 
-        void push_back(std::string plotname, std::shared_ptr<TH1> histo){
+        void push_back(std::string plotname, std::shared_ptr<T> histo){
             histo_map[plotname] = histo;
             histo_map[plotname]->SetDirectory(0);
         }
@@ -43,8 +55,8 @@ class BaseHistoHelper{
         void SetSkipWeightSysts( bool& input) {
             skipWeightSysts = input;
         }
-        std::map<std::string, std::shared_ptr<TH1>>& GetHistoMap(){return histo_map;}
-        void SetHistoMap(std::map<std::string, std::shared_ptr<TH1>>& input) {
+        std::map<std::string, std::shared_ptr<T>>& GetHistoMap(){return histo_map;}
+        void SetHistoMap(std::map<std::string, std::shared_ptr<T>>& input) {
             histo_map = input;
             std::cout << "set map with following entries:" << std::endl;
             for(auto entry: histo_map){
@@ -53,7 +65,7 @@ class BaseHistoHelper{
         }
     protected:
         std::vector<std::string> systematics;
-        std::map<std::string, std::shared_ptr<TH1>> histo_map;
+        std::map<std::string, std::shared_ptr<T>> histo_map;
         std::string variation;
         bool skipWeightSysts;
 };
