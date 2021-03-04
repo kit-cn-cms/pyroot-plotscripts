@@ -183,24 +183,24 @@ class Systematics:
                             continue
                         self.processes[process][n]=SystematicsForProcess(n,process,typ,construction,expr)
 
-    # only gets variables to plot, without variation of name with up and down!
-    def plotSystematicsForProcesses(self,list_of_processes):
-        self.processes={}
-        for process in list_of_processes:
-            self.processes[process]={}
-        for i,systematic in self.systematics.iterrows():
-            name=systematic["Uncertainty"]
-            if name.startswith("#"):
-                continue
-            plot=str(systematic["Plot"])
-            if plot=="-":
-                continue
-            typ=systematic["Type"]
-            construction=systematic["Construction"]
-            for process in list_of_processes:
-                if systematic[process] is not "-":
-                    self.processes[process][name]=SystematicsForProcess(name,process,typ,construction,
-                                                                            plot=plot)
+    # # only gets variables to plot, without variation of name with up and down!
+    # def plotSystematicsForProcesses(self,list_of_processes):
+    #     self.processes={}
+    #     for process in list_of_processes:
+    #         self.processes[process]={}
+    #     for i,systematic in self.systematics.iterrows():
+    #         name=systematic["Uncertainty"]
+    #         if name.startswith("#"):
+    #             continue
+    #         plot=str(systematic["Plot"])
+    #         if plot=="-":
+    #             continue
+    #         typ=systematic["Type"]
+    #         construction=systematic["Construction"]
+    #         for process in list_of_processes:
+    #             if systematic[process] is not "-":
+    #                 self.processes[process][name]=SystematicsForProcess(name,process,typ,construction,
+    #                                                                         plot=plot)
 
     #returns weight systematics for specific process
     def get_weight_systs(self,process):
@@ -245,6 +245,49 @@ class Systematics:
         returns list of strings
         """
         return self.__dict_weight_systs.values()
+    
+    def get_all_weight_systs_with_expressions(self):
+        """function to return a dictionary with all weight 
+        systematics and the corresponding expressions.
+        The dictionary contains the weight uncertainties
+        for all relevant processes
+
+        Returns:
+            [dict]: Dictionary for all relevant processes of format
+                    {
+                        "weight_uncertainty_name" : "expression"
+                    }
+        """
+        # init dictionary to return
+        rdict = {}
+        # try to load the dictionary with uncertainties for the 
+        # relevant processes. If this wasn't initialized before, the
+        # property doesn't exist, which is why we try first
+        try:
+            source = self.processes
+            # if this is successful, loop through all the processes and
+            # collect the relevant weight systematics
+            for p in source:
+                # loop through the relevant processes
+                proc_dict = source[p]
+                # loop through the systematics
+                for syst in proc_dict:
+                    # first check that the construction of the entry is
+                    # 'weight'
+                    entry = proc_dict[syst]
+                    if not entry.construction == "weight":
+                        continue
+                    # update the return dictionary. This will also 
+                    # ensure that each systematic is present exactly
+                    # once
+                    rdict.update({syst: entry.expression})
+        except:
+            # if the dictionary with systematics for the relevant processes
+            # is not initialized, use the dictionary with all weight
+            # systematics
+            rdict = self.__dict_weight_systs
+        
+        return rdict
 
     #returns all variation systematics
     def get_all_variation_systs(self):
