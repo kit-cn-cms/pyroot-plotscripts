@@ -58,6 +58,21 @@ class Systematics:
         if self.replacing_config:
             print("WILL USE REPLACE CONFIGURATION FROM '{}'".format(replacing_config))
 
+    def check_expression(self, expression):
+        """function to ensure backwards compatibility. In case weight is defined in the syst csv
+        (WHICH YOU SHOULD NOT DO), this function will return the argument of the definition
+        and will discard the newly defined weight.
+
+        Args:
+            expression (str): expression that needs to be checked
+
+        Returns:
+            str: fully checked expression
+        """
+        if ":=" in expression:
+            expression =  expression.split(":=")[-1]
+        return expression
+
     def construct_syst_dict(self, construct_type):
         syst_dict = OrderedDict()
         systs = self.systematics.loc[self.systematics["Construction"] == construct_type]
@@ -70,7 +85,9 @@ class Systematics:
                 syst_dict.update(self.expand_uncertainties(systematic))
             else:
                 expr_up = self.replaceDummies(systematic["Up"])
+                expr_up = self.check_expression(expr_up)
                 expr_down = self.replaceDummies(systematic["Down"])
+                expr_down = self.check_expression(expr_down)
                 if expr_up == "-" and expr_down == "-":
                     syst_dict[systName] = "-"
                 elif expr_up == "-" or expr_down == "-":
@@ -97,7 +114,9 @@ class Systematics:
         expanded_systs = {}
         systName = syst["Uncertainty"]
         up_variation = self.replaceDummies(syst["Up"])
+        up_variation = self.check_expression(up_variation)
         down_variation = self.replaceDummies(syst["Down"])
+        down_variation = self.check_expression(down_variation)
         syst_variations = {}
         if up_variation == "-" or down_variation == "-":
             syst_variations[systName] = up_variation if not up_variation == "-" else down_variation
@@ -154,7 +173,9 @@ class Systematics:
             names = []
             typ=systematic["Type"]
             up = systematic["Up"]
+            up = self.check_expression(up)
             down = systematic["Down"]
+            down = self.check_expression(down)
             if up == "-" or down == "-":
                 names.append(name)
             else:
