@@ -130,6 +130,11 @@ electronTrigger_down = "("+sel_singleel+"&&(internalEleTriggerWeightDown>0.))*in
 muonTrigger_up = "("+sel_singlemu+"&&(Weight_MuonTriggerSF_Up>0.))*Weight_MuonTriggerSF_Up"
 muonTrigger_down = "("+sel_singlemu+"&&(Weight_MuonTriggerSF_Down>0.))*Weight_MuonTriggerSF_Down"
 
+memup="(((N_BTagsM>=4)*(1.0*(memDBp<=0.8)+1.08*(memDBp>0.8&&memDBp<=0.85)+1.22*(memDBp>0.85&&memDBp<=0.9)+1.16*(memDBp>0.9&&memDBp<=0.95)+1.16*(memDBp>0.95&&memDBp<=1.0)))+((N_BTagsM==3)*(1.0*(memDBp<=0.8)+1.06*(memDBp>0.8&&memDBp<=0.85)+1.06*(memDBp>0.85&&memDBp<=0.9)+1.18*(memDBp>0.9&&memDBp<=0.95)+1.18*(memDBp>0.95&&memDBp<=1.0))))"
+
+memdown="(((N_BTagsM>=4)*(1.0*(memDBp<=0.8)+0.91*(memDBp>0.8&&memDBp<=0.85)+0.78*(memDBp>0.85&&memDBp<=0.9)+0.84*(memDBp>0.9&&memDBp<=0.95)+0.84*(memDBp>0.95&&memDBp<=1.0)))+((N_BTagsM==3)*(1.0*(memDBp<=0.8)+0.94*(memDBp>0.8&&memDBp<=0.85)+0.94*(memDBp>0.85&&memDBp<=0.9)+0.82*(memDBp>0.9&&memDBp<=0.95)+0.81*(memDBp>0.95&&memDBp<=1.0))))"
+
+
 
 # dictionary of expressions to replace in systematics csv
 weightReplacements = {
@@ -153,6 +158,10 @@ weightReplacements = {
     "ELETRIGSDOWN":     "("+electronTrigger_down+"+"+muonTrigger+")",
     "MUTRIGSUP":        "("+electronTrigger+"+"+muonTrigger_up+")",
     "MUTRIGSDOWN":      "("+electronTrigger+"+"+muonTrigger_down+")",
+
+    #MEM uncertainty     
+    "MEMWEIGHTDOWN":    memdown,
+    "MEMWEIGHTUP":      memup,
 
     # do weights for data
     "DOWEIGHTS":        "(DoWeights==1)+(DoWeights==0)*1.0",
@@ -434,7 +443,7 @@ samples = [
              ttHpath,
              lumi+sel_MET,
              'ttH',
-             samDict=sampleDict, readTrees=doReadTrees),     
+             samDict=sampleDict, readTrees=doReadTrees, typ="signal"),     
 
     # ttbar 5FS default background samples
     plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
@@ -451,7 +460,7 @@ samples = [
     ]
 
 
-samples += samples_tH
+# samples += samples_tH
 samples += samples_ttbb_4FS
 samples += samples_minor_backgrounds
 samples += samples_5FS
