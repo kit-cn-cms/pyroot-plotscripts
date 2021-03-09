@@ -48,12 +48,12 @@ class configData:
     def initData(self):
         self.Data = catData()
 
-    def getData():
+    def getData(self):
         return self.Data
 
     def initSystematics(self,systconfig):
 
-        print "loading systematics..."
+        print( "loading systematics...")
         self.systconfig=systconfig
         processes=self.pltcfg.list_of_processes
         workdir=self.analysis.workdir

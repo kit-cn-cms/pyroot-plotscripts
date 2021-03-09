@@ -8,7 +8,8 @@ import plotClasses
 ROOT.gROOT.SetBatch(True)
 
 # -- generating the head of the script ------------------------------------------------------------
-def getHead(basepath, dataBases, memDB_path, addCodeInterfaces=[], useNormHeader = None):
+def getHead(basepath, dataBases, memDB_path, addCodeInterfaces=[], \
+              additional_includes = []):
   
   includes = ['"TChain.h"', '"TBranch.h"', '"TLorentzVector.h"', '"TFile.h"',
                 '"TH1F.h"', '"TH2F.h"', '<iostream>', '<string>', '<sstream>',
@@ -16,8 +17,7 @@ def getHead(basepath, dataBases, memDB_path, addCodeInterfaces=[], useNormHeader
                 '<map>', '"TStopwatch.h"', '<TString.h>', '<TH2D.h>',
                 '"LHAPDF/LHAPDF.h"', '"TGraphAsymmErrors.h"', '"TStopwatch.h"',
                 '<tuple>']
-  if useNormHeader:
-    includes.append('"{}"'.format(useNormHeader))
+  includes += ['"{}"'.format(x) for x in additional_includes]
   retstr = ""
 
   for include in includes:
@@ -42,7 +42,9 @@ def getHead(basepath, dataBases, memDB_path, addCodeInterfaces=[], useNormHeader
     "LeptonSFHelper",
     "Systematics",
     "CSVHelper",
-    "SFCorrectionHelper"
+    "SFCorrectionHelper",
+    "OneDimHistoHelper",
+    "TwoDimHistoHelper",
     #"QCDHelper",
     #"TTbarSystHelper",
     ]
@@ -51,14 +53,14 @@ def getHead(basepath, dataBases, memDB_path, addCodeInterfaces=[], useNormHeader
   for cls in includedClasses:
     includepath = include_template.format(cls)
     path = os.path.join(scriptdirpath,includepath)
-    print "checking path to include: " + path
+    print ("checking path to include: '{}'".format(path))
     if os.path.exists(path):
       if counter == 0:
         retstr += "// following files can be found in {}\n".format(scriptdirpath)
       retstr += '#include "{}"\n'.format(includepath)
       counter += 1
     else:
-      print "WARNING: could not find file '{}', will not include it!".format(path)
+      print ("WARNING: could not find file '{}', will not include it!".format(path))
 
   retstr+="""
 using namespace std;
@@ -197,63 +199,123 @@ def InitSFCorrection(sfCorrection):
 # -------------------------------------------------------------------------------------------------
 
 
+def initSystematicsPerProcess(weight_syst_dict, outpath = "systematic_uncertainties.h"):
+  print("="*130)
+  print("entering 'initSystematicsPerProcess'")
+  s = """
+#if !defined(PROCESS_SYSTEMATICS)
+#define PROCESS_SYSTEMATICS
 
+#include <vector>
+#include <map>
+#include <string>
+#include <iostream>
+
+namespace ProcessSystematics
+{{
+  std::map< std::string, std::vector<std::string> > systematics_map={{
+    {combinations}
+  }};
+
+
+  void load_systematics(const std::string& process_name, std::vector<std::string>& target){{
+        
+        if(systematics_map.find(process_name) != systematics_map.end()){{
+            for( auto& systematic: systematics_map[process_name]){{
+                target.push_back(systematic);
+            }}
+        }}
+        else{{
+            std::cerr << "Could not find systematics for process '" << process_name << std::endl;
+            target.push_back("");
+        }}
+
+    }}
+
+}} // namespace ProcessSystematics
+
+
+#endif // PROCESS_SYSTEMATICS
+  """
+  combinations = []
+  for name in weight_syst_dict:
+    systs = [""] + weight_syst_dict[name]
+    comb = '\t{{ "{process}", {{ {syst_names} }} \n\t}}'\
+                      .format(process = name,
+                              syst_names = ',\n'.join(['\t"{}"'.format(x) for x in systs])
+                              )
+    combinations.append(comb)
+  to_insert = ",\n".join(combinations)
+
+  s = s.format(combinations = to_insert)
+
+  with open(outpath, "w") as f:
+    f.write(s)
+
+def initSystematics():
+  rstr = """
+  std::vector<std::string> systematics;
+
+  ProcessSystematics::load_systematics(processname, systematics);
+  
+  if(skipWeightSysts){
+    systematics = {
+      variation
+    };
+  };
+  """
+  return rstr
 
 # -- initializing histograms ----------------------------------------------------------------------
-def initHistos(catnames, systnames, plots, nom_histname_template, syst_histname_template, edge_precision=4):
-    rstr = """
+def initHistos(catnames, plots, nom_histname_template, syst_histname_template, edge_precision=4):
+  rstr = """
 double variable = -999;
 double variable1 = -999;
 double variable2 = -999;
 
-std::vector<std::string> systematics = {{
+std::vector<std::string> categs = {{
 {}
 }};
-
-""".format(",\n".join(['\t"{}"'.format(x) for x in systnames]))
-    rstr += """
-if(skipWeightSysts){
-  systematics = {
-    variation
-  };
-};
-"""
-# std::vector<std::string> categs = {\n"
-# for cat in catnames:
-#     rstr += "    \""+cat+"\",\n"
-# rstr = rstr[:-2]+"\n};\n"
-    rstr += """std::map<std::string, Plot1DInfoStruct> plotinfo1D;
+std::map<std::string, Plot1DInfoStruct> plotinfo1D;
 std::map<std::string, Plot2DInfoStruct> plotinfo2D;
-std::map<std::string, std::unique_ptr<TH1>> histos1D;
-std::map<std::string, std::unique_ptr<TH2>> histos2D;
-"""
-    for plot in plots:
-        if plot.dim == 2:
-            title  = plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
-            name   = plot.histo.GetName()
-            nbinsX = plot.histo.GetNbinsX()
-            bin_edges_x = []
-            for i in range(1, nbinsX+2):
-              bin_edges_x.append(str(round(plot.histo.GetXaxis().GetBinLowEdge(i),edge_precision)))
-            nbinsY = plot.histo.GetNbinsY()
-            bin_edges_y = []
-            for i in range(1, nbinsY+2):
-              bin_edges_y.append(str(round(plot.histo.GetYaxis().GetBinLowEdge(i),edge_precision)))
-            rstr  += """plotinfo2D["{0}"] = {{"{0}","{1}",{2},{{ {3} }}, {4}, {{ {5} }} }};\n""".format(name, title, 
-                                                                                                        nbinsX, ",".join(bin_edges_x), 
-                                                                                                        nbinsY, ",".join(bin_edges_y)
-                                                                                                        )
-        else:
-            title  = plot.histo.GetTitle()
-            name   = plot.histo.GetName()
-            nbins  = plot.histo.GetNbinsX()
-            bin_edges = []
-            for i in range(1, nbins+2):
-              bin_edges.append(str(round(plot.histo.GetBinLowEdge(i),edge_precision)))
-            rstr  += """plotinfo1D["{0}"] = {{"{0}","{1}",{2},{{ {3} }} }};\n""".format(name, title, nbins, ",".join(bin_edges))
+OneDimHistoHelper histos1D; // Container for templates that need to be filled
+histos1D.SetSystematics(systematics); // List of relevant weight systematics to ensure that we don't try to fill a non-existing template
+histos1D.SetCurrentVariation(variation); // needed to correctly initialize the nominal templates in case of variation uncertainties (e.g. JES)
+histos1D.SetSkipWeightSysts(skipWeightSysts); // Decide here whether to processes weight systematics at all
+TwoDimHistoHelper histos2D; // Container for templates that need to be filled
+histos2D.SetSystematics(systematics); // List of relevant weight systematics to ensure that we don't try to fill a non-existing template
+histos2D.SetCurrentVariation(variation); // needed to correctly initialize the nominal templates in case of variation uncertainties (e.g. JES)
+histos2D.SetSkipWeightSysts(skipWeightSysts); // Decide here whether to processes weight systematics at all
+""".format(',\n'.join(['\t"{}"'.format(c) for c in catnames]))
+  for plot in plots:
+      if plot.dim == 2:
+          title  = plot.histo.GetTitle()+";"+plot.histo.GetXaxis().GetTitle()+";"+plot.histo.GetYaxis().GetTitle()
+          name   = plot.histo.GetName()
+          nbinsX = plot.histo.GetNbinsX()
+          bin_edges_x = []
+          for i in range(1, nbinsX+2):
+            bin_edges_x.append(str(round(plot.histo.GetXaxis().GetBinLowEdge(i),edge_precision)))
+          nbinsY = plot.histo.GetNbinsY()
+          bin_edges_y = []
+          for i in range(1, nbinsY+2):
+            bin_edges_y.append(str(round(plot.histo.GetYaxis().GetBinLowEdge(i),edge_precision)))
+          rstr  += """plotinfo2D["{0}"] = {{"{0}","{1}",{2},{{ {3} }}, {4}, {{ {5} }} }};\n""".format(name, title, 
+                                                                                                      nbinsX, ",".join(bin_edges_x), 
+                                                                                                      nbinsY, ",".join(bin_edges_y)
+                                                                                                      )
+      else:
+          title  = plot.histo.GetTitle()
+          name   = plot.histo.GetName()
+          nbins  = plot.histo.GetNbinsX()
+          bin_edges = []
+          for i in range(1, nbins+2):
+            bin_edges.append(str(round(plot.histo.GetBinLowEdge(i),edge_precision)))
+          rstr  += """plotinfo1D["{0}"] = {{"{0}","{1}",{2},{{ {3} }} }};\n""".format(name, title, nbins, ",".join(bin_edges))
 
-    rstr += """
+  rstr += """
 TString histname;
+// loop through all plots and initialize nominal template and
+// templates for variations that are needed for the current process
 for(const auto& obj: plotinfo1D){{
   for(const auto& syst: systematics){{
     const auto& PlotInfo1D = obj.second;
@@ -262,8 +324,16 @@ for(const auto& obj: plotinfo1D){{
     histname.ReplaceAll("$PROCESS", origName);
     histname.ReplaceAll("$CHANNEL", obj.first);
     histname.ReplaceAll("$SYSTEMATIC", syst);
-    histos1D[obj.first+syst] = std::unique_ptr<TH1>(new TH1F((histname.Data()+suffix).c_str(), (PlotInfo1D.title).c_str(), PlotInfo1D.nbins, PlotInfo1D.edges.data()));
-    histos1D[obj.first+syst]->SetDirectory(0);
+    histos1D.push_back(obj.first+syst, 
+                        std::move( std::shared_ptr<TH1>(
+                            new TH1F((histname.Data()+suffix).c_str(), 
+                                      (PlotInfo1D.title).c_str(), 
+                                      PlotInfo1D.nbins, 
+                                      PlotInfo1D.edges.data()
+                                      )
+                                    )
+                                  )
+                        );
     if (skipWeightSysts) break;
   }}
 }}
@@ -276,16 +346,20 @@ for(const auto& obj: plotinfo2D){{
     histname.ReplaceAll("$PROCESS", origName);
     histname.ReplaceAll("$CHANNEL", obj.first);
     histname.ReplaceAll("$SYSTEMATIC", syst);
-    histos2D[obj.first+syst] = std::unique_ptr<TH2>(new TH2F((histname.Data()+suffix).c_str(), (PlotInfo2D.title).c_str(), 
+    histos2D.push_back(obj.first+syst, 
+                        std::move( std::shared_ptr<TH2>(new TH2F((histname.Data()+suffix).c_str(), (PlotInfo2D.title).c_str(), 
                                                                 PlotInfo2D.nbinsx, PlotInfo2D.edges_x.data(), 
-                                                                PlotInfo2D.nbinsy, PlotInfo2D.edges_y.data()));
-    histos2D[obj.first+syst]->SetDirectory(0);
+                                                                PlotInfo2D.nbinsy, PlotInfo2D.edges_y.data()
+                                                                )
+                                                        )
+                                  )
+                        );
     if (skipWeightSysts) break;
   }}
 }}""".format( nom_hist_temp   = nom_histname_template,
               syst_hist_temp  = syst_histname_template)
     
-    return rstr
+  return rstr
 
 def initOneDimHisto(name,nbins,xmin=0,xmax=0,title_=''):
   if title_=='':
@@ -510,7 +584,7 @@ class initPlots:
             arraySelection = self.varManager.checkArrayLengths(",".join(variables + [sel]))
             weight = "("+arraySelection+")*("+sel_i+")*Weight_XS*categoryweight*sampleweight"
 
-            script += fillHistoSyst(histName, var_i, weight, self.systnames, self.systweights)
+            script += fillHistoSyst(histName, var_i, weight)
             script += "            }\n"
         else:
             # only handle one dimensional plots that are not BDT variables, are not in tree and have '_' in name
@@ -525,7 +599,7 @@ class initPlots:
 
             arraySelection = self.varManager.checkArrayLengths(",".join(variables + [sel]))
             weight = '('+arraySelection+')*('+sel+')*Weight_XS*categoryweight*sampleweight'
-            script += fillHistoSyst(histName, variables, weight, self.systnames, self.systweights)
+            script += fillHistoSyst(histName, variables, weight)
         if self.varManager.verbose > 20: print("\n\ninit plot code for "+str(plotName)+":\n"+str(script))
         return script
         
@@ -535,7 +609,7 @@ class initPlots:
 def varLoop(i,n):
     return '      for(int '+str(i)+'=0; '+str(i)+'<'+str(n)+'; '+str(i)+'++)'
 
-def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
+def fillHistoSyst(histName, varNames, weight):
     print(varNames)
     final_names = []
     # perform replacement for friendTrees. Important: check if the '.'
@@ -553,71 +627,22 @@ def fillHistoSyst(histName, varNames, weight, systNames, systWeights):
                     ) else v for v in varNames]
     # if any("_friendTree_" in x for x in varNames):
         # exit("DEBUG OUT")
-    text = '      float weight_{}={};\n'.format(histName, weight)
+    text = '      final_weight={};\n'.format(weight)
 
     histVectorName = "histos2D" if len(varNames) == 2 else "histos1D"
-
-
-    # write lines to fill systematics
-    systline_template = " ".join("""helpWeightVec_{histName}.push_back(
-        {{  
-            {histVectorName}["{histName}{systName}"].get(), 
-            ({systWeight})*(weight_{histName})
-        }}
-    );""".split())
-    indent = "        "
-    systlines = [indent+systline_template.format(
-                                histVectorName = histVectorName,
-                                histName = histName,
-                                systName = sname,
-                                systWeight = sweight) \
-                for sname, sweight in zip(systNames[1:], systWeights[1:])]
 
     # Write all individual systnames and systweights in nested vector 
     # to use together with function allowing variadic vector size 
     # -> speed-up of compilation and less code lines
-    if len(varNames) == 1:
-        # 1D Histograms
-        
-        text += """
-        // nominal plot
-        std::vector<structHelpFillHisto> helpWeightVec_{histName} = {{
-            {{{histVectorName}["{histName}"+variation].get(), ((NomWeight)*(weight_{histName}))}},
-        }};
-        if (!skipWeightSysts) {{ // append plots for weight systs if neccessary
-            {systlines}
-        }}
-        variable = {varName};
-        helperFillHisto(helpWeightVec_{histName}, variable);
-        variable = -999;\n""".format(
-                        histVectorName = histVectorName,
-                        histName = histName,
-                        systlines = "\n".join(systlines),
-                        varName = varNames[0]
-                        )
-        
-
-    elif len(varNames) == 2:
-        # 2D Histograms
-        text += """
-        // nominal plot
-        std::vector<structHelpFillTwoDimHisto> helpWeightVec_{histName} = {{
-            {{{histVectorName}["{histName}"+variation].get(), ((NomWeight)*(weight_{histName}))}},
-        }};
-        if (!skipWeightSysts) {{ // append plots for weight systs if neccessary
-            {systlines}
-        }}
-        variable1 = {varName1};
-        variable2 = {varName2};
-        helperFillTwoDimHisto(helpWeightVec_{histName}, variable1, variable2);
-        variable1 = -999;
-        variable2 = -999;\n""".format(
-                        histVectorName = histVectorName,
-                        histName = histName,
-                        systlines = "\n".join(systlines),
-                        varName1 = varNames[0],
-                        varName2 = varNames[1]
-                        )
+    
+    text += """
+    // fill templates for {histName}
+    {histVectorName}.fillNecessaryHistograms("{histName}", NomWeight, final_weight,
+                            weight_expressions, {varName});\n""".format(
+                    histVectorName = histVectorName,
+                    histName = histName,
+                    varName = ", ".join(varNames)
+                    )
     return text
 # -------------------------------------------------------------------------------------------------
 
@@ -641,8 +666,8 @@ def endLoop():
 # -- generating foot of the script ----------------------------------------------------------------
 def getFoot(addCodeInterfaces):
   rstr= """
-  for(auto& histo1D: histos1D){ outfile->WriteTObject(histo1D.second.get()); }
-  for(auto& histo2D: histos2D){ outfile->WriteTObject(histo2D.second.get()); }
+  for(auto& histo1D: histos1D.GetHistoMap()){ outfile->WriteTObject(histo1D.second.get()); }
+  for(auto& histo2D: histos2D.GetHistoMap()){ outfile->WriteTObject(histo2D.second.get()); }
   //outfile->Write();
 
   outfile->Close();
