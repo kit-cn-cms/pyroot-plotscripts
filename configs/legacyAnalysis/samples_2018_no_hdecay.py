@@ -58,7 +58,7 @@ ttZpath =  path+'/TTZToQQ*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu_M-10*/*nominal*.root'+';'
 
 friendTrees = {
-    "MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH_fixed/2018_wrongJERsources/",
+    "MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH_fixed/2018/",
     }
 
 # SELECTIONS
@@ -480,7 +480,7 @@ samples_5FS = [
             ttbarPathS,
             lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+ttbb_5FS_scale+sel_MET+sel_StrangeMuWeights,
             'ttbb_5FS',
-            samDict=sampleDict, readTrees=doReadTrees, plot = True), 
+            samDict=sampleDict, readTrees=doReadTrees, plot = False), 
     ]
 
 samples_ttnonbb = [
@@ -523,7 +523,7 @@ processes = []
 for sample in samples:
     processes.append(sample.nick)
 list_of_processes   = processes
-datacard_processes  = [p for p in processes if not x.nick == "ttbb_5FS"]
+datacard_processes  = [p for p in processes if not p == "ttbb_5FS"]
 pseudo_data_samples = [x for x in samples if not x.typ == "signal" or x.nick == "ttbb_5FS"]
 
 plottingsamples = [
