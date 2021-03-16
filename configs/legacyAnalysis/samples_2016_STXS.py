@@ -57,7 +57,7 @@ ttZpath =  path+'/TTZToQQ*/*nominal*.root'+';'+ \
            path+'/TTZToLLNuNu_M-10*/*nominal*.root'+';'
 
 friendTrees = {
-    "MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH/2016/",
+    "MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH_fixed/2016/",
     }
 # SELECTIONS
 STXS_stage0 = '*(abs(GenHiggs_Y)<2.5)'

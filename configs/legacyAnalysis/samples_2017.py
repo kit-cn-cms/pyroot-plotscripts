@@ -63,7 +63,7 @@ ttHpath = "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2017_newttH"+'/ttHTobb_M125_T
 	      "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2017_newttH"+'/ttHToNonbb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'
 
 friendTrees = {
-    "MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH/2017",
+    "MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH_fixed/2017",
     }
 
 # SELECTIONS
