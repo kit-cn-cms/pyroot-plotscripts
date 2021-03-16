@@ -12,6 +12,7 @@ import util.variableHistoInterface as vhi
 import ROOT
 from array import array
 from copy import deepcopy
+import numpy as np
 
 
 memexp = ""
@@ -24,6 +25,7 @@ def plots_ge4j_ge4t_top20(data = None):
     interfaces = []
     selection = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)"
     # plotClasses.Plot(ROOT.TH1D(cat+"_memDBp","MEM",40,0.0,1.2),memexp,selection,label),
+
     interf_ljets_ge4j_ge4t_memDBp = vhi.variableHistoInterface(variable_name  = "memDBp",
                                             label          = "ljets_ge4j_ge4t_memDBp",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
@@ -32,8 +34,9 @@ def plots_ge4j_ge4t_top20(data = None):
     interf_ljets_ge4j_ge4t_memDBp.histotitle = "MEM"
     interf_ljets_ge4j_ge4t_memDBp.histoname = "ljets_ge4j_ge4t_memDBp"
     interf_ljets_ge4j_ge4t_memDBp.nhistobins = 40
-    interf_ljets_ge4j_ge4t_memDBp.minxval = 0.0
-    interf_ljets_ge4j_ge4t_memDBp.maxxval = 1.0
+    # interf_ljets_ge4j_ge4t_memDBp.minxval = 0.0
+    # interf_ljets_ge4j_ge4t_memDBp.maxxval = 1.0
+    interf_ljets_ge4j_ge4t_memDBp.bin_edges = np.linspace(0.,1.,40)
     interfaces.append(interf_ljets_ge4j_ge4t_memDBp)
 
     interf_ljets_ge4j_ge4t_top20_CSV_2 = vhi.variableHistoInterface(variable_name  = "CSV[2]",
@@ -952,8 +955,9 @@ def plots_ge4j_ge4t_top25(data = None):
     interf_ljets_ge4j_ge4t_memDBp.histotitle = "MEM"
     interf_ljets_ge4j_ge4t_memDBp.histoname = "ljets_ge4j_ge4t_memDBp"
     interf_ljets_ge4j_ge4t_memDBp.nhistobins = 40
-    interf_ljets_ge4j_ge4t_memDBp.minxval = 0.0
-    interf_ljets_ge4j_ge4t_memDBp.maxxval = 1.0
+    # interf_ljets_ge4j_ge4t_memDBp.minxval = 0.0
+    # interf_ljets_ge4j_ge4t_memDBp.maxxval = 1.0
+    interf_ljets_ge4j_ge4t_memDBp.bin_edges = np.linspace(0.,1.,40)
     interfaces.append(interf_ljets_ge4j_ge4t_memDBp)
 
     interf_ljets_ge4j_ge4t_top25_CSV_2 = vhi.variableHistoInterface(variable_name  = "CSV[2]",
@@ -1275,8 +1279,9 @@ def plots_ge4j_ge4t_top30(data = None):
     interf_ljets_ge4j_ge4t_memDBp.histotitle = "MEM"
     interf_ljets_ge4j_ge4t_memDBp.histoname = "ljets_ge4j_ge4t_memDBp"
     interf_ljets_ge4j_ge4t_memDBp.nhistobins = 40
-    interf_ljets_ge4j_ge4t_memDBp.minxval = 0.0
-    interf_ljets_ge4j_ge4t_memDBp.maxxval = 1.0
+    # interf_ljets_ge4j_ge4t_memDBp.minxval = 0.0
+    # interf_ljets_ge4j_ge4t_memDBp.maxxval = 1.0
+    interf_ljets_ge4j_ge4t_memDBp.bin_edges = np.linspace(0.,1.,40)
     interfaces.append(interf_ljets_ge4j_ge4t_memDBp)
 
     interf_ljets_ge4j_ge4t_top30_CSV_2 = vhi.variableHistoInterface(variable_name  = "CSV[2]",
@@ -1658,8 +1663,9 @@ def plots_ge4j_3t_top20(data = None):
     interf_ljets_ge4j_3t_memDBp.histotitle = "MEM"
     interf_ljets_ge4j_3t_memDBp.histoname = "ljets_ge4j_3t_memDBp"
     interf_ljets_ge4j_3t_memDBp.nhistobins = 40
-    interf_ljets_ge4j_3t_memDBp.minxval = 0.0
-    interf_ljets_ge4j_3t_memDBp.maxxval = 1.0
+    # interf_ljets_ge4j_3t_memDBp.minxval = 0.0
+    # interf_ljets_ge4j_3t_memDBp.maxxval = 1.0
+    interf_ljets_ge4j_ge4t_memDBp.bin_edges = np.linspace(0.,1.,40)
     interfaces.append(interf_ljets_ge4j_3t_memDBp)
 
 
@@ -1910,8 +1916,9 @@ def plots_ge4j_3t_top25(data = None):
     interf_ljets_ge4j_3t_memDBp.histotitle = "MEM"
     interf_ljets_ge4j_3t_memDBp.histoname = "ljets_ge4j_3t_memDBp"
     interf_ljets_ge4j_3t_memDBp.nhistobins = 40
-    interf_ljets_ge4j_3t_memDBp.minxval = 0.0
-    interf_ljets_ge4j_3t_memDBp.maxxval = 1.0
+    # interf_ljets_ge4j_3t_memDBp.minxval = 0.0
+    # interf_ljets_ge4j_3t_memDBp.maxxval = 1.0
+    interf_ljets_ge4j_3t_memDBp.bin_edges = np.linspace(0.,1.,40)
     interfaces.append(interf_ljets_ge4j_3t_memDBp)
 
 
@@ -3170,8 +3177,9 @@ def plots_ge4j_3t_top30(data = None):
     interf_ljets_ge4j_3t_memDBp.histotitle = "MEM"
     interf_ljets_ge4j_3t_memDBp.histoname = "ljets_ge4j_3t_memDBp"
     interf_ljets_ge4j_3t_memDBp.nhistobins = 40
-    interf_ljets_ge4j_3t_memDBp.minxval = 0.0
-    interf_ljets_ge4j_3t_memDBp.maxxval = 1.0
+    # interf_ljets_ge4j_3t_memDBp.minxval = 0.0
+    # interf_ljets_ge4j_3t_memDBp.maxxval = 1.0
+    interf_ljets_ge4j_3t_memDBp.bin_edges = np.linspace(0.,1.,40)
     interfaces.append(interf_ljets_ge4j_3t_memDBp)
 
     interf_ljets_ge4j_3t_top30_Evt_CSV_avg = vhi.variableHistoInterface(variable_name  = "Evt_CSV_avg",
@@ -8284,6 +8292,9 @@ def init_plots_2D(interfaces):
     plots = [] #init list of plotClasses objects to return
     dictionary = {}
     for i, interf in enumerate(interfaces):
+        if interf.histotitle != "MEM":
+            print("not MEM")
+            continue
         for interf2 in interfaces[i+1:]:
             binsX = None
             nbinsX = None
