@@ -1,0 +1,1 @@
+python /ceph/pkeicher/ttH_legacy/DRACO-MLfoy/train_scripts/train_template.py -o legacy_16_17_18/noMEM_pruned_set_v1 -i /local/scratch/ssd/swieland/h5Files/SL_16_17_18 -a ttH,ttmb,ttlf,ttcc,tHq,tHW,tt2b -v variables_ttHbb_SL_final_ge4j_3t_pruned_v1 -e 1000 -s -1 -RpG -n ttH_SL_legacy_opt43 -c ge4j_3t -f 0.1
