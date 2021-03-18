@@ -248,6 +248,29 @@ void plot()
     ewk_nlo_wlnu.AddScaleFactorHistogram("ewk_nlo_wlnu","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/merged_kfactors_wjets.root","kfactor_monojet_ewk");
     SFHelper ewk_nlo_gamma;
     ewk_nlo_gamma.AddScaleFactorHistogram("ewk_nlo_gamma","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/merged_kfactors_gjets.root","kfactor_monojet_ewk");
+    
+    // vjets nlo ewk k factors from lindert paper for NLO QCD V+Jets samples
+    SFHelper ewk_nlo_lindert;
+
+    ewk_nlo_lindert.AddScaleFactorHistogram("ewk_nlo_zll_lindert","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/eej.root","eej_pTV_kappa_EW");
+    ewk_nlo_lindert.AddScaleFactorHistogram("ewk_nlo_zvv_lindert","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/vvj.root","vvj_pTV_kappa_EW");
+    ewk_nlo_lindert.AddScaleFactorHistogram("ewk_nlo_wlv_lindert","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/evj.root","evj_pTV_kappa_EW");
+    ewk_nlo_lindert.AddScaleFactorHistogram("ewk_nlo_gamma_lindert","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/aj.root","aj_pTV_kappa_EW");
+
+    ewk_nlo_lindert.AddScaleFactorHistogram("ewk_nlo_ew1_zll_lindert","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/eej.root","eej_pTV_d1kappa_EW");
+    ewk_nlo_lindert.AddScaleFactorHistogram("ewk_nlo_ew1_zvv_lindert","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/vvj.root","vvj_pTV_d1kappa_EW");
+    ewk_nlo_lindert.AddScaleFactorHistogram("ewk_nlo_ew1_wlv_lindert","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/evj.root","evj_pTV_d1kappa_EW");
+    ewk_nlo_lindert.AddScaleFactorHistogram("ewk_nlo_ew1_gamma_lindert","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/aj.root","aj_pTV_d1kappa_EW");
+
+    ewk_nlo_lindert.AddScaleFactorHistogram("ewk_nlo_ew2_zll_lindert","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/eej.root","eej_pTV_d2kappa_EW");
+    ewk_nlo_lindert.AddScaleFactorHistogram("ewk_nlo_ew2_zvv_lindert","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/vvj.root","vvj_pTV_d2kappa_EW");
+    ewk_nlo_lindert.AddScaleFactorHistogram("ewk_nlo_ew2_wlv_lindert","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/evj.root","evj_pTV_d2kappa_EW");
+    ewk_nlo_lindert.AddScaleFactorHistogram("ewk_nlo_ew2_gamma_lindert","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/aj.root","aj_pTV_d2kappa_EW");
+
+    ewk_nlo_lindert.AddScaleFactorHistogram("ewk_nlo_ew3_zll_lindert","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/eej.root","eej_pTV_d3kappa_EW");
+    ewk_nlo_lindert.AddScaleFactorHistogram("ewk_nlo_ew3_zvv_lindert","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/vvj.root","vvj_pTV_d3kappa_EW");
+    ewk_nlo_lindert.AddScaleFactorHistogram("ewk_nlo_ew3_wlv_lindert","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/evj.root","evj_pTV_d3kappa_EW");
+    ewk_nlo_lindert.AddScaleFactorHistogram("ewk_nlo_ew3_gamma_lindert","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/aj.root","aj_pTV_d3kappa_EW");
 
     // tau scale factors
     SFHelper tau_sfs;

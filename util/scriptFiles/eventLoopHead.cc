@@ -183,6 +183,53 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     //    internalBosonWeight_monojet = internalBosonWeight;
     //}
     
+    // higher-order corrections for NLO V+Jets samples (only NLO EWK needed)
+    float internalBosonWeight_NLO = 1.0;
+    float internalBosonWeight_NLO_ew1_up = 1.0;
+    float internalBosonWeight_NLO_ew1_down = 1.0;
+    float internalBosonWeight_NLO_ew2_up = 1.0;
+    float internalBosonWeight_NLO_ew2_down = 1.0;
+    float internalBosonWeight_NLO_ew3_up = 1.0;
+    float internalBosonWeight_NLO_ew3_down = 1.0;
+    
+    float ewk_nlo_sf_lindert = 0.0;
+    float ewk_nlo_sf_lindert_ew1 = 0.0;
+    float ewk_nlo_sf_lindert_ew2 = 0.0;
+    float ewk_nlo_sf_lindert_ew3 = 0.0;
+    
+    if (processname.find("wlnujets") != std::string::npos && W_Pt > 100.) {
+        ewk_nlo_sf_lindert = ewk_nlo_lindert.GetScaleFactor("ewk_nlo_wlv_lindert", W_Pt, true);
+        ewk_nlo_sf_lindert_ew1 = ewk_nlo_lindert.GetScaleFactor("ewk_nlo_ew1_wlv_lindert", W_Pt, true);
+        ewk_nlo_sf_lindert_ew2 = ewk_nlo_lindert.GetScaleFactor("ewk_nlo_ew2_wlv_lindert", W_Pt, true);
+        ewk_nlo_sf_lindert_ew3 = ewk_nlo_lindert.GetScaleFactor("ewk_nlo_ew3_wlv_lindert", W_Pt, true);
+    }
+    else if (processname.find("znunujets") != std::string::npos && Z_Pt > 100.) {
+        ewk_nlo_sf_lindert = ewk_nlo_lindert.GetScaleFactor("ewk_nlo_zvv_lindert", Z_Pt, true);
+        ewk_nlo_sf_lindert_ew1 = ewk_nlo_lindert.GetScaleFactor("ewk_nlo_ew1_zvv_lindert", Z_Pt, true);
+        ewk_nlo_sf_lindert_ew2 = ewk_nlo_lindert.GetScaleFactor("ewk_nlo_ew2_zvv_lindert", Z_Pt, true);
+        ewk_nlo_sf_lindert_ew3 = ewk_nlo_lindert.GetScaleFactor("ewk_nlo_ew3_zvv_lindert", Z_Pt, true);
+    }
+    else if (processname.find("zlljets") != std::string::npos && Z_Pt > 100.) {
+        ewk_nlo_sf_lindert = ewk_nlo_lindert.GetScaleFactor("ewk_nlo_zll_lindert", Z_Pt, true);
+        ewk_nlo_sf_lindert_ew1 = ewk_nlo_lindert.GetScaleFactor("ewk_nlo_ew1_zll_lindert", Z_Pt, true);
+        ewk_nlo_sf_lindert_ew2 = ewk_nlo_lindert.GetScaleFactor("ewk_nlo_ew2_zll_lindert", Z_Pt, true);
+        ewk_nlo_sf_lindert_ew3 = ewk_nlo_lindert.GetScaleFactor("ewk_nlo_ew3_zll_lindert", Z_Pt, true);
+    }
+    else if (processname.find("gammajets") != std::string::npos && Gamma_Pt > 100.) {
+        ewk_nlo_sf_lindert = ewk_nlo_lindert.GetScaleFactor("ewk_nlo_gamma_lindert", Gamma_Pt, true);
+        ewk_nlo_sf_lindert_ew1 = ewk_nlo_lindert.GetScaleFactor("ewk_nlo_ew1_gamma_lindert", Gamma_Pt, true);
+        ewk_nlo_sf_lindert_ew2 = ewk_nlo_lindert.GetScaleFactor("ewk_nlo_ew2_gamma_lindert", Gamma_Pt, true);
+        ewk_nlo_sf_lindert_ew3 = ewk_nlo_lindert.GetScaleFactor("ewk_nlo_ew3_gamma_lindert", Gamma_Pt, true);
+    }
+
+    internalBosonWeight_NLO = 1 + ewk_nlo_sf_lindert;
+    internalBosonWeight_NLO_ew1_up = (1 + ewk_nlo_sf_lindert + ewk_nlo_sf_lindert_ew1)/internalBosonWeight_NLO;
+    internalBosonWeight_NLO_ew1_down = (1 + ewk_nlo_sf_lindert - ewk_nlo_sf_lindert_ew1)/internalBosonWeight_NLO;
+    internalBosonWeight_NLO_ew2_up = (1 + ewk_nlo_sf_lindert + ewk_nlo_sf_lindert_ew2)/internalBosonWeight_NLO;
+    internalBosonWeight_NLO_ew2_down = (1 + ewk_nlo_sf_lindert - ewk_nlo_sf_lindert_ew2)/internalBosonWeight_NLO;
+    internalBosonWeight_NLO_ew3_up = (1 + ewk_nlo_sf_lindert + ewk_nlo_sf_lindert_ew3)/internalBosonWeight_NLO;
+    internalBosonWeight_NLO_ew3_down = (1 + ewk_nlo_sf_lindert - ewk_nlo_sf_lindert_ew3)/internalBosonWeight_NLO;
+    
     // additional uncertainty for for v+heavy flavor jet events
     float vjets_hf_up = 1.0;
     float vjets_hf_down = 1.0;
