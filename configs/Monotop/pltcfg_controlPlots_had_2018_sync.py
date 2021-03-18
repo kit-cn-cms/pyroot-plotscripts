@@ -179,14 +179,22 @@ ps_fsr_down = "GenWeight_fsr_Def_down"
 #deepakEfficiencySF_high_up = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*((AK15Jet_DeepAK15_MD_TvsQCD[0]>=0.3)*1.2+(AK15Jet_DeepAK15_MD_TvsQCD[0]<0.3)*0.8)+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
 #deepakEfficiencySF_high_down = "(((AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5) && AK15Jet_Pt[0]>=400.)*((AK15Jet_DeepAK15_MD_TvsQCD[0]>=0.3)*0.8+(AK15Jet_DeepAK15_MD_TvsQCD[0]<0.3)*1.2)+(AK15Jet_match_tbcq[0]<0.5 && AK15Jet_match_tbqq[0]<0.5 && AK15Jet_Pt[0]>=400.)*1.+(AK15Jet_Pt[0]<400.)*1.)"
 
-pass_region = False
-fail_region = not pass_region
+region = ""
 
 deepakWeight = "1.0"
+deepakEfficiencySF_low_up = "1.0"
+deepakEfficiencySF_low_down = "1.0"
+deepakMistagSF_low_up = "1.0"
+deepakMistagSF_low_down = "1.0"
+deepakEfficiencySF_high_up = "1.0"
+deepakEfficiencySF_high_down = "1.0"
+deepakMistagSF_high_up = "1.0"
+deepakMistagSF_high_down = "1.0"
+
 gen_class = "(AK15Jet_match_tbcq[0]>0.5 || AK15Jet_match_tbqq[0]>0.5)"
 tagger_pass = "(AK15Jet_DeepAK15_MD_TvsQCD[0]>=0.3)"
 
-if pass_region:
+if region=="pass":
     deepakWeight = "("+tagger_pass+"*1.0+(!"+tagger_pass+")*0.0)"
     
     kin_region = "(AK15Jet_Pt[0]<400.)"
@@ -204,10 +212,8 @@ if pass_region:
     
     deepakMistagSF_high_up = "("+kin_region+"*("+tagger_pass+"*("+gen_class+"*1.0+(!"+gen_class+")*1.5)+(!"+tagger_pass+")*0.0)+(!"+kin_region+")*"+deepakWeight+")"
     deepakMistagSF_high_down = "("+kin_region+"*("+tagger_pass+"*("+gen_class+"*1.0+(!"+gen_class+")*0.5)+(!"+tagger_pass+")*0.0)+(!"+kin_region+")*"+deepakWeight+")"
-    
-    
 
-if fail_region:
+elif region=="fail":
     deepakWeight = "("+tagger_pass+"*0.0+(!"+tagger_pass+")*1.0)"
     
     kin_region = "(AK15Jet_Pt[0]<400.)"
@@ -363,10 +369,10 @@ doReadTrees = True
 
 single_el_sel = "((N_LooseElectrons>0) || (N_LoosePhotons>0)) && (N_LooseMuons==0) && (N_Taus==0)"
 met_sel = "(N_LooseElectrons==0) && (N_LooseMuons>=0) && (N_LoosePhotons==0) && (N_Taus==0)"
-if pass_region:
+if region=="pass":
     single_el_sel += " && "+tagger_pass
     met_sel += " && "+tagger_pass
-elif fail_region:
+elif region=="fail":
     single_el_sel += " && "+"(!"+tagger_pass+")"
     met_sel += " && "+"(!"+tagger_pass+")"
 
