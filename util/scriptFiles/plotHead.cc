@@ -272,6 +272,13 @@ void plot()
     ewk_nlo_lindert.AddScaleFactorHistogram("ewk_nlo_ew3_wlv_lindert","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/lindert/evj.root","evj_pTV_d3kappa_EW");
     ewk_nlo_lindert.AddScaleFactorHistogram("ewk_nlo_ew3_gamma_lindert","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/lindert/aj.root","aj_pTV_d3kappa_EW");
 
+    // Vjets scale factors for lindert cross sections
+    //SFHelper lindert_xs_sfs;
+    //lindert_xs_sfs.AddScaleFactorHistogram("vvj_qcd_nnlo_ewk_nlo_xs_sf","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/lindert/TheoryXS_vvj_amc_"+dataera+".root","vvj_NNLO_NLO_nnn_nnn_n");
+    //lindert_xs_sfs.AddScaleFactorHistogram("eej_qcd_nnlo_ewk_nlo_xs_sf","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/lindert/TheoryXS_eej_amc_"+dataera+".root","eej_NNLO_NLO_nnn_nnn_n");
+    //lindert_xs_sfs.AddScaleFactorHistogram("evj_qcd_nnlo_ewk_nlo_xs_sf","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/lindert/TheoryXS_evj_amc_"+dataera+".root","evj_NNLO_NLO_nnn_nnn_n");
+    //lindert_xs_sfs.AddScaleFactorHistogram("aj_qcd_nnlo_ewk_nlo_xs_sf","/nfs/dust/cms/user/mwassmer/MonoTop/pyroot-plotscripts/data/vjets_SFs/lindert/TheoryXS_aj_amc_"+dataera+".root","aj_NNLO_NLO_nnn_nnn_n");
+
     // tau scale factors
     SFHelper tau_sfs;
     if ( dataera == "2018" ) {

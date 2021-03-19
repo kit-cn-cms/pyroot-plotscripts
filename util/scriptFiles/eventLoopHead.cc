@@ -229,6 +229,23 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
     internalBosonWeight_NLO_ew2_down = (1 + ewk_nlo_sf_lindert - ewk_nlo_sf_lindert_ew2)/internalBosonWeight_NLO;
     internalBosonWeight_NLO_ew3_up = (1 + ewk_nlo_sf_lindert + ewk_nlo_sf_lindert_ew3)/internalBosonWeight_NLO;
     internalBosonWeight_NLO_ew3_down = (1 + ewk_nlo_sf_lindert - ewk_nlo_sf_lindert_ew3)/internalBosonWeight_NLO;
+
+    //std::cout << "NLO EWK SF " << ewk_nlo_sf_lindert << std::endl;
+    //std::cout << "NLO EWK Weight " << internalBosonWeight_NLO << std::endl;
+    
+    // Vjets scale factors for lindert cross sections
+    //if (processname.find("znunujets") != std::string::npos && Z_Pt > 100.) {
+    //    internalBosonWeight = lindert_xs_sfs.GetScaleFactor("vvj_qcd_nnlo_ewk_nlo_xs_sf", Z_Pt, true);
+    //}
+    //else if (processname.find("zlljets") != std::string::npos && Z_Pt > 100.) {
+    //    internalBosonWeight = lindert_xs_sfs.GetScaleFactor("eej_qcd_nnlo_ewk_nlo_xs_sf", Z_Pt, true);
+    //}
+    //else if (processname.find("wlnujets") != std::string::npos && W_Pt > 100.) {
+    //    internalBosonWeight = lindert_xs_sfs.GetScaleFactor("evj_qcd_nnlo_ewk_nlo_xs_sf", W_Pt, true);
+    //}
+    //else if (processname.find("gammajets") != std::string::npos && Gamma_Pt > 100.) {
+    //    internalBosonWeight = lindert_xs_sfs.GetScaleFactor("aj_qcd_nnlo_ewk_nlo_xs_sf", Gamma_Pt, true);
+    //}
     
     // additional uncertainty for for v+heavy flavor jet events
     float vjets_hf_up = 1.0;
