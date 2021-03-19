@@ -1,0 +1,1 @@
+python /ceph/pkeicher/ttH_legacy/DRACO-MLfoy/train_scripts/train_template.py -o legacy_16_17_18/noMEM_kNN_2D_top20 -i /local/scratch/ssd/swieland/h5Files/SL_16_17_18 -a ttH,ttmb,ttlf,ttcc,tHq,tHW,tt2b -v variables_ttHbb_SL_final_ge4j_ge4t_top20 -e 1000 -s -1 -RpG -n ttH_SL_legacy_opt44 -c ge4j_ge4t -f 0.1
