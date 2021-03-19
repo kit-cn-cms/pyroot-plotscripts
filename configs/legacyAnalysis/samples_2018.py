@@ -511,7 +511,7 @@ processes = []
 for sample in samples:
     processes.append(sample.nick)
 list_of_processes   = processes
-datacard_processes  = [p for p in processes if not x.nick == "ttbb_5FS"]
+datacard_processes  = [p for p in processes if not p == "ttbb_5FS"]
 pseudo_data_samples = [x for x in samples if not x.typ == "signal" or x.nick == "ttbb_5FS"]
 
 plottingsamples = [
