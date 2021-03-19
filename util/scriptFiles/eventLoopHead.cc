@@ -158,11 +158,11 @@ for (long iEntry = skipevents; iEntry < nentries; iEntry++) {
         qcd_nlo_sf = qcd_nlo_gamma.GetScaleFactor("qcd_nlo_gamma", lead_gen_photon_pt, true);
         ewk_nlo_sf = ewk_nlo_gamma.GetScaleFactor("ewk_nlo_gamma", lead_gen_photon_pt, true);
         if(dataera == "2016"){
-            //internalBosonWeight_monojet = qcd_nlo_sf*ewk_nlo_sf;
-            internalBosonWeight_monojet  = internalBosonWeight;
+            internalBosonWeight_monojet = qcd_nlo_sf*ewk_nlo_sf;
+            //internalBosonWeight_monojet  = internalBosonWeight;
         }
         else if(dataera == "2017" || dataera == "2018"){
-            internalBosonWeight_monojet = internalBosonWeight;
+            internalBosonWeight_monojet = ewk_nlo_sf;
         }
         else {
             std::cout << "NO VALID DATAERA CHOSEN!!" << std::endl;
