@@ -1,0 +1,2 @@
+model_checkpoint_path: "/ceph/pkeicher/ttH_legacy/DRACO-MLfoy/workdir/legacy_16_17_18/noMEM_pruned_set_v2_ge4j_3t/checkpoints//trained_model"
+all_model_checkpoint_paths: "/ceph/pkeicher/ttH_legacy/DRACO-MLfoy/workdir/legacy_16_17_18/noMEM_pruned_set_v2_ge4j_3t/checkpoints//trained_model"

@@ -1,5 +1,5 @@
 {
-  "shuffleSeed": 59872,
+  "shuffleSeed": 23062,
   "test_percentage": 0.1,
   "outputName": "outputLayer/Softmax",
   "trainSelection": "",
@@ -15,7 +15,7 @@
       "sampleWeight": 1.0,
       "sampleLabel": "ttH",
       "min": 0.14,
-      "max": 0.96,
+      "max": 0.87,
       "samplePath": "/local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM/ttH_dnn.h5"
     },
     {
@@ -23,7 +23,7 @@
       "sampleWeight": 1.0,
       "sampleLabel": "ttmb",
       "min": 0.14,
-      "max": 0.46,
+      "max": 0.47,
       "samplePath": "/local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM/ttmb_dnn.h5"
     },
     {
@@ -47,7 +47,7 @@
       "sampleWeight": 1.0,
       "sampleLabel": "ttlf",
       "min": 0.14,
-      "max": 0.84,
+      "max": 0.66,
       "samplePath": "/local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM/ttlf_dnn.h5"
     },
     {
@@ -55,7 +55,7 @@
       "sampleWeight": 1.0,
       "sampleLabel": "tHq",
       "min": 0.14,
-      "max": 0.98,
+      "max": 0.95,
       "samplePath": "/local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM/tHq_dnn.h5"
     },
     {
@@ -81,15 +81,12 @@
   "Selection": "(N_Jets >= 4 and N_BTagsM == 3)",
   "trainVariables": [
     "Reco_tHq_bestJABDToutput",
-    "Jet_Pt[0]",
     "Evt_CSV_dev",
     "Evt_HT_jets",
     "Reco_JABDT_tHW_Jet_CSV_btop",
     "Evt_M_JetsAverage",
     "memDBp",
     "Evt_CSV_avg",
-    "Reco_ttbar_bestJABDToutput",
-    "Evt_M_Total",
     "Reco_ttH_bestJABDToutput"
   ],
   "inputName": "inputLayer",
