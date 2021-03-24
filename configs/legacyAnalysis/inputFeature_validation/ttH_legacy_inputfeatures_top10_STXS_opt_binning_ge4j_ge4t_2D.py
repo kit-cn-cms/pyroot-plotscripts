@@ -21,6 +21,20 @@ def interfaces_STXS_ljets_ge4j_ge4t():
     interfaces = []
     selection = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)"
 
+    interf_ljets_ge4j_ge4t_memDBp = vhi.variableHistoInterface(variable_name  = "memDBp",
+                                            label          = "ljets_ge4j_ge4t_memDBp",
+                                            selection      = selection)
+    interf_ljets_ge4j_ge4t_memDBp.category = (selection,"ljets_ge4j_ge4t_memDBp","")
+    interf_ljets_ge4j_ge4t_memDBp.category_label = label
+    interf_ljets_ge4j_ge4t_memDBp.histotitle = "MEM"
+    interf_ljets_ge4j_ge4t_memDBp.histoname = "ljets_ge4j_ge4t_memDBp"
+    interf_ljets_ge4j_ge4t_memDBp.nhistobins = 40
+    # interf_ljets_ge4j_ge4t_memDBp.minxval = 0.0
+    # interf_ljets_ge4j_ge4t_memDBp.maxxval = 1.0
+    interf_ljets_ge4j_ge4t_memDBp.bin_edges = np.linspace(0.,1.,40)
+    interfaces.append(interf_ljets_ge4j_ge4t_memDBp)
+
+
     interf_ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt = vhi.variableHistoInterface(variable_name  = "Reco_JABDT_ttH_log_h_pt",
                                             label          = "ljets_ge4j_ge4t_Reco_JABDT_ttH_log_h_pt",
                                             selection      = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)")
@@ -704,6 +718,7 @@ def plots_STXS_ljets_ge4j_ge4t(data = None):
     for i in interfaces:
         i.category_label = label
     plots = init_plots_2D(interfaces = interfaces)
+    plots += init_plots(interfaces = interfaces)
     if data:
         add_data_plots(plots = plots, data = data)
     return plots
