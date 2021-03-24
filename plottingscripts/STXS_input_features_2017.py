@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     ''')
     # name of the analysis (i.e. workdir name)
-    name = 'noMEM_pruned_set_input_features/2017'
+    name = 'STXS_input_features/2017'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -52,7 +52,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis/samples_2017"
     variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "configs/legacyAnalysis/inputFeature_validation/ttH_legacy_inputfeatures_top10_STXS_opt_binning_2D"
+    plot_cfg        = "legacyAnalysis/inputFeature_validation/ttH_legacy_inputfeatures_top10_STXS_opt_binning_2D"
     # plot_cfg        = "legacyAnalysis/DNN_14-05-2020/combined161718_DNNs"
     syst_cfg        = "legacyAnalysis/systs_2017"
     # syst_cfg        = "legacyAnalysis/no_systs"
