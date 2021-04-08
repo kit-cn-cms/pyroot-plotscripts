@@ -146,7 +146,7 @@ def plots_dnn_ttH_vs_slike_STXS(data, discrname, cat_classifier, cat_stxs, stxsp
 
 
     interf_ttH_ttmb_vs_slike = vhi.variableHistoInterface(variable_name  = "(DNNOutput_{cat}_node_ttH/(DNNOutput_{cat}_node_ttH + DNNOutput_{cat}_node_ttmb + DNNOutput_{cat}_node_tt2b))*DNNOutput_{cat_stxs}_node_{stxsproc}".format(cat = cat_classifier, cat_stxs = cat_stxs, stxsproc = stxsproc),
-                                            label          = "ljets_{cat}_ttH_ttmb_vs_slike{stxsproc}".format(cat = cat_classifier, stxsproc = stxsproc),
+                                            label          = "ljets_{cat}_ttH_ttmb_vs_slike_times_{stxsproc}".format(cat = cat_classifier, stxsproc = stxsproc),
                                             selection      = "")
     interf_ttH_ttmb_vs_slike.category = ("({sel}&&(1.)&&(DNNPredictedClass_{cat}==0 || DNNPredictedClass_{cat}==1)&&(DNNPredictedClass_ge4j_3t_STXSnet=={index}))".format(cat = cat_classifier, sel = selection, index = str(index)),"ljets_{cat}_ttH_ttmb_vs_slike{stxsproc}".format(cat = cat_classifier, stxsproc = stxsproc),"")
     interf_ttH_ttmb_vs_slike.category_label = label
@@ -154,81 +154,6 @@ def plots_dnn_ttH_vs_slike_STXS(data, discrname, cat_classifier, cat_stxs, stxsp
     interf_ttH_ttmb_vs_slike.maxxval = 1.0
     interf_ttH_ttmb_vs_slike.nhistobins = ndefaultbins
     interfaces.append(interf_ttH_ttmb_vs_slike)
-
-    for interf in interfaces:
-        l = interf.label
-        interf.histoname = discrname+"_"+l if not discrname == "" else l 
-        interf.histotitle = "final discriminator ({})".format(l)
-        interf.selection = interf.category[0]
-
-    DNNPlots = init_plots(interfaces = interfaces, data = data)
-    return DNNPlots	
-
-
-def plots_dnn_ttH_vs_slike(data, discrname, category, selection, label):
-    ndefaultbins = 50
-    interfaces = []
-
-
-    # interf_ttH_vs_slike_merged = vhi.variableHistoInterface(variable_name  = "DNNOutput_{cat}_node_ttH/(DNNOutput_{cat}_node_ttH + DNNOutput_{cat}_node_ttmb + DNNOutput_{cat}_node_tt2b)".format(cat = category),
-    #                                         label          = "ljets_{}_ttH_vs_slike_merged".format(category),
-    #                                         selection      = "({sel}&&(1.)&&(DNNPredictedClass_{cat}==0))".format(sel = selection, cat = category))
-    # interf_ttH_vs_slike_merged.category = ("({sel}&&(1.)&&(DNNPredictedClass_{cat}==0 || DNNPredictedClass_{cat}==1 || DNNPredictedClass_{cat}==2))".format(cat=category, sel = selection),"ljets_{}_ttH_vs_slike_merged".format(category),"")
-    # interf_ttH_vs_slike_merged.category_label = label
-    # interf_ttH_vs_slike_merged.minxval = 0.2
-    # interf_ttH_vs_slike_merged.maxxval = 1.0
-    # interf_ttH_vs_slike_merged.nhistobins = ndefaultbins
-    # interfaces.append(interf_ttH_vs_slike_merged)
-
-    # interf_ttH_vs_slike = vhi.variableHistoInterface(variable_name  = "DNNOutput_{cat}_node_ttH/(DNNOutput_{cat}_node_ttH + DNNOutput_{cat}_node_ttmb + DNNOutput_{cat}_node_tt2b)".format(cat = category),
-    #                                         label          = "ljets_{}_ttH_vs_slike".format(category),
-    #                                         selection      = "({sel}&&(1.)&&(DNNPredictedClass_{cat}==0))".format(cat = category, sel = selection))
-    # interf_ttH_vs_slike.category = ("({sel}&&(1.)&&(DNNPredictedClass_{cat}==0))".format(cat = category, sel = selection),"ljets_{}_ttH_vs_slike".format(category),"")
-    # interf_ttH_vs_slike.category_label = label
-    # interf_ttH_vs_slike.minxval = 0.2
-    # interf_ttH_vs_slike.maxxval = 1.0
-    # interf_ttH_vs_slike.nhistobins = ndefaultbins
-    # interfaces.append(interf_ttH_vs_slike)
-
-    interf_ttmb_vs_slike = vhi.variableHistoInterface(variable_name  = "DNNOutput_{cat}_node_ttmb/(DNNOutput_{cat}_node_ttH + DNNOutput_{cat}_node_ttmb + DNNOutput_{cat}_node_tt2b)".format(cat=category),
-                                            label          = "ljets_{}_ttmb_vs_slike".format(category),
-                                            selection      = "({sel}&&(1.)&&(DNNPredictedClass_{cat}==1))".format(cat = category, sel = selection))
-    interf_ttmb_vs_slike.category = ("({sel}&&(1.)&&(DNNPredictedClass_{cat}==1))".format(cat = category, sel = selection),"ljets_{}_ttmb_vs_slike".format(category),"")
-    interf_ttmb_vs_slike.category_label = label
-    interf_ttmb_vs_slike.minxval = 0.2
-    interf_ttmb_vs_slike.maxxval = 1.0
-    interf_ttmb_vs_slike.nhistobins = ndefaultbins
-    interfaces.append(interf_ttmb_vs_slike)
-
-    interf_tt2b_vs_slike = vhi.variableHistoInterface(variable_name  = "DNNOutput_{cat}_node_tt2b/(DNNOutput_{cat}_node_ttH + DNNOutput_{cat}_node_ttmb + DNNOutput_{cat}_node_tt2b)".format(cat=category),
-                                            label          = "ljets_{}_tt2b_vs_slike".format(category),
-                                            selection      = "({sel}&&(1.)&&(DNNPredictedClass_{cat}==2))".format(cat = category, sel = selection))
-    interf_tt2b_vs_slike.category = ("({sel}&&(1.)&&(DNNPredictedClass_{cat}==2))".format(cat = category, sel = selection),"ljets_{}_tt2b_vs_slike".format(category),"")
-    interf_tt2b_vs_slike.category_label = label
-    interf_tt2b_vs_slike.minxval = 0.2
-    interf_tt2b_vs_slike.maxxval = 1.0
-    interf_tt2b_vs_slike.nhistobins = ndefaultbins
-    interfaces.append(interf_tt2b_vs_slike)
-
-    interf_ttB_vs_slike = vhi.variableHistoInterface(variable_name  = "(DNNOutput_{cat}_node_tt2b + DNNOutput_{cat}_node_ttmb)/(DNNOutput_{cat}_node_ttH + DNNOutput_{cat}_node_ttmb + DNNOutput_{cat}_node_tt2b)".format(cat=category),
-                                            label          = "ljets_{}_ttB_vs_slike".format(category),
-                                            selection      = "({sel}&&(1.)&&(DNNPredictedClass_{cat}==2))".format(cat = category, sel = selection))
-    interf_ttB_vs_slike.category = ("({sel}&&(1.)&&(DNNPredictedClass_{cat}==2 || DNNPredictedClass_{cat}==1))".format(cat = category, sel = selection),"ljets_{}_ttB_vs_slike".format(category),"")
-    interf_ttB_vs_slike.category_label = label
-    interf_ttB_vs_slike.minxval = 0.2
-    interf_ttB_vs_slike.maxxval = 1.0
-    interf_ttB_vs_slike.nhistobins = ndefaultbins
-    interfaces.append(interf_ttB_vs_slike)
-
-    # interf_ttH_ttmb_vs_slike = vhi.variableHistoInterface(variable_name  = "DNNOutput_{cat}_node_ttH/(DNNOutput_{cat}_node_ttH + DNNOutput_{cat}_node_ttmb + DNNOutput_{cat}_node_tt2b)".format(cat = category),
-    #                                         label          = "ljets_{}_ttH_ttmb_vs_slike".format(category),
-    #                                         selection      = "({sel}&&(1.)&&(DNNPredictedClass_{cat}==0))".format(sel = selection, cat = category))
-    # interf_ttH_ttmb_vs_slike.category = ("({sel}&&(1.)&&(DNNPredictedClass_{cat}==0 || DNNPredictedClass_{cat}==1))".format(cat=category, sel = selection),"ljets_{}_ttH_vs_slike_merged".format(category),"")
-    # interf_ttH_ttmb_vs_slike.category_label = label
-    # interf_ttH_ttmb_vs_slike.minxval = 0.2
-    # interf_ttH_ttmb_vs_slike.maxxval = 1.0
-    # interf_ttH_ttmb_vs_slike.nhistobins = ndefaultbins
-    # interfaces.append(interf_ttH_ttmb_vs_slike)
 
     for interf in interfaces:
         l = interf.label
@@ -516,8 +441,6 @@ def getDiscriminatorPlots(data = None, discrname = ''):
 
     label = "\geq 4 jets, 3 b-tags"
     selection = "(N_Jets>=4&&N_BTagsM==3)"
-    # discriminatorPlots += plots_dnn_ttH_vs_slike(data = data, discrname=discrname, category="ge4j_3t_classification", selection= selection, label = label )
-    # discriminatorPlots += plots_dnn_X_vs_ttLF(data = data, discrname=discrname, category="ge4j_3t_classification", selection= selection, label = label )
     # STXS
     discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="ge4j_3t_classification", cat_stxs = "ge4j_3t_STXSnet", stxsproc = "ttHbb_STXS_0", index = 0, selection = selection, label = label )
     discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="ge4j_3t_classification", cat_stxs = "ge4j_3t_STXSnet", stxsproc = "ttHbb_STXS_1", index = 1, selection = selection, label = label )
@@ -529,8 +452,6 @@ def getDiscriminatorPlots(data = None, discrname = ''):
 
     label = "\geq 4 jets, \geq 4 b-tags"
     selection = "(N_Jets>=4&&N_BTagsM>=4)"
-    # discriminatorPlots += plots_dnn_ttH_vs_slike(data = data, discrname=discrname, category="ge4j_ge4t_classification", selection= selection, label = label )
-    # discriminatorPlots += plots_dnn_X_vs_ttLF(data = data, discrname=discrname, category="ge4j_ge4t_classification", selection= selection, label = label )
     # STXS
     discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="ge4j_ge4t_classification", cat_stxs = "ge4j_ge4t_STXSnet", stxsproc = "ttHbb_STXS_0", index = 0, selection = selection, label = label )
     discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="ge4j_ge4t_classification", cat_stxs = "ge4j_ge4t_STXSnet", stxsproc = "ttHbb_STXS_1", index = 1, selection = selection, label = label )
