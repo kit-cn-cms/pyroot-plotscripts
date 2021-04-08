@@ -1,0 +1,1 @@
+python /work/swieland/ttH/DRACO-MLfoy/train_scripts/train_template.py -o legacy_16_17_18/STXSwMEM_validated -i /local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM -a ttHbb_STXS_0,ttHbb_STXS_1,ttHbb_STXS_2,ttHbb_STXS_3,ttHbb_STXS_4, -v variables_ttHbb_SL_STXS_final -e 1000 -s -1 -RpG -n ttH_SL_legacy_STXS_opt43 -c ge4j_3t
