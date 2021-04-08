@@ -134,21 +134,21 @@ def plots_dnn_ttH_vs_slike_STXS(data, discrname, cat_classifier, cat_stxs, stxsp
     ndefaultbins = 50
     interfaces = []
 
-    interf_ttH_vs_slike = vhi.variableHistoInterface(variable_name  = "(DNNOutput_{cat}_node_ttH/(DNNOutput_{cat}_node_ttH + DNNOutput_{cat}_node_ttmb + DNNOutput_{cat}_node_tt2b))*DNNOutput_{cat_stxs}_node_{stxsproc}".format(cat = cat_classifier, cat_stxs = cat_stxs, stxsproc = stxsproc),
-                                            label          = "ljets_{cat}_ttH_vs_slike_times_{stxsproc}".format(cat = cat_classifier, stxsproc = stxsproc),
-                                            selection      = "")
-    interf_ttH_vs_slike.category = ("({sel}&&(1.)&&(DNNPredictedClass_{cat}==0)&&(DNNPredictedClass_ge4j_3t_STXSnet=={index}))".format(cat = cat_classifier, sel = selection, index = str(index)),"ljets_{cat}_ttH_vs_slike_times_{stxsproc}".format(cat = cat_classifier, stxsproc = stxsproc),"")
-    interf_ttH_vs_slike.category_label = label
-    interf_ttH_vs_slike.minxval = 0.2
-    interf_ttH_vs_slike.maxxval = 1.0
-    interf_ttH_vs_slike.nhistobins = ndefaultbins
-    interfaces.append(interf_ttH_vs_slike)
+    # interf_ttH_vs_slike = vhi.variableHistoInterface(variable_name  = "(DNNOutput_{cat}_node_ttH/(DNNOutput_{cat}_node_ttH + DNNOutput_{cat}_node_ttmb + DNNOutput_{cat}_node_tt2b))*DNNOutput_{cat_stxs}_node_{stxsproc}".format(cat = cat_classifier, cat_stxs = cat_stxs, stxsproc = stxsproc),
+    #                                         label          = "ljets_{cat}_ttH_vs_slike_times_{stxsproc}".format(cat = cat_classifier, stxsproc = stxsproc),
+    #                                         selection      = "")
+    # interf_ttH_vs_slike.category = ("({sel}&&(1.)&&(DNNPredictedClass_{cat}==0)&&(DNNPredictedClass_{cat_stxs}=={index}))".format(cat = cat_classifier, cat_stxs = cat_stxs, sel = selection, index = str(index)),"ljets_{cat}_ttH_vs_slike_times_{stxsproc}".format(cat = cat_classifier, stxsproc = stxsproc),"")
+    # interf_ttH_vs_slike.category_label = label
+    # interf_ttH_vs_slike.minxval = 0.2
+    # interf_ttH_vs_slike.maxxval = 1.0
+    # interf_ttH_vs_slike.nhistobins = ndefaultbins
+    # interfaces.append(interf_ttH_vs_slike)
 
 
     interf_ttH_ttmb_vs_slike = vhi.variableHistoInterface(variable_name  = "(DNNOutput_{cat}_node_ttH/(DNNOutput_{cat}_node_ttH + DNNOutput_{cat}_node_ttmb + DNNOutput_{cat}_node_tt2b))*DNNOutput_{cat_stxs}_node_{stxsproc}".format(cat = cat_classifier, cat_stxs = cat_stxs, stxsproc = stxsproc),
                                             label          = "ljets_{cat}_ttH_ttmb_vs_slike_times_{stxsproc}".format(cat = cat_classifier, stxsproc = stxsproc),
                                             selection      = "")
-    interf_ttH_ttmb_vs_slike.category = ("({sel}&&(1.)&&(DNNPredictedClass_{cat}==0 || DNNPredictedClass_{cat}==1)&&(DNNPredictedClass_ge4j_3t_STXSnet=={index}))".format(cat = cat_classifier, sel = selection, index = str(index)),"ljets_{cat}_ttH_ttmb_vs_slike{stxsproc}".format(cat = cat_classifier, stxsproc = stxsproc),"")
+    interf_ttH_ttmb_vs_slike.category = ("({sel}&&(1.)&&(DNNPredictedClass_{cat}==0 || DNNPredictedClass_{cat}==1)&&(DNNPredictedClass_{cat_stxs}=={index}))".format(cat = cat_classifier, sel = selection, cat_stxs = cat_stxs, index = str(index)),"ljets_{cat}_ttH_ttmb_vs_slike{stxsproc}".format(cat = cat_classifier, stxsproc = stxsproc),"")
     interf_ttH_ttmb_vs_slike.category_label = label
     interf_ttH_ttmb_vs_slike.minxval = 0.2
     interf_ttH_ttmb_vs_slike.maxxval = 1.0
