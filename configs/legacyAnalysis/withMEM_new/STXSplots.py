@@ -150,8 +150,8 @@ def plots_dnn_ttH_vs_slike_STXS(data, discrname, cat_classifier, cat_stxs, stxsp
                                             selection      = "")
     interf_ttH_ttmb_vs_slike.category = ("({sel}&&(1.)&&(DNNPredictedClass_{cat}==0 || DNNPredictedClass_{cat}==1)&&(DNNPredictedClass_{cat_stxs}=={index}))".format(cat = cat_classifier, sel = selection, cat_stxs = cat_stxs, index = str(index)),"ljets_{cat}_ttH_ttmb_vs_slike_times_{stxsproc}".format(cat = cat_classifier, stxsproc = stxsproc),"")
     interf_ttH_ttmb_vs_slike.category_label = label
-    interf_ttH_ttmb_vs_slike.minxval = 0.2
-    interf_ttH_ttmb_vs_slike.maxxval = 1.0
+    interf_ttH_ttmb_vs_slike.minxval = 0.0
+    interf_ttH_ttmb_vs_slike.maxxval = 0.8
     interf_ttH_ttmb_vs_slike.nhistobins = ndefaultbins
     interfaces.append(interf_ttH_ttmb_vs_slike)
 
