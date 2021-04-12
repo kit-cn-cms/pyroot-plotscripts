@@ -603,6 +603,31 @@ plottingsamples = [
 #    plotClasses.Sample("misc.", 18, "", "",
 #        "misc", addsamples ["ttbarZ", "ttbarW", "wjets", "zjets", "diboson"],
 #        samDict = sampleDict, readTrees = doReadTrees)
+
+    'TTH_PTH_0_60': {'addSamples': ['TTH_PTH_0_60_hbb', 'TTH_PTH_0_60_hcc', 'TTH_PTH_0_60_htt', 'TTH_PTH_0_60_hgg', 'TTH_PTH_0_60_hgluglu', 'TTH_PTH_0_60_hww', 'TTH_PTH_0_60_hzz', 'TTH_PTH_0_60_hzg'],
+                    'color': 830L, 'typ': 'signal',
+                    'label': 'TTH_PTH_0_60'},
+    'TTH_PTH_60_120': {'addSamples': ['TTH_PTH_60_120_hbb', 'TTH_PTH_60_120_hcc', 'TTH_PTH_60_120_htt', 'TTH_PTH_60_120_hgg', 'TTH_PTH_60_120_hgluglu', 'TTH_PTH_60_120_hww', 'TTH_PTH_60_120_hzz', 'TTH_PTH_60_120_hzg'],
+                    'color': 418L, 'typ': 'signal',
+                    'label': 'TTH_PTH_60_120'},
+    'TTH_PTH_120_200': {'addSamples': ['TTH_PTH_120_200_hbb', 'TTH_PTH_120_200_hcc', 'TTH_PTH_120_200_htt', 'TTH_PTH_120_200_hgg', 'TTH_PTH_120_200_hgluglu', 'TTH_PTH_120_200_hww', 'TTH_PTH_120_200_hzz', 'TTH_PTH_120_200_hzg'],
+                    'color': 433L, 'typ': 'signal',
+                    'label': 'TTH_PTH_120_200'},
+    'TTH_PTH_200_300': {'addSamples': ['TTH_PTH_200_300_hbb', 'TTH_PTH_200_300_hcc', 'TTH_PTH_200_300_htt', 'TTH_PTH_200_300_hgg', 'TTH_PTH_200_300_hgluglu', 'TTH_PTH_200_300_hww', 'TTH_PTH_200_300_hzz', 'TTH_PTH_200_300_hzg'],
+                    'color': 867L, 'typ': 'signal',
+                    'label': 'TTH_PTH_200_300'},
+    'TTH_PTH_GT300': {'addSamples': [   'TTH_PTH_300_450_hbb', 'TTH_PTH_300_450_hcc', 'TTH_PTH_300_450_htt', 'TTH_PTH_300_450_hgg', 'TTH_PTH_300_450_hgluglu', 'TTH_PTH_300_450_hww', 'TTH_PTH_300_450_hzz', 'TTH_PTH_300_450_hzg',
+                                        'TTH_PTH_GT450_hbb', 'TTH_PTH_GT450_hcc', 'TTH_PTH_GT450_htt', 'TTH_PTH_GT450_hgg', 'TTH_PTH_GT450_hgluglu', 'TTH_PTH_GT450_hww', 'TTH_PTH_GT450_hzz', 'TTH_PTH_GT450_hzg'],
+                    'color': 602L, 'typ': 'signal',
+                    'label': 'TTH_PTH_GT300'},
+
+    'tHq': {'addSamples': ['tHq_hbb', 'tHq_hcc', 'tHq_htt', 'tHq_hgg', 'tHq_hgluglu', 'tHq_hww', 'tHq_hzz', 'tHq_hzg'],
+                    'color': 9L, 'typ': 'bkg',
+                    'label': 'tHq'},
+    'tHW': {'addSamples': ['tHW_hbb', 'tHW_hcc', 'tHW_htt', 'tHW_hgg', 'tHW_hgluglu', 'tHW_hww', 'tHW_hzz', 'tHW_hzg'],
+                    'color': 830L, 'typ': 'bkg',
+                    'label': 'tHW'},
+
      ]
 
 # sort subset of processes in plots. descending order
