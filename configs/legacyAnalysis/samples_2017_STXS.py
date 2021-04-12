@@ -604,22 +604,22 @@ plottingsamples = [
 #        "misc", addsamples ["ttbarZ", "ttbarW", "wjets", "zjets", "diboson"],
 #        samDict = sampleDict, readTrees = doReadTrees)
 
-    plotClasses.Sample('TTH_PTH_0_60', 830L, "", "", "TTH_PTH_0_60", addSamples = ['TTH_PTH_0_60_hbb', 'TTH_PTH_0_60_hcc', 'TTH_PTH_0_60_htt', 'TTH_PTH_0_60_hgg', 'TTH_PTH_0_60_hgluglu', 'TTH_PTH_0_60_hww', 'TTH_PTH_0_60_hzz', 'TTH_PTH_0_60_hzg'],
+    plotClasses.Sample('TTH_PTH_0_60', 830, "", "", "TTH_PTH_0_60", addsamples = ['TTH_PTH_0_60_hbb', 'TTH_PTH_0_60_hcc', 'TTH_PTH_0_60_htt', 'TTH_PTH_0_60_hgg', 'TTH_PTH_0_60_hgluglu', 'TTH_PTH_0_60_hww', 'TTH_PTH_0_60_hzz', 'TTH_PTH_0_60_hzg'],
         samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
-    plotClasses.Sample('TTH_PTH_60_120', 830L, "", "", "TTH_PTH_60_120", addSamples = ['TTH_PTH_60_120_hbb', 'TTH_PTH_60_120_hcc', 'TTH_PTH_60_120_htt', 'TTH_PTH_60_120_hgg', 'TTH_PTH_60_120_hgluglu', 'TTH_PTH_60_120_hww', 'TTH_PTH_60_120_hzz', 'TTH_PTH_60_120_hzg'],
+    plotClasses.Sample('TTH_PTH_60_120', 418, "", "", "TTH_PTH_60_120", addsamples = ['TTH_PTH_60_120_hbb', 'TTH_PTH_60_120_hcc', 'TTH_PTH_60_120_htt', 'TTH_PTH_60_120_hgg', 'TTH_PTH_60_120_hgluglu', 'TTH_PTH_60_120_hww', 'TTH_PTH_60_120_hzz', 'TTH_PTH_60_120_hzg'],
         samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
-    plotClasses.Sample('TTH_PTH_120_200', 830L, "", "", "TTH_PTH_120_200", addSamples =  ['TTH_PTH_120_200_hbb', 'TTH_PTH_120_200_hcc', 'TTH_PTH_120_200_htt', 'TTH_PTH_120_200_hgg', 'TTH_PTH_120_200_hgluglu', 'TTH_PTH_120_200_hww', 'TTH_PTH_120_200_hzz', 'TTH_PTH_120_200_hzg'],
+    plotClasses.Sample('TTH_PTH_120_200', 433, "", "", "TTH_PTH_120_200", addsamples =  ['TTH_PTH_120_200_hbb', 'TTH_PTH_120_200_hcc', 'TTH_PTH_120_200_htt', 'TTH_PTH_120_200_hgg', 'TTH_PTH_120_200_hgluglu', 'TTH_PTH_120_200_hww', 'TTH_PTH_120_200_hzz', 'TTH_PTH_120_200_hzg'],
         samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
-    plotClasses.Sample('TTH_PTH_200_300', 830L, "", "", "TTH_PTH_200_300", addSamples = ['TTH_PTH_200_300_hbb', 'TTH_PTH_200_300_hcc', 'TTH_PTH_200_300_htt', 'TTH_PTH_200_300_hgg', 'TTH_PTH_200_300_hgluglu', 'TTH_PTH_200_300_hww', 'TTH_PTH_200_300_hzz', 'TTH_PTH_200_300_hzg'],
+    plotClasses.Sample('TTH_PTH_200_300', 867, "", "", "TTH_PTH_200_300", addsamples = ['TTH_PTH_200_300_hbb', 'TTH_PTH_200_300_hcc', 'TTH_PTH_200_300_htt', 'TTH_PTH_200_300_hgg', 'TTH_PTH_200_300_hgluglu', 'TTH_PTH_200_300_hww', 'TTH_PTH_200_300_hzz', 'TTH_PTH_200_300_hzg'],
         samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
-    plotClasses.Sample('TTH_PTH_GT300', 830L, "", "", "TTH_PTH_GT300", addSamples =[   'TTH_PTH_300_450_hbb', 'TTH_PTH_300_450_hcc', 'TTH_PTH_300_450_htt', 'TTH_PTH_300_450_hgg', 'TTH_PTH_300_450_hgluglu', 'TTH_PTH_300_450_hww', 'TTH_PTH_300_450_hzz', 'TTH_PTH_300_450_hzg',
+    plotClasses.Sample('TTH_PTH_GT300', 602, "", "", "TTH_PTH_GT300", addsamples =[   'TTH_PTH_300_450_hbb', 'TTH_PTH_300_450_hcc', 'TTH_PTH_300_450_htt', 'TTH_PTH_300_450_hgg', 'TTH_PTH_300_450_hgluglu', 'TTH_PTH_300_450_hww', 'TTH_PTH_300_450_hzz', 'TTH_PTH_300_450_hzg',
                                         'TTH_PTH_GT450_hbb', 'TTH_PTH_GT450_hcc', 'TTH_PTH_GT450_htt', 'TTH_PTH_GT450_hgg', 'TTH_PTH_GT450_hgluglu', 'TTH_PTH_GT450_hww', 'TTH_PTH_GT450_hzz', 'TTH_PTH_GT450_hzg'],
         samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
 
 
-    plotClasses.Sample('tHq', 9L, "", "", "tHq", addSamples = ['tHq_hbb', 'tHq_hcc', 'tHq_htt', 'tHq_hgg', 'tHq_hgluglu', 'tHq_hww', 'tHq_hzz', 'tHq_hzg'],
+    plotClasses.Sample('tHq', 9, "", "", "tHq", addsamples = ['tHq_hbb', 'tHq_hcc', 'tHq_htt', 'tHq_hgg', 'tHq_hgluglu', 'tHq_hww', 'tHq_hzz', 'tHq_hzg'],
         samDict = sampleDict, readTrees = doReadTrees, typ = "bkg"),
-    plotClasses.Sample('tHW', 830L, "", "", "tHW", addSamples = ['tHW_hbb', 'tHW_hcc', 'tHW_htt', 'tHW_hgg', 'tHW_hgluglu', 'tHW_hww', 'tHW_hzz', 'tHW_hzg'],
+    plotClasses.Sample('tHW', 830, "", "", "tHW", addsamples = ['tHW_hbb', 'tHW_hcc', 'tHW_htt', 'tHW_hgg', 'tHW_hgluglu', 'tHW_hww', 'tHW_hzz', 'tHW_hzg'],
         samDict = sampleDict, readTrees = doReadTrees, typ = "bkg"),
 
      ]
