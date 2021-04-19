@@ -35,7 +35,7 @@ def main(pyrootdir, opts):
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "TTH"
+    signalProcess = "ttH"
     nSigSamples   = 1
 
     # dataera
@@ -206,9 +206,9 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts_nom(50000)
+        pP.setMaxEvts_nom(400000)
         # pP.setMaxEvts_nom(200000)
-        pP.setMaxEvts_systs(200000)
+        pP.setMaxEvts_systs(800000)
         # pP.request_runtime = 60*60*5
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])

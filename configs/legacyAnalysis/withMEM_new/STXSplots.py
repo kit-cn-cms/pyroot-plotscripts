@@ -150,8 +150,8 @@ def plots_dnn_ttH_vs_slike_STXS(data, discrname, cat_classifier, cat_stxs, stxsp
                                             selection      = "")
     interf_ttH_ttmb_vs_slike.category = ("({sel}&&(1.)&&(DNNPredictedClass_{cat}==0 || DNNPredictedClass_{cat}==1)&&(DNNPredictedClass_{cat_stxs}=={index}))".format(cat = cat_classifier, sel = selection, cat_stxs = cat_stxs, index = str(index)),"ljets_{cat}_ttH_ttmb_vs_slike_times_{stxsproc}".format(cat = cat_classifier, stxsproc = stxsproc),"")
     interf_ttH_ttmb_vs_slike.category_label = label
-    interf_ttH_ttmb_vs_slike.minxval = 0.2
-    interf_ttH_ttmb_vs_slike.maxxval = 1.0
+    interf_ttH_ttmb_vs_slike.minxval = 0.0
+    interf_ttH_ttmb_vs_slike.maxxval = 0.8
     interf_ttH_ttmb_vs_slike.nhistobins = ndefaultbins
     interfaces.append(interf_ttH_ttmb_vs_slike)
 
@@ -163,6 +163,30 @@ def plots_dnn_ttH_vs_slike_STXS(data, discrname, cat_classifier, cat_stxs, stxsp
 
     DNNPlots = init_plots(interfaces = interfaces, data = data)
     return DNNPlots	
+
+def plots_dnn_ttH_times_STXS(data, discrname, cat_classifier, cat_stxs, stxsproc, index, selection, label):
+    ndefaultbins = 50
+    interfaces = []
+
+    interf_ttH_times_STXS = vhi.variableHistoInterface(variable_name  = "(DNNOutput_{cat}_node_ttH)*DNNOutput_{cat_stxs}_node_{stxsproc}".format(cat = cat_classifier, cat_stxs = cat_stxs, stxsproc = stxsproc),
+                                            label          = "ljets_{cat}_ttH_times_{stxsproc}".format(cat = cat_classifier, stxsproc = stxsproc),
+                                            selection      = "")
+    interf_ttH_times_STXS.category = ("({sel}&&(1.)&&(DNNPredictedClass_{cat}==0)&&(DNNPredictedClass_{cat_stxs}=={index}))".format(cat = cat_classifier, sel = selection, cat_stxs = cat_stxs, index = str(index)),"ljets_{cat}_ttH_times_{stxsproc}".format(cat = cat_classifier, stxsproc = stxsproc),"")
+    interf_ttH_times_STXS.category_label = label
+    interf_ttH_times_STXS.minxval = 0.0
+    interf_ttH_times_STXS.maxxval = 0.8
+    interf_ttH_times_STXS.nhistobins = ndefaultbins
+    interfaces.append(interf_ttH_times_STXS)
+
+    for interf in interfaces:
+        l = interf.label
+        interf.histoname = discrname+"_"+l if not discrname == "" else l 
+        interf.histotitle = "final discriminator ({})".format(l)
+        interf.selection = interf.category[0]
+
+    DNNPlots = init_plots(interfaces = interfaces, data = data)
+    return DNNPlots	
+
 
 def plots_dnn(data, discrname):
 
@@ -442,11 +466,18 @@ def getDiscriminatorPlots(data = None, discrname = ''):
     label = "\geq 4 jets, 3 b-tags"
     selection = "(N_Jets>=4&&N_BTagsM==3)"
     # STXS
-    discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="ge4j_3t_classification", cat_stxs = "ge4j_3t_STXSnet", stxsproc = "ttHbb_STXS_0", index = 0, selection = selection, label = label )
-    discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="ge4j_3t_classification", cat_stxs = "ge4j_3t_STXSnet", stxsproc = "ttHbb_STXS_1", index = 1, selection = selection, label = label )
-    discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="ge4j_3t_classification", cat_stxs = "ge4j_3t_STXSnet", stxsproc = "ttHbb_STXS_2", index = 2, selection = selection, label = label )
-    discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="ge4j_3t_classification", cat_stxs = "ge4j_3t_STXSnet", stxsproc = "ttHbb_STXS_3", index = 3, selection = selection, label = label )
-    discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="ge4j_3t_classification", cat_stxs = "ge4j_3t_STXSnet", stxsproc = "ttHbb_STXS_4", index = 4, selection = selection, label = label )
+    discriminatorPlots += plots_dnn_ttH_times_STXS(data = data, discrname=discrname, cat_classifier="ge4j_3t_classification", cat_stxs = "ge4j_3t_STXSnet", stxsproc = "ttHbb_STXS_0", index = 0, selection = selection, label = label )
+    discriminatorPlots += plots_dnn_ttH_times_STXS(data = data, discrname=discrname, cat_classifier="ge4j_3t_classification", cat_stxs = "ge4j_3t_STXSnet", stxsproc = "ttHbb_STXS_1", index = 1, selection = selection, label = label )
+    discriminatorPlots += plots_dnn_ttH_times_STXS(data = data, discrname=discrname, cat_classifier="ge4j_3t_classification", cat_stxs = "ge4j_3t_STXSnet", stxsproc = "ttHbb_STXS_2", index = 2, selection = selection, label = label )
+    discriminatorPlots += plots_dnn_ttH_times_STXS(data = data, discrname=discrname, cat_classifier="ge4j_3t_classification", cat_stxs = "ge4j_3t_STXSnet", stxsproc = "ttHbb_STXS_3", index = 3, selection = selection, label = label )
+    discriminatorPlots += plots_dnn_ttH_times_STXS(data = data, discrname=discrname, cat_classifier="ge4j_3t_classification", cat_stxs = "ge4j_3t_STXSnet", stxsproc = "ttHbb_STXS_4", index = 4, selection = selection, label = label )
+
+
+    # discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="ge4j_3t_classification", cat_stxs = "ge4j_3t_STXSnet", stxsproc = "ttHbb_STXS_0", index = 0, selection = selection, label = label )
+    # discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="ge4j_3t_classification", cat_stxs = "ge4j_3t_STXSnet", stxsproc = "ttHbb_STXS_1", index = 1, selection = selection, label = label )
+    # discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="ge4j_3t_classification", cat_stxs = "ge4j_3t_STXSnet", stxsproc = "ttHbb_STXS_2", index = 2, selection = selection, label = label )
+    # discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="ge4j_3t_classification", cat_stxs = "ge4j_3t_STXSnet", stxsproc = "ttHbb_STXS_3", index = 3, selection = selection, label = label )
+    # discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="ge4j_3t_classification", cat_stxs = "ge4j_3t_STXSnet", stxsproc = "ttHbb_STXS_4", index = 4, selection = selection, label = label )
 
 
 

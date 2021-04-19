@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     ''')
     # name of the analysis (i.e. workdir name)
-    name = 'withMEM_new_optimized/2016'
+    name = 'withMEM_new_optimized/2016v2'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
