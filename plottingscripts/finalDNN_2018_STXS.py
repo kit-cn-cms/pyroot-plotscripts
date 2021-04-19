@@ -35,7 +35,7 @@ def main(pyrootdir, opts):
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "TTH"
+    signalProcess = "ttH"
     nSigSamples   = 1
 
     # dataera
@@ -107,7 +107,8 @@ def main(pyrootdir, opts):
         "skipMergeSysts":       opts.skipMergeSysts,
         "skipDatacards":        opts.skipDatacards}
 
-    plotJson = ""#pyrootdir+"/configs/legacyAnalysis/treeJson_2018.json"
+    # plotJson = ""#pyrootdir+"/configs/legacyAnalysis/treeJson_2018.json"
+    plotJson = pyrootdir+"/configs/legacyAnalysis/treeJson_STXS_2018.json"
     # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2018/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
@@ -207,9 +208,9 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts_nom(600000)
+        pP.setMaxEvts_nom(400000)
         # pP.setMaxEvts_nom(200000)
-        pP.setMaxEvts_systs(1000000)
+        pP.setMaxEvts_systs(800000)
         # pP.request_runtime = 60*60*5
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])

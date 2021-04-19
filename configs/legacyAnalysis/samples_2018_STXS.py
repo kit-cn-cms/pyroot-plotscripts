@@ -138,12 +138,12 @@ muonTrigger_down = "("+sel_singlemu+"&&(Weight_MuonTriggerSF_Down>0.))*Weight_Mu
 
 def constructSTXSnormedVariation(weight = "Weight_scale_variation_muR_1p0_muF_0p5"):
     replacement =  "("
-    replacement +=  "("+STXS_stage0_+STXS_stage1_0+'*(fracRatio_TTH_PTH_0_60.at("{weight}")))+'
-    replacement += "("+STXS_stage0_+STXS_stage1_1+'*(fracRatio_TTH_PTH_60_120.at("{weight}")))+'
-    replacement += "("+STXS_stage0_+STXS_stage1_2+'*(fracRatio_TTH_PTH_120_200.at("{weight}")))+'
-    replacement += "("+STXS_stage0_+STXS_stage1_3+'*(fracRatio_TTH_PTH_200_300.at("{weight}")))+'
-    replacement += "("+STXS_stage0_+STXS_stage1_4+'*(fracRatio_TTH_PTH_300_450.at("{weight}")))+'
-    replacement += "("+STXS_stage0_+STXS_stage1_5+'*(fracRatio_TTH_PTH_GT450.at("{weight}")))'
+    replacement +=  "("+STXS_stage0_+STXS_stage1_0+'*(fracRatio_ttH_PTH_0_60.at("{weight}")))+'
+    replacement += "("+STXS_stage0_+STXS_stage1_1+'*(fracRatio_ttH_PTH_60_120.at("{weight}")))+'
+    replacement += "("+STXS_stage0_+STXS_stage1_2+'*(fracRatio_ttH_PTH_120_200.at("{weight}")))+'
+    replacement += "("+STXS_stage0_+STXS_stage1_3+'*(fracRatio_ttH_PTH_200_300.at("{weight}")))+'
+    replacement += "("+STXS_stage0_+STXS_stage1_4+'*(fracRatio_ttH_PTH_300_450.at("{weight}")))+'
+    replacement += "("+STXS_stage0_+STXS_stage1_5+'*(fracRatio_ttH_PTH_GT450.at("{weight}")))'
     replacement +=  ")"
     return replacement.format(weight=weight)
 
@@ -318,36 +318,36 @@ samples_ttH_decay = [
 #     plotClasses.Sample('t#bar{t}H_PTH_0_60',830,
 #             ttHpath,
 #             lumi+sel_MET+STXS_stage0+STXS_stage1_0,
-#             'TTH_PTH_0_60',
+#             'ttH_PTH_0_60',
 #             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
 #     plotClasses.Sample('t#bar{t}H_PTH_60_120',418,
 #             ttHpath,
 #             lumi+sel_MET+STXS_stage0+STXS_stage1_1,
-#             'TTH_PTH_60_120',
+#             'ttH_PTH_60_120',
 #             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
 #     plotClasses.Sample('t#bar{t}H_PTH_120_200',433,
 #             ttHpath,
 #             lumi+sel_MET+STXS_stage0+STXS_stage1_2,
-#             'TTH_PTH_120_200',
+#             'ttH_PTH_120_200',
 #             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
 #     plotClasses.Sample('t#bar{t}H_PTH_200_300',867,
 #             ttHpath,
 #             lumi+sel_MET+STXS_stage0+STXS_stage1_3,
-#             'TTH_PTH_200_300',
+#             'ttH_PTH_200_300',
 #             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
 #     plotClasses.Sample('t#bar{t}H_PTH_300_450',602,
 #             ttHpath,
 #             lumi+sel_MET+STXS_stage0+STXS_stage1_4,
-#             'TTH_PTH_300_450',
+#             'ttH_PTH_300_450',
 #             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 #     plotClasses.Sample('t#bar{t}H_PTH_GT450',605,
 #             ttHpath,
 #             lumi+sel_MET+STXS_stage0+STXS_stage1_5,
-#             'TTH_PTH_GT450',
+#             'ttH_PTH_GT450',
 #             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 # ]
 
@@ -385,36 +385,36 @@ for dec in h_decays:
     plotClasses.Sample('t#bar{t}H_PTH_0_60_'+ dec,830,
             ttHpath,
             lumi+sel_MET+STXS_stage0+STXS_stage1_0+h_decays[dec],
-            'TTH_PTH_0_60_'+dec,
+            'ttH_PTH_0_60_'+dec,
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('t#bar{t}H_PTH_60_120_'+ dec,418,
             ttHpath,
             lumi+sel_MET+STXS_stage0+STXS_stage1_1+h_decays[dec],
-            'TTH_PTH_60_120_'+dec,
+            'ttH_PTH_60_120_'+dec,
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('t#bar{t}H_PTH_120_200_'+ dec,433,
             ttHpath,
             lumi+sel_MET+STXS_stage0+STXS_stage1_2+h_decays[dec],
-            'TTH_PTH_120_200_'+dec,
+            'ttH_PTH_120_200_'+dec,
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('t#bar{t}H_PTH_200_300_'+ dec,867,
             ttHpath,
             lumi+sel_MET+STXS_stage0+STXS_stage1_3+h_decays[dec],
-            'TTH_PTH_200_300_'+dec,
+            'ttH_PTH_200_300_'+dec,
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
 
     plotClasses.Sample('t#bar{t}H_PTH_300_450_'+ dec,602,
             ttHpath,
             lumi+sel_MET+STXS_stage0+STXS_stage1_4+h_decays[dec],
-            'TTH_PTH_300_450_'+dec,
+            'ttH_PTH_300_450_'+dec,
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
     plotClasses.Sample('t#bar{t}H_PTH_GT450_'+ dec,605,
             ttHpath,
             lumi+sel_MET+STXS_stage0+STXS_stage1_5+h_decays[dec],
-            'TTH_PTH_GT450_'+dec,
+            'ttH_PTH_GT450_'+dec,
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal")
             
     ]
@@ -631,16 +631,16 @@ plottingsamples = [
 #        "misc", addsamples ["ttbarZ", "ttbarW", "wjets", "zjets", "diboson"],
 #        samDict = sampleDict, readTrees = doReadTrees)
 
-    plotClasses.Sample('TTH_PTH_0_60', 830, "", "", "TTH_PTH_0_60", addsamples = ['TTH_PTH_0_60_hbb', 'TTH_PTH_0_60_hcc', 'TTH_PTH_0_60_htt', 'TTH_PTH_0_60_hgg', 'TTH_PTH_0_60_hgluglu', 'TTH_PTH_0_60_hww', 'TTH_PTH_0_60_hzz', 'TTH_PTH_0_60_hzg'],
+    plotClasses.Sample('ttH_PTH_0_60', 830, "", "", "ttH_PTH_0_60", addsamples = ['ttH_PTH_0_60_hbb', 'ttH_PTH_0_60_hcc', 'ttH_PTH_0_60_htt', 'ttH_PTH_0_60_hgg', 'ttH_PTH_0_60_hgluglu', 'ttH_PTH_0_60_hww', 'ttH_PTH_0_60_hzz', 'ttH_PTH_0_60_hzg'],
         samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
-    plotClasses.Sample('TTH_PTH_60_120', 418, "", "", "TTH_PTH_60_120", addsamples = ['TTH_PTH_60_120_hbb', 'TTH_PTH_60_120_hcc', 'TTH_PTH_60_120_htt', 'TTH_PTH_60_120_hgg', 'TTH_PTH_60_120_hgluglu', 'TTH_PTH_60_120_hww', 'TTH_PTH_60_120_hzz', 'TTH_PTH_60_120_hzg'],
+    plotClasses.Sample('ttH_PTH_60_120', 418, "", "", "ttH_PTH_60_120", addsamples = ['ttH_PTH_60_120_hbb', 'ttH_PTH_60_120_hcc', 'ttH_PTH_60_120_htt', 'ttH_PTH_60_120_hgg', 'ttH_PTH_60_120_hgluglu', 'ttH_PTH_60_120_hww', 'ttH_PTH_60_120_hzz', 'ttH_PTH_60_120_hzg'],
         samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
-    plotClasses.Sample('TTH_PTH_120_200', 433, "", "", "TTH_PTH_120_200", addsamples =  ['TTH_PTH_120_200_hbb', 'TTH_PTH_120_200_hcc', 'TTH_PTH_120_200_htt', 'TTH_PTH_120_200_hgg', 'TTH_PTH_120_200_hgluglu', 'TTH_PTH_120_200_hww', 'TTH_PTH_120_200_hzz', 'TTH_PTH_120_200_hzg'],
+    plotClasses.Sample('ttH_PTH_120_200', 433, "", "", "ttH_PTH_120_200", addsamples =  ['ttH_PTH_120_200_hbb', 'ttH_PTH_120_200_hcc', 'ttH_PTH_120_200_htt', 'ttH_PTH_120_200_hgg', 'ttH_PTH_120_200_hgluglu', 'ttH_PTH_120_200_hww', 'ttH_PTH_120_200_hzz', 'ttH_PTH_120_200_hzg'],
         samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
-    plotClasses.Sample('TTH_PTH_200_300', 867, "", "", "TTH_PTH_200_300", addsamples = ['TTH_PTH_200_300_hbb', 'TTH_PTH_200_300_hcc', 'TTH_PTH_200_300_htt', 'TTH_PTH_200_300_hgg', 'TTH_PTH_200_300_hgluglu', 'TTH_PTH_200_300_hww', 'TTH_PTH_200_300_hzz', 'TTH_PTH_200_300_hzg'],
+    plotClasses.Sample('ttH_PTH_200_300', 867, "", "", "ttH_PTH_200_300", addsamples = ['ttH_PTH_200_300_hbb', 'ttH_PTH_200_300_hcc', 'ttH_PTH_200_300_htt', 'ttH_PTH_200_300_hgg', 'ttH_PTH_200_300_hgluglu', 'ttH_PTH_200_300_hww', 'ttH_PTH_200_300_hzz', 'ttH_PTH_200_300_hzg'],
         samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
-    plotClasses.Sample('TTH_PTH_GT300', 602, "", "", "TTH_PTH_GT300", addsamples =[   'TTH_PTH_300_450_hbb', 'TTH_PTH_300_450_hcc', 'TTH_PTH_300_450_htt', 'TTH_PTH_300_450_hgg', 'TTH_PTH_300_450_hgluglu', 'TTH_PTH_300_450_hww', 'TTH_PTH_300_450_hzz', 'TTH_PTH_300_450_hzg',
-                                        'TTH_PTH_GT450_hbb', 'TTH_PTH_GT450_hcc', 'TTH_PTH_GT450_htt', 'TTH_PTH_GT450_hgg', 'TTH_PTH_GT450_hgluglu', 'TTH_PTH_GT450_hww', 'TTH_PTH_GT450_hzz', 'TTH_PTH_GT450_hzg'],
+    plotClasses.Sample('ttH_PTH_GT300', 602, "", "", "ttH_PTH_GT300", addsamples =[   'ttH_PTH_300_450_hbb', 'ttH_PTH_300_450_hcc', 'ttH_PTH_300_450_htt', 'ttH_PTH_300_450_hgg', 'ttH_PTH_300_450_hgluglu', 'ttH_PTH_300_450_hww', 'ttH_PTH_300_450_hzz', 'ttH_PTH_300_450_hzg',
+                                        'ttH_PTH_GT450_hbb', 'ttH_PTH_GT450_hcc', 'ttH_PTH_GT450_htt', 'ttH_PTH_GT450_hgg', 'ttH_PTH_GT450_hgluglu', 'ttH_PTH_GT450_hww', 'ttH_PTH_GT450_hzz', 'ttH_PTH_GT450_hzg'],
         samDict = sampleDict, readTrees = doReadTrees, typ = "signal"),
 
 
