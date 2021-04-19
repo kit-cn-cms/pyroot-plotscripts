@@ -462,17 +462,17 @@ samples_ttbb_decay_modes_5FS = [
             path+'/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root',
             lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
             'ttbb_5FS_SL',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"), 
+            samDict=sampleDict, readTrees=doReadTrees), 
     plotClasses.Sample('t#bar{t}+b#bar{b}(dl) (5FS)',ROOT.kRed+3,
             path+'/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/*nominal*.root',
             lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
             'ttbb_5FS_DL',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"), 
+            samDict=sampleDict, readTrees=doReadTrees), 
     plotClasses.Sample('t#bar{t}+b#bar{b}(fh) (5FS)',ROOT.kRed+3,
             path+'/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/*nominal*.root',
             lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
             'ttbb_5FS_FH',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"), 
+            samDict=sampleDict, readTrees=doReadTrees), 
     ]
 
 samples_5FS = [
@@ -524,7 +524,7 @@ for sample in samples:
     processes.append(sample.nick)
 list_of_processes   = processes
 datacard_processes  = [p for p in processes if not p == "ttbb_5FS"]
-pseudo_data_samples = [x for x in samples if not x.typ == "signal" or x.nick == "ttbb_5FS"]
+pseudo_data_samples = [x for x in samples if not (x.typ == "signal" or x.nick == "ttbb_5FS")]
 
 plottingsamples = [
     plotClasses.Sample("t#bar{t}+V", ROOT.kCyan, "", "",

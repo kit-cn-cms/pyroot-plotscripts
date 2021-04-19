@@ -468,7 +468,7 @@ samples_5FS = [
             ttbarPathS,
             lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+ttbb_5FS_scale+sel_MET+sel_StrangeMuWeights,
             'ttbb_5FS',
-            samDict=sampleDict, readTrees=doReadTrees, plot = True), 
+            samDict=sampleDict, readTrees=doReadTrees, plot = False), 
     ]
 
 samples_ttnonbb = [
@@ -512,7 +512,7 @@ for sample in samples:
     processes.append(sample.nick)
 list_of_processes   = processes
 datacard_processes  = [p for p in processes if not p == "ttbb_5FS"]
-pseudo_data_samples = [x for x in samples if not x.typ == "signal" or x.nick == "ttbb_5FS"]
+pseudo_data_samples = [x for x in samples if not (x.typ == "signal" or x.nick == "ttbb_5FS")]
 
 plottingsamples = [
     plotClasses.Sample("t#bar{t}+V", ROOT.kCyan, "", "",
