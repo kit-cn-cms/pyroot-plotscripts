@@ -29,14 +29,17 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    #name = 'new_ntuples/recoDNN/multiclassJAN/recoX/bkg_merging/cTag_infos/v2'
-    name = 'new_ntuples/recoDNN/multiclassJAN/recoX/bkg_merging/cTag_infos/v2_opt_5'
+    name = 'new_ntuples/recoDNN/multiclassJAN/recoX/bkg_merging/cTag_infos/GoF/GoF_v1_log'
+    #################################################################################
+    #optimized binning
+    #name = 'new_ntuples/recoDNN/multiclassJAN/recoX/bkg_merging/cTag_infos/GoF_v1'
+    #################################################################################
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "ttX"
+    signalProcess = "ttH"
     nSigSamples   = 1
 
     # dataera
@@ -53,8 +56,11 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyTTZ/samples_ttX_matchable_advanced"
     variable_cfg    = "legacyTTZ/additionalVariables"
-    #plot_cfg        = "legacyTTZ/plots"
-    plot_cfg        = "legacyTTZ/JAN_plots_opt"
+    plot_cfg        = "legacyTTZ/JAN_outputPlots"
+    ##############################################
+    #optimized binning:
+    #plot_cfg        = "legacyTTZ/JAN_input_configs/JAN_inputs_opt"
+    ##############################################
     syst_cfg        = "legacyTTZ/systs_v1"
     replace_cfg     = None
 
@@ -75,14 +81,14 @@ def main(pyrootdir, opts):
     # script options
     analysisOptions = {
         # general options
-        "usePseudoData":        True,
+        "usePseudoData":        False,
         "testrun":              False,  # test run with less samples
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        False,
-        "makeInputDatacards":   False, # create datacards also for all defined plots
-        "addData":              False,  # adding real data 
+        "makeInputDatacards":   True, # create datacards also for all defined plots
+        "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
         "signalScaling":        -1,
@@ -90,7 +96,7 @@ def main(pyrootdir, opts):
         "cmslabel":             "private Work",
         "ratio":                "#frac{data}{MC Background}",
         "shape":                False,
-        "logarithmic":          False,
+        "logarithmic":          True,
         "splitLegend":          False,
         "normalize":            False,
         # the skipX options try to skip the submission of files to the batch system
@@ -107,7 +113,7 @@ def main(pyrootdir, opts):
     memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
                    "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/recoDNNData/new_ntuples/multiclassJAN/bkg_merging/cTag_infos/v1"}
-    dnnInterface = None
+    #dnnInterface = None
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"

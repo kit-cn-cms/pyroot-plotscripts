@@ -51,15 +51,15 @@ THQpath = path+'/THQ_*ctcvcp*/*nominal*.root'
 ttHbbPath    = path+'/ttHTobb*/*nominal*.root'
 ttHnonbbPath = path+'/ttHToNonbb*/*nominal*.root'
 
-ttHpath = path+'/ttHTobb*/*nominal*.root'+';'+ \
+ttHPath = path+'/ttHTobb*/*nominal*.root'+';'+ \
           path+'/ttHToNonbb*/*nominal*.root'
 
 friendTrees = {
-    "dnnZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/v1/recoZ",
-    "dnnH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/v1/recoHiggs",
-    "dnnbb": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/v1/recobb",
-    "dnncc": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/v1/recocc",
-    "dnnttTobb": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/v1/reco_bbfromttbar",
+    "dnnZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/v2/recoZ",
+    "dnnH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/v2/recoHiggs",
+    "dnnbb": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/v2/recobb",
+    "dnncc": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/v2/recocc",
+    "dnnttTobb": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/v2/reco_bbfromttbar",
     "matchZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/matchX/cTag_infos/v1/match_Z_as_X",
     "matchH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/matchX/cTag_infos/v1/match_Higgs_as_X",
     "matchbb": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/matchX/cTag_infos/v1/match_bb_as_X",
@@ -289,6 +289,21 @@ samples=[
 
 
 
+    plotClasses.Sample('t#bar{t}H',ROOT.kRed,
+            ttHPath,
+            lumi+sel_MET+evenSel,
+            'ttH',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+
+
+    plotClasses.Sample('t#bar{t}Z',ROOT.kMagenta,
+            ttZPath,
+            lumi+sel_MET+evenSel,
+            'ttZ',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),
+
+
+
     # ttbar classes
     plotClasses.Sample('t#bar{t}+lf',ROOT.kAzure-9,
             ttbarPathS,
@@ -315,6 +330,8 @@ for sample in samples:
     processes.append(sample.nick)
 list_of_processes   = processes
 datacard_processes  = [p for p in processes if not ("ttZ_" in p or "ttH_" in p)]
+#datacard_processes  = [p for p in processes]
+
 
 
 plottingsamples = [
