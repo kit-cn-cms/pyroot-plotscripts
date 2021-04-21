@@ -697,10 +697,10 @@ class Variable:
     def writeSFCorrectionCalculation(self, indent):
         text = "\n"
         # get procID
-        text+= "    "+indent+"procID = internalSFCorrectionHelper->GetProcID(processname, isTTbarSample, isTthSample);\n"
+        text+= "    "+indent+"procID = internalSFCorrectionHelper->GetProcID(processname, isTTbarSample, isTthSample, N_GenTopLep);\n"
         # calculate output scalefactor
         # split sf name in parts
-        _, correction, name = self.varName.split("__") 
+        _, correction, name = self.varName.split("__")
         text+= "    "+indent+self.varName+" = "+"internalSFCorrectionHelper->GetSF(procID, TString(\"{}\"), TString(\"{}\"), {});\n".format(
             correction, name, ", ".join(self.sfBinning))
         #text+= "    {indent}cout << procID;\n    {indent}cout << {sf} << endl;\n".format(indent = indent, sf = self.varName)

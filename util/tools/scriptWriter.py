@@ -38,7 +38,7 @@ class scriptWriter:
         self.sampleForVariableSetup = plotParaClass.sampleForVariableSetup
         if self.pp.useGenWeightNormMap:
             # initialize class to handle genWeight normalization stuff
-            self.genWeightNormalization = GenWeightUtils.GenWeightNormalization(self.pp.rateFactorsFile)
+            self.genWeightNormalization = GenWeightUtils.GenWeightNormalization(self.pp.rateFactorsFile, self.pp.loadSTXSnorms)
 
     ## main function for writing and compiling c++ code ##
     def writeCC(self):
@@ -125,36 +125,27 @@ class scriptWriter:
         if self.pp.useFriendTrees:
             # sample file should have path BASE/SAMPLENAME/FILE.root
             # -> strip base
-
             for ftName in self.pp.friendTrees:
-                found = False
-                print("searching for file for friend tree {}".format(ftName))
-                for basetree in TreeFileMap["files"]:
-                    # take first tree as base
-                    sampledir, treename = os.path.split(basetree)
+                foundFT = False
+                for i,thistree in enumerate(TreeFileMap["files"]): 
+                    sampledir, treename = os.path.split(thistree)
                     basedir, samplename = os.path.split(sampledir)
-
-                    # add one friend tree to list of trees
                     friendtree = "/".join([self.pp.friendTrees[ftName], samplename, treename])
-                    print("looking at file {}".format(friendtree))
+                    print("checking friend tree {}".format(friendtree))
                     if os.path.exists(friendtree):
-                        print("\t\tfile exists - cool")
-                        TreeFileMap["files"].append(friendtree)
-                        f = ROOT.TFile(friendtree)
-                        tree = f.Get("MVATree")
-                        TreeFileMap["trees"].append(deepcopy(tree))
-                        found = True
+                        foundFT = True
                         break
-                    else:
-                        print("\t\tfile does not exist")
-                if not found:
-                    sys.exit("didnt find friend tree")
-                       
+                if not foundFT:
+                    exit("cannot use file for variable setup because required friend tree does not exist.")
+                TreeFileMap["trees"][i].AddFriend("{}=MVATree".format(ftName), friendtree)
         
 
         # initialize variables with variablebox
         self.initVariables(TreeFileMap["trees"])
         
+        # initialize a list of additional header files
+        # that need to be included
+        add_includes = []
         # if a GenWeightNormMap is used, create new header file
         genWeightNormHeader_name = None
         if self.pp.useGenWeightNormMap:
@@ -164,13 +155,25 @@ class scriptWriter:
             header_code = self.genWeightNormalization.declareNormalizationMapHeader()
             with open(genWeightNormHeader_path, "w") as headerfile:
                 headerfile.write(header_code)
+            add_includes.append(genWeightNormHeader_name)
+        # initialize a list of uncertainty for each process
+        # to avoid processes unnecessary templates
+        syst_header = "systematic_uncertainties.h"
+        outpath = os.path.join(self.pp.analysis.workdir, 
+                                syst_header)
+        combinations = {}
+        for proc in self.pp.configData.systematics.relevantProcesses:
+            combinations[proc] = self.pp.configData.systematics.get_weight_systs(proc)
+        scriptfunctions.initSystematicsPerProcess(weight_syst_dict = combinations, 
+                                                outpath = outpath )
+        add_includes.append(syst_header)
         # write program
         # start writing program
-        script = scriptfunctions.getHead(   basepath          = self.pp.analysis.pyrootdir, 
-                                            dataBases         = self.pp.dataBases, 
-                                            memDB_path        = self.pp.memDBpath, 
-                                            addCodeInterfaces = self.pp.addInterfaces,
-                                            useNormHeader     = genWeightNormHeader_name
+        script = scriptfunctions.getHead(   basepath            = self.pp.analysis.pyrootdir, 
+                                            dataBases           = self.pp.dataBases, 
+                                            memDB_path          = self.pp.memDBpath, 
+                                            addCodeInterfaces   = self.pp.addInterfaces,
+                                            additional_includes = add_includes
                                             )
 
         # replace FRIENDTREE placeholders
@@ -202,11 +205,12 @@ class scriptWriter:
 
         # initialize TMVA Readers
         script += self.varManager.writeTMVAReader()
+        
+        script += scriptfunctions.initSystematics()
 
         # initialize histograms in all categories and for all systematics
         script += scriptfunctions.initHistos(
             catnames  = self.pp.categoryNames, 
-            systnames = self.pp.systNames, 
             plots     = self.pp.configData.getDiscriminatorPlots(),
             nom_histname_template = self.pp.nominalHistoKey, 
             syst_histname_template = self.pp.systHistoKey)
@@ -401,6 +405,26 @@ class scriptWriter:
         variableManager.run()
         self.varManager = variableManager
 
+    def initWeightMap(self):
+        """initialize a c++ map with the expressions for the weight systematics
+
+        return
+            [str]:  c++ code that sets up a std::map
+        """
+        s = """
+        std::map<std::string, float> weight_expressions;
+
+        if(!skipWeightSysts){{
+        {lines}
+        }}
+        """
+        line = '\tweight_expressions.insert(std::pair<std::string, float>("{name}", {expression}));'
+        syst_dict = self.pp.configData.systematics.get_all_weight_systs_with_expressions()
+        lines = []
+        for name in syst_dict:
+            lines.append(line.format(name = name, expression = syst_dict[name]))
+        
+        return s.format(lines = "\n".join(lines))
 
     def initLoop(self):
         script = ""
@@ -425,6 +449,7 @@ class scriptWriter:
         script += "     timerEvalWeightsAndBDT->Start();\n"
         # calculate varibles and get TMVA outputs
         script += self.varManager.calculateVariables()
+        script += self.initWeightMap()
         script += "     totalTimeEvalWeightsAndBDT+=timerEvalWeightsAndBDT->RealTime();\n"
 
         script += "     timerEvalDNN->Start();\n"
@@ -445,8 +470,8 @@ class scriptWriter:
 
     def eventLoop(self, tree):
         script = ""
-        # this class temporary saves variables, systNames and systWeights
-        # this way these havent got to be given as arguments for every plot initiated
+        # this class temporarily saves variables, systNames and systWeights
+        # this way these don't have to be given as arguments for every plot initiated
         plotClass = scriptfunctions.initPlots(self.varManager, self.pp.systNames, self.systWeights)
         
         for catname, catselection in zip(self.pp.categoryNames, self.pp.categorySelections):
@@ -583,13 +608,13 @@ class scriptWriter:
         maxevents = writeOptions.get("maxEventsinJob", maxEventsinJob)
         events_File = writeOptions.get("events_File", -1)
         events_job = writeOptions.get("events_job", -1)
-        processname = sample.nick
+        processname = sample.nick #ttccCMS_ttHbb_HDAMP_ttccDown
         outfilename = self.pp.plotPath+processname+'_'+str(nJob)+'.root'
         scriptname = self.pp.scriptsPath+'/'+processname+'_'+str(nJob)+'.sh'
-        origName = str(sample.origName)
+        origName = str(sample.origName) #ttcc
         suffix = writeOptions.get("suffix", "")
         skipevents = writeOptions.get("skipEvents", 0)
-        variation = processname.split(origName)[1]
+        variation = processname.split(origName,1)[1]
         # check options
         if self.pp.analysis.testrun and maxevents < 100:
             maxevents = 100

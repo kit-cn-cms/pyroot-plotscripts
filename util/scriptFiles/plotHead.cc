@@ -7,25 +7,6 @@ struct Plot1DInfoStruct{
     //std::unique_ptr<TH1> histoptr;
 };
 
-
-// Helper struct to fill plots more efficiently
-// Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
-struct structHelpFillHisto{
-  TH1* histo;
-  double weight;
-};
-
-// helper function to fill plots more efficiently
-void helperFillHisto(const std::vector<structHelpFillHisto>& paramVec, const double& val)
-{
-  for (const auto &singleParams: paramVec)
-  // singleParams: histo, var, weight
-  {
-    if((singleParams.weight)!=0)
-        singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,val)),singleParams.weight);
-  }
-}
-
 // Helper struct to fill plots more efficiently
 // Until GCC 4.9 struct cannot have init values if one wants to initialize it with bracket lists
 struct Plot2DInfoStruct{
@@ -38,21 +19,7 @@ struct Plot2DInfoStruct{
     //std::unique_ptr<TH2> histoptr;
 };
 
-struct structHelpFillTwoDimHisto{
-  TH2* histo;
-  double weight;
-};
 
-// helper function to fill plots more efficiently
-void helperFillTwoDimHisto(const std::vector<structHelpFillTwoDimHisto>& paramVec, const double& val1, const double& val2)
-{
-  for (const auto &singleParams: paramVec)
-  // singleParams: histo, var1, var2, weight
-  {
-    if((singleParams.weight)!=0)
-        singleParams.histo->Fill(fmin(singleParams.histo->GetXaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetXaxis()->GetXmin()+1e-6,val1)),fmin(singleParams.histo->GetYaxis()->GetXmax()-1e-6,fmax(singleParams.histo->GetYaxis()->GetXmin()+1e-6,val2)),singleParams.weight);
-  }
-}
 
 void resetMap(std::map<TString, float>& input, const float& val = 1){
   for(auto& entry : input){
@@ -117,7 +84,7 @@ void plot(){
 
   TString qcd_file = "/nfs/dust/cms/user/mwassmer/QCD_Estimation_September17/QCD_Estimation/QCD_Estimation_FakeScaleFactor_nominal.root";
   
-  //CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
+  CSVHelper* internalCSVHelper= new CSVHelper(csvHFfile,csvLFfile, 5,4,3,v_SystTypes);
   LeptonSFHelper* internalLeptonSFHelper= new LeptonSFHelper(dataera, plotscriptBaseDir);
   //QCDHelper* internalQCDHelper = new QCDHelper(qcd_file);
   //ttbarsysthelper* internalttbarsysthelper = new ttbarsysthelper();
@@ -241,8 +208,7 @@ void plot(){
    sampleDataBaseIdentifiers[originalfilename]=thisfilename;
 
     //check if already in vectr
-   // TString translatedFileNameForDataBase;
-
+    // TString translatedFileNameForDataBase;
 
   //DANGERZONE
   // hardcode sample translation map for now
@@ -297,7 +263,10 @@ void plot(){
   globalFileNameForSystType=filenameforSytType;
   }// end loop of filename parsing
   
-  
+  // init variable to differentiate between 4FS and 5FS samples
+
+  float isFourFSsample = 0.;
+
   TString vecNameForDataBase="mem_p";
   if(globalFileNameForSystType!=""){
     TString vecNameForDataBaseBuffer=globalFileNameForSystType;
@@ -374,6 +343,8 @@ void plot(){
   TStopwatch* timerTotal=new TStopwatch();
   TStopwatch* timerMapping=new TStopwatch();
   
+  // define final weight for event when it's filled into the template
+  float final_weight = 0;
 
  
   // initialize variables from tree

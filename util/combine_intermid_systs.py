@@ -80,7 +80,7 @@ def load_values(key, rfile, syst_list):
         print(values)
     return values
 
-def combine_systs(nom_key, syst_key, rfile, systname, replace_cfg):
+def combine_systs(nom_key, syst_key, rfile, systname, replace_cfg, cleanup = True):
     keyword = replace_cfg[systname].get("construction", "")
     syst_list = replace_cfg[systname].get("expand_with", [])
     h_nom = rfile.Get(nom_key)
@@ -118,10 +118,16 @@ def combine_systs(nom_key, syst_key, rfile, systname, replace_cfg):
         h_down = construct_new_hist(h_nom = h_nom, name = name+"Down", vals = nom_vals - values)
         print("Writing '{}'".format(h_down.GetName()))
         rfile.WriteTObject(h_down, h_down.GetName(), "Overwrite")
+        if cleanup:
+            for syst in syst_list:
+                wildcard = syst_key.replace("$SYSTEMATIC", "*{}".format(syst))
+                if debug >= 3:
+                    print("Removing '{}'".format(wildcard))
+                rfile.Delete("{};*".format(wildcard))
     else:
         print("Unable to load values for key '{}'".format(syst_key))
 
-def merge_systs(nom_key, syst_key, rfile, systname, replace_cfg):
+def merge_systs(nom_key, syst_key, rfile, systname, replace_cfg, cleanup = True):
     orig_list = replace_cfg[systname].get("merge_with", [])
     if len(orig_list) == 0:
         print("Found no specifications to merge systematic '{}' with something else".format(systname))
@@ -156,9 +162,12 @@ def merge_systs(nom_key, syst_key, rfile, systname, replace_cfg):
             h_new = construct_new_hist(h_nom = h_nom, name = name+var, vals = values)
             print("Writing '{}'".format(h_new.GetName()))
             rfile.WriteTObject(h_new, h_new.GetName(), "Overwrite")
-
-        else:
-            print("Unable to load values for key '{}'".format(syst_key))
+            if cleanup:
+                for syst in orig_list:
+                    wildcard = syst_key.replace("$SYSTEMATIC", "{}".format(syst+var))
+                    if debug >= 3:
+                        print("Removing '{}'".format(wildcard))
+                    rfile.Delete("{};*".format(wildcard))
 
 def load_config(cfg_path):
     if not cfg_path:
@@ -249,6 +258,7 @@ def combine_intermid_syst(**kwargs):
     h_nominal_key = kwargs.get("h_nominal_key", None)
     h_syst_key = kwargs.get("h_syst_key", None)
     rfile_path = kwargs.get("rfile_path", None)
+    cleanup = not kwargs.get("keep_intermid", False)
     if any(x is None for x in [h_nominal_key, h_syst_key, rfile_path]):
         msg = "Parsing error!\n"
         msg += str(locals())
@@ -300,7 +310,8 @@ def combine_intermid_syst(**kwargs):
             for nom_key, syst_key in proc_keys:
                 combine_systs(  nom_key = nom_key, syst_key = syst_key,
                                 systname = syst,
-                                rfile = rfile, replace_cfg = replace_cfg)
+                                rfile = rfile, replace_cfg = replace_cfg,
+                                cleanup = cleanup)
         
         #WIP: include logic to merge two uncertainties here
         for syst in replace_cfg:
@@ -310,7 +321,8 @@ def combine_intermid_syst(**kwargs):
             for nom_key, syst_key in proc_keys:
                 merge_systs(  nom_key = nom_key, syst_key = syst_key,
                                 systname = syst,
-                                rfile = rfile, replace_cfg = replace_cfg)
+                                rfile = rfile, replace_cfg = replace_cfg,
+                                cleanup=cleanup)
 
 
 
@@ -412,6 +424,18 @@ def parse_arguments():
                         dest = "verbosity",
                         default = 0,
                         type = "int"
+                    )
+    parser.add_option("--keep_intermid",
+                        help = " ".join(
+                            """
+                            Keep intermediary templates.
+                            Default is False, i.e. the intermidiary
+                            templates are deleted.
+                            """.split()
+                        ),
+                        dest = "keep_intermid",
+                        action = "store_true",
+                        default = False
                     )
 
     options, args = parser.parse_args()

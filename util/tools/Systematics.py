@@ -17,7 +17,7 @@ class SystematicsForProcess:
 
 class Systematics:
     def __init__(self,systematicconfig,weightDictionary = {}, replacing_config = None, relevantProcesses = []):
-        print "loading systematics config ..."
+        print("loading systematics config ...")
         self.systematics=pandas.read_csv(systematicconfig,sep=",")
         self.systematics.fillna("-", inplace=True)
         self.relevantProcesses = relevantProcesses
@@ -58,6 +58,21 @@ class Systematics:
         if self.replacing_config:
             print("WILL USE REPLACE CONFIGURATION FROM '{}'".format(replacing_config))
 
+    def check_expression(self, expression):
+        """function to ensure backwards compatibility. In case weight is defined in the syst csv
+        (WHICH YOU SHOULD NOT DO), this function will return the argument of the definition
+        and will discard the newly defined weight.
+
+        Args:
+            expression (str): expression that needs to be checked
+
+        Returns:
+            str: fully checked expression
+        """
+        if ":=" in expression:
+            expression =  expression.split(":=")[-1]
+        return expression
+
     def construct_syst_dict(self, construct_type):
         syst_dict = OrderedDict()
         systs = self.systematics.loc[self.systematics["Construction"] == construct_type]
@@ -70,7 +85,9 @@ class Systematics:
                 syst_dict.update(self.expand_uncertainties(systematic))
             else:
                 expr_up = self.replaceDummies(systematic["Up"])
+                expr_up = self.check_expression(expr_up)
                 expr_down = self.replaceDummies(systematic["Down"])
+                expr_down = self.check_expression(expr_down)
                 if expr_up == "-" and expr_down == "-":
                     syst_dict[systName] = "-"
                 elif expr_up == "-" or expr_down == "-":
@@ -97,7 +114,9 @@ class Systematics:
         expanded_systs = {}
         systName = syst["Uncertainty"]
         up_variation = self.replaceDummies(syst["Up"])
+        up_variation = self.check_expression(up_variation)
         down_variation = self.replaceDummies(syst["Down"])
+        down_variation = self.check_expression(down_variation)
         syst_variations = {}
         if up_variation == "-" or down_variation == "-":
             syst_variations[systName] = up_variation if not up_variation == "-" else down_variation
@@ -154,7 +173,9 @@ class Systematics:
             names = []
             typ=systematic["Type"]
             up = systematic["Up"]
+            up = self.check_expression(up)
             down = systematic["Down"]
+            down = self.check_expression(down)
             if up == "-" or down == "-":
                 names.append(name)
             else:
@@ -183,24 +204,24 @@ class Systematics:
                             continue
                         self.processes[process][n]=SystematicsForProcess(n,process,typ,construction,expr)
 
-    # only gets variables to plot, without variation of name with up and down!
-    def plotSystematicsForProcesses(self,list_of_processes):
-        self.processes={}
-        for process in list_of_processes:
-            self.processes[process]={}
-        for i,systematic in self.systematics.iterrows():
-            name=systematic["Uncertainty"]
-            if name.startswith("#"):
-                continue
-            plot=str(systematic["Plot"])
-            if plot=="-":
-                continue
-            typ=systematic["Type"]
-            construction=systematic["Construction"]
-            for process in list_of_processes:
-                if systematic[process] is not "-":
-                    self.processes[process][name]=SystematicsForProcess(name,process,typ,construction,
-                                                                            plot=plot)
+    # # only gets variables to plot, without variation of name with up and down!
+    # def plotSystematicsForProcesses(self,list_of_processes):
+    #     self.processes={}
+    #     for process in list_of_processes:
+    #         self.processes[process]={}
+    #     for i,systematic in self.systematics.iterrows():
+    #         name=systematic["Uncertainty"]
+    #         if name.startswith("#"):
+    #             continue
+    #         plot=str(systematic["Plot"])
+    #         if plot=="-":
+    #             continue
+    #         typ=systematic["Type"]
+    #         construction=systematic["Construction"]
+    #         for process in list_of_processes:
+    #             if systematic[process] is not "-":
+    #                 self.processes[process][name]=SystematicsForProcess(name,process,typ,construction,
+    #                                                                         plot=plot)
 
     #returns weight systematics for specific process
     def get_weight_systs(self,process):
@@ -245,6 +266,49 @@ class Systematics:
         returns list of strings
         """
         return self.__dict_weight_systs.values()
+    
+    def get_all_weight_systs_with_expressions(self):
+        """function to return a dictionary with all weight 
+        systematics and the corresponding expressions.
+        The dictionary contains the weight uncertainties
+        for all relevant processes
+
+        Returns:
+            [dict]: Dictionary for all relevant processes of format
+                    {
+                        "weight_uncertainty_name" : "expression"
+                    }
+        """
+        # init dictionary to return
+        rdict = {}
+        # try to load the dictionary with uncertainties for the 
+        # relevant processes. If this wasn't initialized before, the
+        # property doesn't exist, which is why we try first
+        try:
+            source = self.processes
+            # if this is successful, loop through all the processes and
+            # collect the relevant weight systematics
+            for p in source:
+                # loop through the relevant processes
+                proc_dict = source[p]
+                # loop through the systematics
+                for syst in proc_dict:
+                    # first check that the construction of the entry is
+                    # 'weight'
+                    entry = proc_dict[syst]
+                    if not entry.construction == "weight":
+                        continue
+                    # update the return dictionary. This will also 
+                    # ensure that each systematic is present exactly
+                    # once
+                    rdict.update({syst: entry.expression})
+        except:
+            # if the dictionary with systematics for the relevant processes
+            # is not initialized, use the dictionary with all weight
+            # systematics
+            rdict = self.__dict_weight_systs
+        
+        return rdict
 
     #returns all variation systematics
     def get_all_variation_systs(self):
@@ -292,7 +356,7 @@ class Systematics:
                     plotShapes.append(systName)
                 else:
                     plotShapes.append("#"+systName)
-                print systName
+                print (systName)
         return plotShapes
 
     def replaceDummies(self, variationString):

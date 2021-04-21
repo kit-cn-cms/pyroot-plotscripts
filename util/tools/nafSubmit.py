@@ -169,7 +169,7 @@ def condorSubmit(submitPath):
         try:
             jobID = int(output[0].split(".")[0])
         except:
-            print("something went wrong with calling the condor_submit command, submission of jobs was not successful")
+            print("something went wrong with calling the condir_submit command, submission of jobs was not successful")
             print("DEBUG:")
             print(output)
             tries += 1
