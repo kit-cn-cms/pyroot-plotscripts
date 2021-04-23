@@ -157,7 +157,7 @@ weightReplacements.update(generate_phasespace_corrections.main())
 
 # exit(0)
 # Lumi weight
-lumi = '35.9'
+lumi = '36.33'
 
 kfactor_zjets = "*1.23"
 kfactor_wjets = "*1.21"
