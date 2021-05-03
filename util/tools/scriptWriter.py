@@ -107,15 +107,17 @@ class scriptWriter:
         print("#"*30)
         print("Globbing one File of each sample to init Variables")
         print("#"*30)
-        for i in range(len(samplesToCheck)):
-            for j in range(len(samplesToCheck[i].files)):
+        for sample in samplesToCheck:
+            for fpath in sample.files:
                 # tree = ROOT.TTree()
-                f = ROOT.TFile(samplesToCheck[i].files[j])
-                tree = f.Get('MVATree')
+                f = ROOT.TFile(fpath)
+                tree = f.Get(sample.treename)
+                if not isinstance(tree, ROOT.TTree): 
+                    continue
                 if tree.GetEntries() > 0:
-                    print("using "+str(samplesToCheck[i].files[j])+" to determine variable types")
+                    print("using "+str(fpath)+" to determine variable types")
                     TreeFileMap["trees"].append(deepcopy(tree))
-                    TreeFileMap["files"].append(str(samplesToCheck[i].files[j]))
+                    TreeFileMap["files"].append(str(fpath))
                     break
         print("#"*30)
         print("Using {} rootFiles for variable Setup".format(len(TreeFileMap["files"])))
@@ -363,7 +365,7 @@ class scriptWriter:
     def initVariables(self, trees):
         # initialize variables objects
         variableManager = variableCancer.VariableManager(trees, self.vetolist, self.pp.sfCorrection, self.pp.friendTrees)
-        variableManager.add( ["Weight", "Weight_CSV", "Weight_XS"] )
+        #variableManager.add( ["Weight", "Weight_CSV", "Weight_XS"] )
         
         # get additional variables
         if len(self.pp.configData.addVars) > 0:
@@ -532,8 +534,11 @@ class scriptWriter:
                     nEventsInFile = LoadedTreeInformation[filename]
                 else:
                     f = ROOT.TFile(filename)
-                    tree = f.Get('MVATree')
-                    nEventsInFile = tree.GetEntries()
+                    tree = f.Get(sample.treename)
+                    if isinstance(tree, ROOT.TTree):
+                        nEventsInFile = tree.GetEntries()
+                    else:
+                        continue
 
                 SaveTreeInformation[filename] = nEventsInFile                
                 # if the file is larger than self.maxevents it is analyzed in portions of nevents
@@ -637,6 +642,7 @@ class scriptWriter:
         script += "export SYSTHISTKEY='{}'\n".format(self.pp.systHistoKey)
         script += 'export SEPARATOR="{}"\n'.format(self.pp.histNameSeparator)
         script += 'export VARIATION="{}"\n'.format(variation)
+        script += 'export TREENAME="{}"\n'.format(sample.treename)
         #DANGERZONE
         pPscript = script + ".".join(self.ccPath.split(".")[:-1])+'\n'
 

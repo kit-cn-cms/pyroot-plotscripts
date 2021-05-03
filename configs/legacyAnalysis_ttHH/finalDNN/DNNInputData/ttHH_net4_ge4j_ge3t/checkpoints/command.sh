@@ -1,0 +1,1 @@
+python /home/nshadskiy/Documents/DRACO-MLfoy/train_scripts/train_template_ttHH.py -i /local/scratch/ssd/esarauer/preprocessed_ttHH/ -o ttHH_net4 -c ge4j_ge3t -v variables_ttHH -n ttH_2017 --plot --printroc -S ttHH -e 100

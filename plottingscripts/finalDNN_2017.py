@@ -23,19 +23,20 @@ import util.checkHistos as checkHistos
 import util.makeDatacards as makeDatacards
 
 def main(pyrootdir, opts):
-    print '''
+    print ('''
     # ========================================================
     # welcome to main function - defining some variables
     # ========================================================
-    '''
+    ''')
     # name of the analysis (i.e. workdir name)
-    name = 'finalDNN_unblinded/2017'
+
+    name = 'finalDNN_ttHH_2017_withDNN'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "ttH"
+    signalProcess = "ttHH"
     nSigSamples   = 1
 
     # dataera
@@ -48,43 +49,43 @@ def main(pyrootdir, opts):
     histname_separator = "__"
 
     # define MEM discriminator variable
-    memexp = "(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)"
+    memexp = ""
     # configs
-    config          = "legacyAnalysis/samples_2017"
-    variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/finalDNN/finalDNN_optimized_classifier"
-    # plot_cfg        = "legacyAnalysis/DNN_14-05-2020/combined161718_DNNs"
-    syst_cfg        = "legacyAnalysis/systs_2017"
-    # syst_cfg        = "legacyAnalysis/no_systs"
-    replace_cfg     = "legacyAnalysis/pdf_relic_names"
+    config          = "legacyAnalysis_ttHH/samples_2017"
+    variable_cfg    = "legacyAnalysis_ttHH/additionalVariables"
+    plot_cfg        = "legacyAnalysis_ttHH/finalDNN/ttHH_DNN_2017_plots"
+    # plot_cfg        = "legacyAnalysis_ttHH/DNN_14-05-2020/combined161718_DNNs"
+    #syst_cfg        = "legacyAnalysis_ttHH/systs_2017"
+    syst_cfg        = "legacyAnalysis_ttHH/no_systs"
+    replace_cfg     = ""
 
-    sfCorrection = {}
-    sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2017_deepJet_combined.root"
+    #sfCorrection = {}
+    #sfCorrection["sfFile"] =  pyrootdir+"/data/btagSFCorrection/sf_2017_deepJet_combined.root"
     # variables for the correction
-    sfCorrection["corrections"] = {}
-    sfCorrection["corrections"]["HT_vs_NJet"] = ["Evt_HT_jets", "N_Jets"]
+    #sfCorrection["corrections"] = {}
+    #sfCorrection["corrections"]["HT_vs_NJet"] = ["Evt_HT_jets", "N_Jets"]
     # in root file sf histograms exist with some naming scheme
-    sfCorrection["nameTemplate"] = "$BINNING__$PROCESS__$NAME"
+    #sfCorrection["nameTemplate"] = "$BINNING__$PROCESS__$NAME"
     # SF_ is always preprended by default, that should not be changed
     # $BINNING = "_vs_".join(corrections[X])
     # DANGER: order of variables is important
     # name of corrections to be applied (should match whats defined in syst.csv or samples.py)
-    sfCorrection["names"] = ["btag_NOMINAL"]
+    #sfCorrection["names"] = ["btag_NOMINAL"]
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_new_plotscript_2017.csv"
+    #rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_new_plotscript_2017.csv"
 
     # script options
     analysisOptions = {
         # general options
         "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
-        "stopAfterCompile":     False,   # stop script after compiling
+        "stopAfterCompile":     True,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        True,
-        "makeInputDatacards":   False, # create datacards also for all defined plots
+        "makeDataCards":        False,
+        "makeInputDatacards":   True, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots
@@ -110,17 +111,17 @@ def main(pyrootdir, opts):
     # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                  "checkpointFiles":  pyrootdir+"/configs/legacyAnalysis/finalDNN/DNNInputData/"}
-    # dnnInterface = None
+                  "checkpointFiles":  pyrootdir+"/configs/legacyAnalysis_ttHH/finalDNN/DNNInputData"}
+    #dnnInterface = None
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
 
-    print '''
+    print ('''
     # ========================================================
     # initializing analysisClass 
     # ========================================================
-    '''
+    ''')
 
     # save a lot of useful information concerning the analysis
     analysis = analysisClass.analysisConfig(
@@ -135,17 +136,17 @@ def main(pyrootdir, opts):
     analysis.initAnalysisOptions( analysisOptions )
 
     pltcfg = analysis.initPlotConfig()
-    print "We will import the following plotconfig: ", analysis.getPlotConfig()
+    print ("We will import the following plotconfig: {}".format(analysis.getPlotConfig()))
 
     # loading monitorTools module locally
     monitor = monitorTools.init(analysis.workdir)
     monitor.printClass(analysis, "init")
 
-    print '''
+    print ('''
     # ========================================================
     # prepare configdata
     # ========================================================
-    '''
+    ''')
 
     configData = configClass.configData(
         analysisClass   = analysis,
@@ -163,33 +164,33 @@ def main(pyrootdir, opts):
     configData.genDiscriminatorPlots(memexp, dnnInterface)
     configData.writeConfigDataToWorkdir()
     monitor.printClass(configData, "init")
-    print '''    
+    print ('''    
     # ========================================================
     # define additional variables necessary for selection in plotparallel
     # ========================================================
-    '''
+    ''')
     configData.getAddVariables() # also adds DNN variables
 
-    print '''    
+    print ('''    
     # ========================================================
     # loading samples and samples data
     # ========================================================
-    '''
+    ''')
     configData.initSamples()
 
-    print '''
+    print ('''
     # ========================================================
     # done with preprocessing
     # ========================================================
-    '''
+    ''')
 
     # plot everything, except during drawParallel step
     # Create file for data cards
-    print '''
+    print ('''
     # ========================================================
     # starting with plotParallel step
     # ========================================================
-    '''
+    ''')
     
     with monitor.Timer("plotParallel"):
         # initialize plotParallel class 
@@ -210,10 +211,10 @@ def main(pyrootdir, opts):
         # pP.setMaxEvts_nom(200000)
         pP.setMaxEvts_systs(200000)
         # pP.request_runtime = 60*60*5
-        pP.setRateFactorsFile(rateFactorsFile)
+        #pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
-        pP.setSFCorrection(sfCorrection)
-        pP.setUseFriendTrees(True)
+        #pP.setSFCorrection(sfCorrection)
+        #pP.setUseFriendTrees(True)
 
         # run plotParallel
         pP.run()
@@ -223,11 +224,11 @@ def main(pyrootdir, opts):
 
     # hadd histo files before renaming. The histograms are actually already renamed. 
     # But the checkbins thingy will not have been done yet.
-    print '''
+    print ('''
     # ========================================================
     # hadding from wildcard
     # ========================================================
-    '''
+    ''')
     with monitor.Timer("haddFilesFromWildCard"):
         haddParallel.haddSplitter( 
             input               = pP.getHaddOutPath(),
@@ -248,11 +249,11 @@ def main(pyrootdir, opts):
     if os.path.exists( analysis.setRenamedPath(name = "limitInput") ):
         print( "renamed file already exists - skipping renaming histos" )
     else:
-        print '''
+        print ('''
         # ========================================================
         # renaming Histograms
         # ========================================================
-        '''
+        ''')
 
         # in this function the variable self.renameInput is set
         # if hadd files were created during plotParallel
@@ -272,11 +273,11 @@ def main(pyrootdir, opts):
 
 
     if analysis.addData:
-        print '''
+        print ('''
         # ========================================================
         # adding data with plotParallel
         # ========================================================
-        '''
+        ''')
         with monitor.Timer("addRealData"):
             if analysis.usePseudoData:
                 print("adding data_obs histograms as pseudo data")
@@ -302,11 +303,11 @@ def main(pyrootdir, opts):
     print("#################################################")
 
     if analysis.makeDataCards or analysis.makeInputDatacards and not opts.skipDatacards:
-        print '''
+        print ('''
         # ========================================================
         # Making Datacards.
         # ========================================================
-        '''
+        ''')
         with monitor.Timer("makeDatacardsParallel"):
             makeDatacards.makeDatacardsParallel(
                 filePath            = analysis.renamedPath,
@@ -324,22 +325,22 @@ def main(pyrootdir, opts):
                 )
     
     if analysis.makePlots:
-        print '''
+        print ('''
         # ========================================================
         # Making Plots
         # ========================================================
-        '''
+        ''')
         with monitor.Timer("makePlots"):
             makePlots.makePlots(configData  = configData,
                                 nominal_key = nom_histname_template,
                                 syst_key    = syst_histname_template)
 
 
-    print '''
+    print ('''
     # ========================================================
     # this is the end of the script 
     # ========================================================
-    '''
+    ''')
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()

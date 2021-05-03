@@ -409,7 +409,8 @@ def encodeSampleSelection(samples, varManager):
         if sampleSelection == '': sampleSelection = '1'
         
         if not sample.vetoEventWeights is None:
-            text+= '    if(processname=="'+sample.nick+'" && abs(NomWeight*Weight_XS) >= '+str(sample.vetoEventWeights)+') continue;\n'
+            #text+= '    if(processname=="'+sample.nick+'" && abs(NomWeight*Weight_XS) >= '+str(sample.vetoEventWeights)+') continue;\n'
+            text+= '    if(processname=="'+sample.nick+'" && abs(NomWeight) >= '+str(sample.vetoEventWeights)+') continue;\n'
 
         text+= '    if(processname=="'+sample.nick+'" && (!('+arraySelection+') || ('+sampleSelection+')==0) ) continue;\n'
         text+= '    else if(processname=="'+sample.nick+'") sampleweight='+sampleSelection+';\n\n'
@@ -582,7 +583,8 @@ class initPlots:
             script += "{\n"
             
             arraySelection = self.varManager.checkArrayLengths(",".join(variables + [sel]))
-            weight = "("+arraySelection+")*("+sel_i+")*Weight_XS*categoryweight*sampleweight"
+            #weight = "("+arraySelection+")*("+sel_i+")*Weight_XS*categoryweight*sampleweight"
+            weight = "("+arraySelection+")*("+sel_i+")*categoryweight*sampleweight"
 
             script += fillHistoSyst(histName, var_i, weight)
             script += "            }\n"
@@ -600,6 +602,7 @@ class initPlots:
             arraySelection = self.varManager.checkArrayLengths(",".join(variables + [sel]))
             weight = '('+arraySelection+')*('+sel+')*Weight_XS*categoryweight*sampleweight'
             script += fillHistoSyst(histName, variables, weight)
+
         if self.varManager.verbose > 20: print("\n\ninit plot code for "+str(plotName)+":\n"+str(script))
         return script
         

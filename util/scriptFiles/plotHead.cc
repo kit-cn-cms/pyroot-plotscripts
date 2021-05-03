@@ -31,10 +31,7 @@ void plot(){
   TH1F::SetDefaultSumw2();
 
   // open files
-  TChain* chain = new TChain("MVATree");
-//PLACEHOLDERFRIENDTREEINIT
-
-  char* filenames = getenv ("FILENAMES");
+    char* filenames = getenv ("FILENAMES");
   char* outfilename = getenv ("OUTFILENAME");
   std::string plotscriptBaseDir = getenv ("PLOTSCRIPTBASEDIR");
   string processname = string(getenv ("PROCESSNAME"));
@@ -45,6 +42,12 @@ void plot(){
   std::string dataera = string(getenv ("DATAERA"));
   std::string variation = string(getenv ("VARIATION"));
   std::string origName = string(getenv ("ORIGNAME"));
+  char* treename = getenv("TREENAME");
+
+  TChain* chain = new TChain(treename);
+//PLACEHOLDERFRIENDTREEINIT
+
+
 
   // create vector of systematics
   std::vector<Systematics::Type> v_SystTypes = Systematics::getTypeVector();
@@ -246,7 +249,7 @@ void plot(){
   // now figure out internalSystType
   filenameforSytType.Replace(0,filenameforSytType.Last('_')+1,"");
   // nominal is the empty string here
-  if(filenameforSytType=="nominal"){filenameforSytType="";}
+  if(filenameforSytType=="nominal" || filenameforSytType=="ttto4b" || filenameforSytType=="full"){filenameforSytType="";}
   if(filenameforSytType.Contains("JESHEM")){
     std::cout << "DANGERZONE: will translate 'JESHEM' to 'JESHEMIssue'!";
     filenameforSytType = filenameforSytType.ReplaceAll("JESHEM", "JESHEMIssue");
