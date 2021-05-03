@@ -1138,10 +1138,10 @@ def plots_ge4j_ge3t(data = None):
 
 def getDiscriminatorPlots(data = None, discrname = ''):
     discriminatorPlots = []
-    discriminatorPlots += plots_4j_ge3t(data)
-    discriminatorPlots += plots_5j_ge3t(data)
+    #discriminatorPlots += plots_4j_ge3t(data)
+    #discriminatorPlots += plots_5j_ge3t(data)
     discriminatorPlots += plots_ge6j_ge3t(data)
-    discriminatorPlots += plots_ge4j_ge3t(data)
+    #discriminatorPlots += plots_ge4j_ge3t(data)
 
     return discriminatorPlots
 

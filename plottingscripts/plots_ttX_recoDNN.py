@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'new_ntuples/recoDNN/multiclassJAN/recoX/bkg_merging/cTag_infos/GoF/GoF_v1_log'
+    name = 'new_ntuples/recoDNN/multiclassJAN/recoX/bkg_merging/cTag_infos/GoF/new_systematics/GoF_v1_log'
     #################################################################################
     #optimized binning
     #name = 'new_ntuples/recoDNN/multiclassJAN/recoX/bkg_merging/cTag_infos/GoF_v1'
