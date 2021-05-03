@@ -95,8 +95,10 @@ void plot(){
   std::cout<<"processname: " <<processname<<std::endl;
   std::cout<<"suffix: " <<suffix<<std::endl;
   bool skipWeightSysts = false;
+  TString variation_suffix = "nom";
   if (variation != "") {
     skipWeightSysts = true;
+    variation_suffix = variation;
   }
   if (TString(processname).Contains("SingleMu") or TString(processname).Contains("SingleEl") or TString(processname).Contains("EGamma") or TString(processname).Contains("MET")){
     std::cout << "Detected Data Sample, going to skip weight systematics" << std::endl;
@@ -164,31 +166,23 @@ void plot(){
     TString treename = buf.c_str();
     treename.Replace(0,treename.Last('/'),"");
     TString samplename = buf.c_str();
-    samplename.ReplaceAll(treename,"");
+    for(int i=0; i<=3; i++){
+      samplename.Replace(samplename.Last('/'), samplename.Length(), "");
+      std::cout << "samplename "<<samplename<<std::endl;
+    }
+    // samplename.ReplaceAll(treename,"");
     samplename.Replace(0,samplename.Last('/')+1,"");
-    samplename+=treename;
+    // samplename+=treename;
     std::cout << "samplename "<<samplename<<std::endl;
 
 //PLACEHOLDERFRIENDTREECHAINS
     
     //std::cout<<"file "<<buf.c_str()<<" "<<thisfilename<<std::endl; // karim debug 
     // cut of directories
-    thisfilename.Replace(0,thisfilename.Last('/')+1,"");
-    //cut of trailing tree and root
-    thisfilename.Replace(thisfilename.Last('_'),thisfilename.Length(),"");
+    thisfilename = samplename;
     // copy the string for figuring out internalSystType
     TString filenameforSytType=TString(thisfilename);
-    // remove syst name in case of JES or JER. Not needed in current database format
-    //std::cout<<thisfilename<<std::endl;
-    if(thisfilename.Contains("JES")==1 or thisfilename.Contains("JER")==1 or thisfilename.Contains("nominal")==1){
-      thisfilename.Replace(thisfilename.Last('_'),thisfilename.Length()-1,"");
-      }
-    //std::cout<<thisfilename<<std::endl;
     //remove number
-    int lastUnderscore=thisfilename.Last('_');
-    //thisfilename.Replace(thisfilename.Last('_'),1,"");
-    //thisfilename.Replace(thisfilename.Last('_'),lastUnderscore-thisfilename.Last('_'),"");
-    thisfilename.Replace(thisfilename.Last('_'),thisfilename.Length(),"");
     //remove remaining underscores
     while(thisfilename.Last('_')>=0){ thisfilename.Replace(thisfilename.Last('_'),1,"");}
     //remove remaining dashes
@@ -294,17 +288,17 @@ void plot(){
   
   
   int nEventsVetoed=0;
-  Long64_t Evt_ID;
-  Int_t Evt_Run;
-  Int_t Evt_Lumi;
+  // Long64_t Evt_ID;
+  // Int_t Evt_Run;
+  // Int_t Evt_Lumi;
   
-  Int_t Evt_ID_INT;
-  Int_t Evt_Run_INT;
-  Int_t Evt_Lumi_INT;
+  // Int_t Evt_ID_INT;
+  // Int_t Evt_Run_INT;
+  // Int_t Evt_Lumi_INT;
 
-  chain->SetBranchStatus("Evt_ID",1);
-  chain->SetBranchStatus("Evt_Run",1);
-  chain->SetBranchStatus("Evt_Lumi",1);
+  // chain->SetBranchStatus("Evt_ID",1);
+  // chain->SetBranchStatus("Evt_Run",1);
+  // chain->SetBranchStatus("Evt_Lumi",1);
   
   // figure out what kind of branch this is
   bool evtIDisIntBranch=1;
@@ -312,9 +306,9 @@ void plot(){
   //TString branchNameString=TString(evtBranch->GetTitle());
   //if(branchNameString.Contains("/L")){
   //  evtIDisIntBranch=0;
-    chain->SetBranchAddress("Evt_ID",&Evt_ID);
-    chain->SetBranchAddress("Evt_Run",&Evt_Run);
-    chain->SetBranchAddress("Evt_Lumi",&Evt_Lumi);
+    // chain->SetBranchAddress("Evt_ID",&Evt_ID);
+    // chain->SetBranchAddress("Evt_Run",&Evt_Run);
+    // chain->SetBranchAddress("Evt_Lumi",&Evt_Lumi);
   //}
   //else{
   //chain->SetBranchAddress("Evt_ID",&Evt_ID_INT);
