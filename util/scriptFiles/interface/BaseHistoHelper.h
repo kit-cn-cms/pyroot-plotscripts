@@ -63,11 +63,14 @@ template<class T> class BaseHistoHelper{
                 std::cout << "\t" << entry.first << std::endl;
             }
         }
+        void SetVerbosity(int input_verbosity){verbosity = input_verbosity;}
+        int GetVerbosity(){return verbosity;}
     protected:
         std::vector<std::string> systematics;
         std::map<std::string, std::shared_ptr<T>> histo_map;
         std::string variation;
         bool skipWeightSysts;
+        int verbosity = 0;
 };
 
 
