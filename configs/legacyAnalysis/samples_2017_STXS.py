@@ -598,7 +598,7 @@ plottingsamples = [
 
     plotClasses.Sample("V+jets", 18, "", "",
         "vjets", addsamples = ["wjets", "zjets"],
-        samDict = sampleDict, readTrees = doReadTrees)
+        samDict = sampleDict, readTrees = doReadTrees),
 
 #    plotClasses.Sample("misc.", 18, "", "",
 #        "misc", addsamples ["ttbarZ", "ttbarW", "wjets", "zjets", "diboson"],
