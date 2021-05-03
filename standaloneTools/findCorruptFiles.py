@@ -15,13 +15,13 @@ def check_root_files_(path = ""):
     rf = ROOT.TFile.Open(path)
     if rf == None or len(rf.GetListOfKeys()) == 0:
         isEMPTY = True
-        print "EMPTY        ", path
+        print ("EMPTY        "), path
     elif rf.TestBit(ROOT.TFile.kZombie):
         isGOOD = False
-        print "ZOMBIE        ", path
+        print ("ZOMBIE        "), path
     elif rf.TestBit(ROOT.TFile.kRecovered):
         isGOOD = False
-        print "BROKEN        ", path
+        print ("BROKEN        "), path
     if rf != None:
         rf.Close()
     # if isEMPTY: return "empty"
