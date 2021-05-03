@@ -3,9 +3,20 @@ import pandas
 
 class GenWeightNormalization():
     # -- init functions ---------------------------------------------
-    def __init__(self, csvfile):
+    def __init__(self, csvfile, loadSTXSnorms):
         self.csvfile = csvfile
-        self.csv_dict = self.readCSVFile()
+        self.csv_dict = self.readCSVFile("final_weight_sl_analysis")
+        self.fractions = {}
+        self.fractions["ttbb"] = self.readCSVFile("ratio_ttB_varied_vs_nom_5FS")
+        self.fractions["ttcc"] = self.readCSVFile("ratio_ttC_varied_vs_nom_5FS")
+        self.fractions["ttlf"] = self.readCSVFile("ratio_ttLF_varied_vs_nom_5FS")
+        if loadSTXSnorms:
+            self.fractions["ttH_PTH_0_60"] = self.readCSVFile("fiducial_xs_norm_TTH_PTH_0_60")
+            self.fractions["ttH_PTH_60_120"] = self.readCSVFile("fiducial_xs_norm_TTH_PTH_60_120")
+            self.fractions["ttH_PTH_120_200"] = self.readCSVFile("fiducial_xs_norm_TTH_PTH_120_200")
+            self.fractions["ttH_PTH_200_300"] = self.readCSVFile("fiducial_xs_norm_TTH_PTH_200_300")
+            self.fractions["ttH_PTH_300_450"] = self.readCSVFile("fiducial_xs_norm_TTH_PTH_300_450")
+            self.fractions["ttH_PTH_GT450"] = self.readCSVFile("fiducial_xs_norm_TTH_PTH_GT450")
         self.weightList = self.getWeightVarsList()
         self.namespace_name = "GenNormMap"
         # print(self.weightList)
@@ -26,7 +37,7 @@ class GenWeightNormalization():
 
 
     # ReadGenWeightNormalizations
-    def readCSVFile(self):
+    def readCSVFile(self, keyword):
         # read csv file as dictionary
         csv_dict = {}
         data = pandas.read_csv(self.csvfile)
@@ -34,7 +45,7 @@ class GenWeightNormalization():
             (x.replace("_","").replace("-","").replace("newpmx","") for x in data["sample"].values),
             index = data.index)
         for index in range(len(data.variation.values)):
-            csv_dict[ (data.sample_name_modified[index], data.variation[index]) ] = data.final_weight_sl_analysis[index]
+            csv_dict[ (data.sample_name_modified[index], data.variation[index]) ] = data[keyword][index]
 
         return csv_dict
     # ---------------------------------------------------------------
@@ -48,54 +59,77 @@ class GenWeightNormalization():
         # for weight in self.weightList:
         #     weightVetoList.append("internalNormFactor_"+weight)
         # return weightVetoList
-        return ["internalNormFactors"]
+        vetolist = ["internalNormFactors"]
+        vetolist += ["fracRatio_{}".format(x) for x in self.fractions.keys()]
+        vetolist.append("isFourFSsample")
+        return vetolist
 
 
-    # DeclareGenWeightNormFactors
-    def declareNormFactors(self):
-        code = "\tstd::map< TString, float> internalNormFactors = \n  {\n"
+    def initMap(self, map_name, default = 1.0):
+        code = "\tstd::map< TString, float> {} = \n  {{\n".format(map_name)
         tmp = []
         for weight in sorted(self.weightList):
-            tmp.append('\t{{ "{}", 1.0 }}'.format(weight))
+            tmp.append('\t{{ "{name}", {default} }}'.format(name = weight, default = default))
         code += ",\n".join(tmp)
-        code += "\n  };"
+        code += "\n  };\n"
+        return code
+    # DeclareGenWeightNormFactors
+    def declareNormFactors(self):
+        code = self.initMap("internalNormFactors")
+        for k in self.fractions:
+            code += self.initMap("fracRatio_{}".format(k))
         return code
 
     def loadNormFactors(self):
-        return "auto internalNormFactors = {}::internalNormFactors;\n".format(self.namespace_name)
+        code = "auto internalNormFactors = {}::internalNormFactors;\n".format(self.namespace_name)
+        for k in self.fractions:
+            code += "auto fracRatio_{key} = {name}::fracRatio_{key};\n".format(name = self.namespace_name, key = k)
+        return code
+
+    def generateDictLines(self, dic, indent = "\t", debug = False):
+        tmp = []
+        code = ""
+        for key in sorted(dic):
+            if dic[key] == -1: continue
+            tmp.append('{}{{ "{}_{}", {} }}'.format( indent, key[0], key[1], dic[key]) )
+            if debug: break
+        code += ",\n".join(tmp)
+        return code
 
     # AddGenWeightNormMap
     def addNormalizationMap(self):
         code = "\tstd::map<TString,float> GenWeight_Norm_Map = \n  {\n"
-        tmp = []
-        for key in sorted(self.csv_dict):
-            tmp.append('\t{{ "{}_{}", {} }}'.format( key[0], key[1], 
-                                                            self.csv_dict[key])
-                        )
-        code += ",\n".join(tmp)
+        code += self.generateDictLines(self.csv_dict)
         code += "\n  };"
+        for k in self.fractions:
+            code += "\tstd::map<TString,float> private_fracRatio_{} = \n  {{\n".format(k)
+            code += self.generateDictLines(self.fractions[k])
+            code += "\n  };"
         return code
+
+    
 
     def declareFillFunction(self):
         """
         writes declaration for function which resets all values of input map
         to input value 
         """
-
-        code = """
-    void fillInternalNormFactors(std::map<TString, float>& input, const TString& currentSample, int& counter){
+        code = """void fillInternalNormFactors(std::map<TString, float>& input, const TString& currentSample, 
+                                int& counter, std::map<TString, float>& source = {}::GenWeight_Norm_Map)""".format(self.namespace_name)
+        code += """
+    {
         TString keyword;
         for(auto& entry : input){
             keyword = TString::Format("%s_%s", currentSample.Data(), entry.first.Data());
             //std::cout << "loading " << keyword << std::endl;
-            if( GenWeight_Norm_Map.find(keyword)!=GenWeight_Norm_Map.end()){
-                //std::cout << "returning entry '" << GenWeight_Norm_Map[keyword];
+            if( source.find(keyword)!=source.end()){
+                //std::cout << "returning entry '" << source[keyword];
                 //std::cout << "' for keyword '" << keyword.Data() << "'" << std::endl;
-                input.at(entry.first) = GenWeight_Norm_Map.at(keyword);
+                input.at(entry.first) = source.at(keyword);
             }
             else if(counter<100) {
                 std::cout << "WARNING: Could not find entry '"<< keyword.Data();
-                std::cout << "' in GenWeight_Norm_Map!" << std::endl; 
+                std::cout << "' in source!" << std::endl; 
                 counter+=1;
             }
         }
@@ -149,8 +183,17 @@ namespace {namespace_name}{{
         """
         code = """
         TString currentRelevantSampleNameForGenWeights = sampleDataBaseIdentifiers[currentfilename];
+        isFourFSsample = 0.;
+        if (currentRelevantSampleNameForGenWeights.BeginsWith("TTbb")){{
+            isFourFSsample = 1.;
+        }}
         resetMap(internalNormFactors, 1.0);
-        GenNormMap::fillInternalNormFactors(internalNormFactors, currentRelevantSampleNameForGenWeights, warningCounter);
-        """
+        {}::fillInternalNormFactors(internalNormFactors, currentRelevantSampleNameForGenWeights, warningCounter);
+        """.format(self.namespace_name)
+        for k in self.fractions:
+            code += """
+        resetMap(fracRatio_{key}, 1.0);
+        {namespace}::fillInternalNormFactors(fracRatio_{key}, currentRelevantSampleNameForGenWeights, warningCounter, {namespace}::private_fracRatio_{key});
+        """.format(namespace = self.namespace_name, key = k)
         return code
 

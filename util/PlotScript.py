@@ -462,7 +462,7 @@ print '''
     '''
 
 #get plotting style information, prioritized by parser>config>default
-signalscaling   = getParserConfigDefaultValue(parser=options.signalscaling,config="signalScaling",
+signalscaling   = getParserConfigDefaultValue(parser=options.signalscaling,config="signalscaling",
                                             plotoptions=plotoptions,defaultvalue=-1)
 ratio           = getParserConfigDefaultValue(parser=options.ratio,config="ratio",
                                             plotoptions=plotoptions,defaultvalue="#frac{data}{MC Background}")
@@ -496,9 +496,7 @@ else:
 """
 
 DrawHistogramObject = Plots.DrawHistograms(PlotList,options.channelName,
-                                data=dataHist,
-                                datalabel=datalabel,
-                                ratio=ratio, 
+                                data=dataHist,ratio=ratio, 
                                 signalscaling=int(signalscaling),
                                 errorband=errorband, background=background,
                                 logoption=logarithmic,

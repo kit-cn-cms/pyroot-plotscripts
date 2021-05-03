@@ -92,7 +92,7 @@ def doRebinning(rootfile, histolist, threshold):
 
 def getOptimizedBinEdges(label, opts, channel = None):
     if channel is None:
-        channel = opts.discrname+"_"+label
+        channel = opts.discrname+"_"+label if not opts.discrname == "" else label
 
     # open rootfile
     rfile = ROOT.TFile.Open(opts.histogram_file)
@@ -131,7 +131,7 @@ class DNN:
         if type(cpPath) == dict:
             self.DNNs       = [DNN(
                     cpPath  = cpPath[key], 
-                    suffix  = "_"+key, 
+                    # suffix  = "_"+key, 
                     xEval   = xEval) 
                     for key in sorted(cpPath)]
             self.multiDNN   = True
@@ -341,7 +341,7 @@ class DNN:
         for i, var in enumerate(self.variables):
             string += """
             tensor_{cat}.tensor<float,2>()(0,{i}) = float( (({var})-({mean}))/({std}) );""".format(
-            cat = self.category, i = i, var = var, mean = self.var_means[i], std = self.var_stds[i])
+            cat = self.category, i = i, var = var.replace(".","_friendTree_"), mean = self.var_means[i], std = self.var_stds[i])
 
         # run graph
         string += """
@@ -421,12 +421,12 @@ class DNN:
         for var in sorted(list(variables.index)):
             # generate dictionary
             plotConfig = {
-                "histname":     "\"ljets_"+self.category+"_"+var+"\"", 
-                "plotname":     "\""+variables.loc[var, "displayname"]+"\"",
+                "histname":     "\"ljets_{}_{}\"".format(self.category, var), 
+                "plotname":     "\"{}\"".format(variables.loc[var, "displayname"]),
                 "nbins":        variables.loc[var, "numberofbins"],
                 "minval":       variables.loc[var, "minvalue"],
                 "maxval":       variables.loc[var, "maxvalue"],
-                "expression":   "\""+var+"\""}
+                "expression":   "\"{}\"".format(var)}
             
             # var[1]->var_1 renaming
             plotConfig["histname"] = plotConfig["histname"].replace("[","_").replace("]","")
@@ -857,7 +857,7 @@ def plots_dnn(data, discrname):
 
     for interf in interfaces:
         l = interf.label
-        interf.histoname = discrname+"_"+l
+        interf.histoname = discrname+"_"+l if not discrname == "" else l 
         interf.histotitle = "final discriminator ({})".format(l)
         interf.selection = interf.category[0]
 

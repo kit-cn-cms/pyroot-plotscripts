@@ -67,6 +67,7 @@ class plotParallel:
         self.request_runtime = None
         self.useFriendTrees = False
         self.friendTrees = {}
+        self.loadSTXSnorms = False
 
         # check cmssw
         self.cmsswpath = os.environ['CMSSW_BASE']
@@ -128,14 +129,15 @@ class plotParallel:
                 print( "unknown additional code interface type: " + str(interface) )
     
     def setDNNInterface(self, interfaceConfig):
-        interfacePath = interfaceConfig["interfacePath"]
-        checkpointFiles = interfaceConfig["checkpointFiles"]
-        addModule = "addModule"+str(len(self.addInterfaces)+1)
-        print("loading module "+str(interfacePath)+" as "+addModule+" module.")
-        self.addInterfaces.append(
-            imp.load_source(addModule, interfacePath).theInterface(
-                self.analysis.workdir, checkpointFiles, 
-                crossEvaluation = self.analysis.crossEvaluation))
+        if interfaceConfig:
+            interfacePath = interfaceConfig["interfacePath"]
+            checkpointFiles = interfaceConfig["checkpointFiles"]
+            addModule = "addModule"+str(len(self.addInterfaces)+1)
+            print("loading module "+str(interfacePath)+" as "+addModule+" module.")
+            self.addInterfaces.append(
+                imp.load_source(addModule, interfacePath).theInterface(
+                    self.analysis.workdir, checkpointFiles, 
+                    crossEvaluation = self.analysis.crossEvaluation))
 
     def setRateFactorsFile(self, csvfile):
         self.rateFactorsFile = csvfile
@@ -171,6 +173,10 @@ class plotParallel:
         self.sampleForVariableSetup = sample
         print("using "+str(sample)+" for variable setup in scriptWriter")
     
+    def setloadSTXSnorms(self, loadSTXSnorms):
+        self.loadSTXSnorms = loadSTXSnorms
+        print("set loadSTXSnorms to: {}".format(loadSTXSnorms))
+
     ## getter functions ##
     def getHaddOutPath(self):
         return os.path.join(self.analysis.workdir, "HaddOutputs", "*.root")
@@ -269,7 +275,9 @@ class plotParallel:
 
   # -- adding pseudo and real data --------------------------------------------------------------
     def addData(self, samples, discrName = None):
-
+        if len(samples) == 0:
+            print("WARNING: found not sample to generate data from, skipping")
+            return
         sampleNicks = [s.nick for s in samples]
         print(sampleNicks)
         rootFile = ROOT.TFile(self.getOutPath(), "UPDATE")
@@ -279,7 +287,7 @@ class plotParallel:
         all_labels = self.configData.getBinlabels()
         #DANGERZONE:    discriminator name is prepended. This has to be adjusted
         #               if corresponding config does something else 
-        if not discrName is None:
+        if not discrName is None and not discrName == "":
             all_labels = ["{}_{}".format(discrName, l) for l in all_labels]
         all_labels += self.configData.getVariablelabels()
         for label in all_labels:

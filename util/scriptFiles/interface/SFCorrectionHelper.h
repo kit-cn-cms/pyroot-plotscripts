@@ -29,7 +29,7 @@ public:
         std::map<TString, TString>& sfCorrections,
         std::map<TString, int>& sfDims);
 
-    TString GetProcID(TString procName, int ttbar, int ttH);
+    TString GetProcID(TString procName, int ttbar, int ttH, int nTopLep);
 
     double GetSF(TString procID, TString correction, TString name, double x) 
         {return GetSF(procID, correction, name, x, 0., 0.);}

@@ -155,7 +155,7 @@ std::map<TString, double> SFCorrectionHelper::getHistRanges(TH3 &sfHist)
 
 // hardcoded function to figure out correct SF histogram name
 // TODO: reduce shittyness
-TString SFCorrectionHelper::GetProcID(TString procName, int ttbar, int ttH) 
+TString SFCorrectionHelper::GetProcID(TString procName, int ttbar, int ttH, int nTopLep) 
 {
     TString procID = "";
 

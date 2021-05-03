@@ -1,8 +1,9 @@
 import ROOT
 import os
 import sys
-import importlib 
+# import importlib 
 import pprint
+import imp
 
 # local imports       
 filedir = os.path.dirname(os.path.realpath(__file__))
@@ -34,6 +35,7 @@ class configData:
         self.cfgdir = os.path.join(self.analysis.pyrootdir, "configs/")
         self.replace_config = os.path.join(self.cfgdir, replace_config) if replace_config else None
         self.Data = None
+        self.pseudo_data_samples = []
 
         if self.execute_file:
             self.saveFile()
@@ -46,12 +48,12 @@ class configData:
     def initData(self):
         self.Data = catData()
 
-    def getData():
+    def getData(self):
         return self.Data
 
     def initSystematics(self,systconfig):
 
-        print "loading systematics..."
+        print( "loading systematics...")
         self.systconfig=systconfig
         processes=self.pltcfg.list_of_processes
         workdir=self.analysis.workdir
@@ -83,8 +85,11 @@ class configData:
             if not dnnInterface: sys.exit("cannot load plots because no dnnInterface specified and no plotconfig")
             # loading dnn interface
             path = dnnInterface["interfacePath"]
-            sys.path.append(os.path.dirname(path))
-            dnnModule = importlib.import_module( path.split("/")[-1].replace(".py","") )
+            # sys.path.append(os.path.dirname(path))
+            if not path.endswith(".py"):
+                path = path+".py"
+            # dnnModule = importlib.import_module( path.split("/")[-1].replace(".py","") )
+            dnnModule = imp.load_source("dnnModule", path)
             interface = dnnModule.theInterface(
                 dnnSet = dnnInterface["checkpointFiles"], 
                 crossEvaluation = self.analysis.crossEvaluation)
@@ -101,9 +106,13 @@ class configData:
             self.plot_config = "plotconfig_local"
             sys.path.append(self.analysis.workdir)
         
-        fileName = self.cfgdir+"/"+self.plot_config
-        sys.path.append(os.path.dirname(fileName))
-        configdatafile = importlib.import_module( os.path.basename(fileName) )
+        fileName = os.path.join(self.cfgdir, self.plot_config)
+        # sys.path.append(os.path.dirname(fileName))
+        # configdatafile = importlib.import_module( os.path.basename(fileName) )
+        if not fileName.endswith(".py"):
+            fileName = fileName + ".py"
+        print("loading plot_config from '{}'".format(fileName))
+        configdatafile = imp.load_source( "configdatafile", fileName)
         configdatafile.memexp = memexp
 
         self.discriminatorPlots = configdatafile.getDiscriminatorPlots(self.Data, self.analysis.discrName)
@@ -129,10 +138,13 @@ class configData:
             return bin_labels + self.getVariablelabels()
 
     def getAddVariables(self):
-        fileName = self.cfgdir+"/"+self.variable_config
-        sys.path.append(os.path.dirname(fileName))
+        fileName = os.path.join(self.cfgdir, self.variable_config)
+        if not fileName.endswith(".py"):
+            fileName = fileName+".py"
+        # sys.path.append(os.path.dirname(fileName))
         print("getting additional variables from "+str(fileName))
-        addVarModule = importlib.import_module( os.path.basename(fileName) )
+        # addVarModule = importlib.import_module( os.path.basename(fileName) )
+        addVarModule = imp.load_source( "addVarModule", fileName )
         self.addVars = addVarModule.getAddVars()
 
     def getSystSamples(self):
@@ -175,7 +187,12 @@ class configData:
             print(sample.name)
         print("-"*30)        
 
-
+        try:
+            self.pseudo_data_samples = self.pltcfg.pseudo_data_samples
+        except:
+            msg = "WARNING: could not load list 'pseudo_data_samples' "
+            msg += "from plot config '{}'".format(self.analysis.plotConfig)
+            print(msg)
         # list of controlsamples used in 'allSamples' list
         self.controlSamples = self.pltcfg.samplesDataControlPlots
         # debug printout

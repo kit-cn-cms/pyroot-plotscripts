@@ -35,6 +35,7 @@ def getAddVars():
         "Weight_pu69p2Down",
         "Weight_pu69p2Up",
 
+        "N_GenTopLep",
         ]
 
     return addVars
