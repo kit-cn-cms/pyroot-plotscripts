@@ -600,7 +600,7 @@ class initPlots:
                     print("found vector variable "+str(varOld)+". Converted to: "+str(variables[0]))
 
             arraySelection = self.varManager.checkArrayLengths(",".join(variables + [sel]))
-            weight = '('+arraySelection+')*('+sel+')*Weight_XS*categoryweight*sampleweight'
+            weight = '('+arraySelection+')*('+sel+')*categoryweight*sampleweight'
             script += fillHistoSyst(histName, variables, weight)
 
         if self.varManager.verbose > 20: print("\n\ninit plot code for "+str(plotName)+":\n"+str(script))

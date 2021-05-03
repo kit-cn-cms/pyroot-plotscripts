@@ -58,6 +58,7 @@ class VariableManager:
         '''
         run the variable search and initialization program
         '''
+        self.verbose = 20
         print("initializing all {} expressions.".format(len(self.expressionsToInit)))
         if self.verbose > 1:
             print("------- expressions -------")
@@ -128,6 +129,7 @@ class VariableManager:
         add variable to dictionary if conditions are fullfilled
         '''
         # dont add variables that are in the vetolist
+        print("check variable '{}' for adding".format(varName))
         if varName in self.vetolist:
             if self.verbose > 20: print("variable '{}' is in vetolist, not adding it.".format(varName))
             return
@@ -378,7 +380,7 @@ class VariableManager:
         take all variables in self.variables and sort them depending on their dependencies
         if a variable is calculated from another variable, the other variable has to be calculated first
         '''
-
+        self.verbose = 10
         print("figuring out variable dependencies")
         rawVariableList = [self.variables[var] for var in self.variables]
         sortedVariables = []
@@ -493,7 +495,7 @@ class VariableManager:
 
 
 class Variable:
-    def __init__(self, varName, expression = "", varType = "F", indexVariable = None):
+    def __init__(self, varName, expression = "", varType = "F", indexVariable = None, suffix = "nom"):
         self.varName                = varName
         self.varType                = varType
         self.isArray                = False
@@ -508,6 +510,7 @@ class Variable:
     
         self.isSFVariable           = False
         self.initError              = False
+        self.suffix                 = suffix
 
     def setAsSFVariable(self, sfBinning):
         self.isSFVariable = True
@@ -517,13 +520,18 @@ class Variable:
         '''
         program to setup variable
         '''
-        if verbose > 10: print("initializing variable: "+str(self.varName))
-        if hasattr(tree, self.varName.replace("_friendTree_",".")):
+        verbose = 30
+        final_name = self.varName
+        if not "_friendTree_" in final_name and not final_name.endswith(self.suffix):
+            final_name = "_".join([final_name, self.suffix])
+        
+        if verbose > 10: print("initializing variable: "+str(final_name))
+        if hasattr(tree, final_name.replace("_friendTree_",".")):
             if verbose > 20: print("variable is in tree")
             self.inTree = True
-            branch = tree.GetBranch(self.varName.replace("_friendTree_","."))
+            branch = tree.GetBranch(final_name.replace("_friendTree_","."))
             branchTitle = branch.GetTitle()
-            if verbose > 20: print("branchTitle is "+str(branchTitle))
+            if verbose > 0: print("branchTitle is "+str(branchTitle))
 
             # get variable type from branch title
             # branch title is formatted as 'variableName/variableType'
@@ -538,7 +546,7 @@ class Variable:
             self.isInitialized = True
         else:
             # variable is not in tree
-            if verbose > 20: print(self.varName +" does not exist in tree")
+            if verbose > 20: print("'{}' does not exist in tree '{}'".format(final_name, tree.GetName()))
             self.inTree = False
             self.varType = "F"
             
@@ -560,6 +568,8 @@ class Variable:
     def setupVariableArray(self, tree, variableManager, branchTitle, verbose):
         # search for indexVariable in 'variableName[indexVariable]/variableType'
         self.indexVariable = re.findall(r"\[(.*?)\]", branchTitle.split("/")[0])[0]
+        if self.indexVariable.endswith(self.suffix):
+            self.indexVariable = "_".join(self.indexVariable.split("_")[:-1])
         if verbose > 20: print("indexVariable is "+str(self.indexVariable))
 
         # adding indexVariable to list of variables to be initialized in variableManager
@@ -635,14 +645,26 @@ class Variable:
         write chain for branch adress to CC file
         '''
         text = ""
-
+        if not "_friendTree_" in self.varName:
+            text = """    varname.Form("%s_%s", "{}", variation_suffix.Data());\n""".format(self.varName)
         if self.isArray:
-            text += "    chain->SetBranchAddress(\""+self.varName.replace("_friendTree_",".")+"\", "+self.varName+".get());\n"
+            if "_friendTree_" in self.varName:
+                text += "    chain->SetBranchAddress(\""+self.varName.replace("_friendTree_",".")+"\", "+self.varName+".get());\n"
+            else:
+                text += """    chain->SetBranchAddress(varname.Data(), {}.get());\n""".format(self.varName)
         else:
             if self.varType == "I" or self.varType == "L":
-                text += "    chain->SetBranchAddress(\""+self.varName.replace("_friendTree_",".")+"\", &"+self.varName+"LONGDUMMY);\n"
+                if "_friendTree_" in self.varName:
+                    text += "    chain->SetBranchAddress(\""+self.varName.replace("_friendTree_",".")+"\", &"+self.varName+"LONGDUMMY);\n"
+                else:
+                    text +=  """    chain->SetBranchAddress(varname.Data(), &{}LONGDUMMY);\n""".format(self.varName)
+                
             else:
-                text += "    chain->SetBranchAddress(\""+self.varName.replace("_friendTree_",".")+"\", &"+self.varName+");\n"
+                if "_friendTree_" in self.varName:
+                    text += "    chain->SetBranchAddress(\""+self.varName.replace("_friendTree_",".")+"\", &"+self.varName+");\n"
+                else:
+                    text +=  """    chain->SetBranchAddress(varname.Data(), &{});\n""".format(self.varName)
+                
         return text
 
     def writeTMVAReader(self, variableManager):

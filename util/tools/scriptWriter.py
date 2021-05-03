@@ -366,7 +366,7 @@ class scriptWriter:
         # initialize variables objects
         variableManager = variableCancer.VariableManager(trees, self.vetolist, self.pp.sfCorrection, self.pp.friendTrees)
         #variableManager.add( ["Weight", "Weight_CSV", "Weight_XS"] )
-        
+        variableManager.verbosity = 20
         # get additional variables
         if len(self.pp.configData.addVars) > 0:
             variableManager.add( self.pp.configData.addVars )

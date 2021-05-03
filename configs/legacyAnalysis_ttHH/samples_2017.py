@@ -13,20 +13,25 @@ import generate_phasespace_corrections
 # samples
 # input path 
 path  = "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2017/"
-nano_path = "/nfs/dust/cms/user/esarauer/master-thesis/VarCalc_nanoAOD_tool/CMSSW_10_2_18/src/PhysicsTools/NanoAODTools/scripts/"
+path = "/nfs/dust/cms/user/esarauer/ntuples_ttHH_analysis/{sample}/ttHHv3/*/*/*tree*.root"
 
 # ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8_new_pmx/*nominal*.root'
-ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
-             path+'/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+\
-             path+'/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8_new_pmx/*nominal*.root'
+ttbarSamples = """TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8
+                TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8
+                TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8_new_pmx""".split()
+ttbarPathSlist = [path.format(sample = x) for x in ttbarSamples]
+ttbarPathS = ";".join(ttbarPathSlist)
 
 VJetsPathS = path+'/DYJets*madgraph*/*nominal*.root'+';'+ \
              path+'/WJets*madgraph*/*nominal*.root'
 
+ttbbsamples = """
+TTbb_4f_TTTo2L2Nu_TuneCP5-Powheg-Openloops-Pythia8
+TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8
+TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8
+""".split()
 
-path_ttbb = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"+';'+ \
-            path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"+";"+ \
-            path+"/TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8/*nominal*.root"
+path_ttbb = ";".join([path.format(sample = x) for x in ttbbsamples])
 
 path_ttbbSL = path+"/TTbb_Powheg_Openloops_new_pmx/*nominal*.root"
 path_ttbbDL = path+"/TTbb_Powheg_Openloops_DL/*nominal*.root"
@@ -61,12 +66,17 @@ THQpath = path+'/THQ_*ctcvcp*/*nominal*.root'
 # 	      path+'/ttHToNonbb_M125_NNPDF31nnlo_TuneCP5_13TeV-powheg-pythia8/*nominal*.root'
 
 # ttHH and tt4b samples
-path_ttHH = nano_path +'ntuples_nano_ttHH_full_2017/*_2017.root'
-path_tt4b = nano_path +'ntuples_nano_ttto4b_2017/*_2017.root'
+ttHHsamples = ["TTHH_TuneCP5_13TeV-madgraph-pythia8"]
 
+path_ttHH = ";".join([path.format(sample = x) for x in ttHHsamples])
+tt4bsamples = ["TT4b_TuneCP5_13TeV_madgraph_pythia8"]
+path_tt4b = ";".join([path.format(sample = x) for x in tt4bsamples])
 
-ttHpath = "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2017_newttH"+'/ttHTobb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'+';'+ \
-	      "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2017_newttH"+'/ttHToNonbb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8/*nominal*.root'
+ttHsamples = """
+ttHToNonbb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8
+ttHTobb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8
+""".split()
+ttHpath = ";".join([path.format(sample = x) for x in ttHsamples])
 
 #friendTrees = {
 #    "MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH/2017",
@@ -221,47 +231,47 @@ samplesDataControlPlots=[
 
 
 samples_splitData = [
-    plotClasses.Sample('SingleMuB',ROOT.kBlack,
-            path+'/SingleMuon*B/*nominal*.root',
-            sel_singlemu+sel_MET,
-            'SingleMuB', samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('SingleMuC',ROOT.kBlack,
-            path+'/SingleMuon*C/*nominal*.root',
-            sel_singlemu+sel_MET,
-            'SingleMuC', samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('SingleMuD',ROOT.kBlack,
-            path+'/SingleMuon*D/*nominal*.root',
-            sel_singlemu+sel_MET,
-            'SingleMuD', samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('SingleMuE',ROOT.kBlack,
-            path+'/SingleMuon*E/*nominal*.root',
-            sel_singlemu+sel_MET,
-            'SingleMuE', samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('SingleMuF',ROOT.kBlack,
-            path+'/SingleMuon*F/*nominal*.root',
-            sel_singlemu+sel_MET,
-            'SingleMuF', samDict=sampleDict, readTrees=doReadTrees),
+#     plotClasses.Sample('SingleMuB',ROOT.kBlack,
+#             path+'/SingleMuon*B/*nominal*.root',
+#             sel_singlemu+sel_MET,
+#             'SingleMuB', samDict=sampleDict, readTrees=doReadTrees),
+#     plotClasses.Sample('SingleMuC',ROOT.kBlack,
+#             path+'/SingleMuon*C/*nominal*.root',
+#             sel_singlemu+sel_MET,
+#             'SingleMuC', samDict=sampleDict, readTrees=doReadTrees),
+#     plotClasses.Sample('SingleMuD',ROOT.kBlack,
+#             path+'/SingleMuon*D/*nominal*.root',
+#             sel_singlemu+sel_MET,
+#             'SingleMuD', samDict=sampleDict, readTrees=doReadTrees),
+#     plotClasses.Sample('SingleMuE',ROOT.kBlack,
+#             path+'/SingleMuon*E/*nominal*.root',
+#             sel_singlemu+sel_MET,
+#             'SingleMuE', samDict=sampleDict, readTrees=doReadTrees),
+#     plotClasses.Sample('SingleMuF',ROOT.kBlack,
+#             path+'/SingleMuon*F/*nominal*.root',
+#             sel_singlemu+sel_MET,
+#             'SingleMuF', samDict=sampleDict, readTrees=doReadTrees),
 
-    plotClasses.Sample('SingleElB',ROOT.kBlack,
-            path+'/SingleElectron*B/*nominal*.root',
-            sel_singleel+sel_MET,
-            'SingleElB', samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('SingleElC',ROOT.kBlack,
-            path+'/SingleElectron*C/*nominal*.root',
-            sel_singleel+sel_MET,
-            'SingleElC', samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('SingleElD',ROOT.kBlack,
-            path+'/SingleElectron*D/*nominal*.root',
-            sel_singleel+sel_MET,
-            'SingleElD', samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('SingleElE',ROOT.kBlack,
-            path+'/SingleElectron*E/*nominal*.root',
-            sel_singleel+sel_MET,
-            'SingleElE', samDict=sampleDict, readTrees=doReadTrees),
-    plotClasses.Sample('SingleElF',ROOT.kBlack,
-            path+'/SingleElectron*F/*nominal*.root',
-            sel_singleel+sel_MET,
-            'SingleElF', samDict=sampleDict, readTrees=doReadTrees),
+#     plotClasses.Sample('SingleElB',ROOT.kBlack,
+#             path+'/SingleElectron*B/*nominal*.root',
+#             sel_singleel+sel_MET,
+#             'SingleElB', samDict=sampleDict, readTrees=doReadTrees),
+#     plotClasses.Sample('SingleElC',ROOT.kBlack,
+#             path+'/SingleElectron*C/*nominal*.root',
+#             sel_singleel+sel_MET,
+#             'SingleElC', samDict=sampleDict, readTrees=doReadTrees),
+#     plotClasses.Sample('SingleElD',ROOT.kBlack,
+#             path+'/SingleElectron*D/*nominal*.root',
+#             sel_singleel+sel_MET,
+#             'SingleElD', samDict=sampleDict, readTrees=doReadTrees),
+#     plotClasses.Sample('SingleElE',ROOT.kBlack,
+#             path+'/SingleElectron*E/*nominal*.root',
+#             sel_singleel+sel_MET,
+#             'SingleElE', samDict=sampleDict, readTrees=doReadTrees),
+#     plotClasses.Sample('SingleElF',ROOT.kBlack,
+#             path+'/SingleElectron*F/*nominal*.root',
+#             sel_singleel+sel_MET,
+#             'SingleElF', samDict=sampleDict, readTrees=doReadTrees),
     ]
 
 # samplesDataControlPlots+=samples_splitData
@@ -492,20 +502,23 @@ samples = [
              ttHpath,
              lumi+sel_MET,
              'ttH',
-             samDict=sampleDict, readTrees=doReadTrees),     
+             samDict=sampleDict, readTrees=doReadTrees,
+            treename = "Events"),     
 
     # ttbar 5FS default background samples
     plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
             ttbarPathS,
             lumi+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET,
             'ttlf',
-            samDict=sampleDict, readTrees=doReadTrees),
+            samDict=sampleDict, readTrees=doReadTrees,
+            treename = "Events"),
 
     plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,
             ttbarPathS,
             lumi+'*(GenEvt_I_TTPlusCC==1)'+sel_MET,
             'ttcc',
-            samDict=sampleDict, readTrees=doReadTrees),
+            samDict=sampleDict, readTrees=doReadTrees,
+            treename = "Events"),
     ]
 
 

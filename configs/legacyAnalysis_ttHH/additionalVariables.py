@@ -1,5 +1,8 @@
 def getAddVars():
     addVars = [
+        "Evt_ID",
+        "Evt_Lumi",
+        "Evt_Run",
         "Jet_Pt",
 #        "Muon_Pt",
 #        "Electron_Pt",
@@ -12,7 +15,7 @@ def getAddVars():
         "Jet_CSV",
 #        "Jet_Flav",
         "N_Jets",
-        "Jet_E",
+        # "Jet_E",
         "Jet_Phi",
         "Jet_M",
 #        "Evt_Pt_PrimaryLepton:=LooseLepton_Pt[0]",

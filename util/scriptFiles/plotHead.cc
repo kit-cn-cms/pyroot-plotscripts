@@ -184,7 +184,8 @@ void plot(){
     // cut of directories
     thisfilename = samplename;
     // copy the string for figuring out internalSystType
-    TString filenameforSytType=TString(thisfilename);
+    TString filenameforSystType=variation_suffix;
+    filenameforSystType.ToUpper();
     //remove number
     //remove remaining underscores
     while(thisfilename.Last('_')>=0){ thisfilename.Replace(thisfilename.Last('_'),1,"");}
@@ -247,17 +248,17 @@ void plot(){
     }
   
   // now figure out internalSystType
-  filenameforSytType.Replace(0,filenameforSytType.Last('_')+1,"");
+  filenameforSystType.Replace(0,filenameforSystType.Last('_')+1,"");
   // nominal is the empty string here
-  if(filenameforSytType=="nominal" || filenameforSytType=="ttto4b" || filenameforSytType=="full"){filenameforSytType="";}
-  if(filenameforSytType.Contains("JESHEM")){
+  if(filenameforSystType=="NOM"){filenameforSystType="";}
+  if(filenameforSystType.Contains("JESHEM")){
     std::cout << "DANGERZONE: will translate 'JESHEM' to 'JESHEMIssue'!";
-    filenameforSytType = filenameforSytType.ReplaceAll("JESHEM", "JESHEMIssue");
+    filenameforSystType = filenameforSystType.ReplaceAll("JESHEM", "JESHEMIssue");
   }
-  internalSystType = Systematics::get(filenameforSytType.Data());
-  std::cout<<"internal systematic filename, int and typename "<<filenameforSytType<<" "<<internalSystType<<" "<<Systematics::toString(internalSystType)<<std::endl;
-  if(filenameforSytType!=TString(Systematics::toString(internalSystType))){std::cout<<"ERROR could not recover systematic from enum"<<std::endl; exit(0);}
-  globalFileNameForSystType=filenameforSytType;
+  internalSystType = Systematics::get(filenameforSystType.Data());
+  std::cout<<"internal systematic filename, int and typename "<<filenameforSystType<<" "<<internalSystType<<" "<<Systematics::toString(internalSystType)<<std::endl;
+  if(filenameforSystType!=TString(Systematics::toString(internalSystType))){std::cout<<"ERROR could not recover systematic from enum"<<std::endl; exit(0);}
+  globalFileNameForSystType=filenameforSystType;
   }// end loop of filename parsing
   
   // init variable to differentiate between 4FS and 5FS samples
@@ -291,6 +292,7 @@ void plot(){
   
   
   int nEventsVetoed=0;
+  TString varname;
   // Long64_t Evt_ID;
   // Int_t Evt_Run;
   // Int_t Evt_Lumi;
