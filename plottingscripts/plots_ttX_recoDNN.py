@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'new_ntuples/recoDNN/multiclassJAN/recoX/bkg_merging/cTag_infos/GoF/new_systematics/GoF_v1_log'
+    name = 'new_ntuples/recoDNN/multiclassJAN/recoX/bkg_merging/cTag_infos/final/v1'
     #################################################################################
     #optimized binning
     #name = 'new_ntuples/recoDNN/multiclassJAN/recoX/bkg_merging/cTag_infos/GoF_v1'
@@ -112,7 +112,7 @@ def main(pyrootdir, opts):
     plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                   "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/recoDNNData/new_ntuples/multiclassJAN/bkg_merging/cTag_infos/v1"}
+                   "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/recoDNNData/new_ntuples/multiclassJAN/bkg_merging/cTag_infos/final/v1"}
     #dnnInterface = None
 
     # path to datacardMaker directory

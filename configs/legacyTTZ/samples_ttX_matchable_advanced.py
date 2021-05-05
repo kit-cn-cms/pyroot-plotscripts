@@ -56,11 +56,11 @@ ttHPath = path+'/ttHTobb*/*nominal*.root'+';'+ \
           path+'/ttHToNonbb*/*nominal*.root'
 
 friendTrees = {
-    "dnnZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/v2/recoZ",
-    "dnnH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/v2/recoHiggs",
-    "dnnbb": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/v2/recobb",
-    "dnncc": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/v2/recocc",
-    "dnnttTobb": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/v2/reco_bbfromttbar",
+    "dnnZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/final/v1/recoZ",
+    "dnnH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/final/v1/recoHiggs",
+    "dnnbb": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/final/v1/recobb",
+    "dnncc": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/final/v1/recocc",
+    "dnnttTobb": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/recoX/bkg_merging/cTag_infos/final/v1/reco_bbfromttbar",
     "matchZ": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/matchX/cTag_infos/v1/match_Z_as_X",
     "matchH": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/matchX/cTag_infos/v1/match_Higgs_as_X",
     "matchbb": "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/ntuples/2017/new_ntuples/multiclassJAN/matchX/cTag_infos/v1/match_bb_as_X",
@@ -323,6 +323,12 @@ samples=[
             ttbbPath,
             lumi+evenSel+'*(GenEvt_I_TTPlusCC==0)*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
             'ttbb',
+            samDict=sampleDict, readTrees=doReadTrees),
+
+    plotClasses.Sample('t',ROOT.kBlue+4,
+            stpath,
+            lumi+sel_MET,
+            'singlet',
             samDict=sampleDict, readTrees=doReadTrees),
 
     ]

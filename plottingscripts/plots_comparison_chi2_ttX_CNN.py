@@ -31,7 +31,7 @@ def main(pyrootdir, opts):
     # name of the analysis (i.e. workdir name)
     #name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/JAN_ttZ_ttH/v5'
     #name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/chi2_ttZ_ttH/v5'
-    #name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/multiclassJAN/v5'
+    name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/multiclassJAN/v5_newSyst'
     #name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/chi2_ttX_JAN_rest/v5'
     #name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/wo_reco/v5'
     #name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/multiclassJAN/only_reco_variables'
@@ -42,14 +42,14 @@ def main(pyrootdir, opts):
     #name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/multiclassJAN_opt/v5_opt'
     #name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/chi2_ttX_JAN_rest_opt/v5_opt'
     #name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/wo_reco_opt/v5_opt'
-    name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/multiclassJAN_opt/only_reco_variables_opt'
+    #name = 'new_ntuples/cnnEval/Comparison_chi2_ttX/multiclassJAN_opt/only_reco_variables_opt'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
 
     # signal process
-    signalProcess = "ttZ"
-    #signalProcess = "ttH"
+    #signalProcess = "ttZ"
+    signalProcess = "ttH"
     nSigSamples   = 1
 
     # dataera
@@ -77,7 +77,7 @@ def main(pyrootdir, opts):
     variable_cfg    = "legacyTTZ/additionalVariables"
     #plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/JAN_ttZ_ttH_plotConfig_v2"
     #plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/chi2_ttZ_ttH_plotConfig_v2"
-    #plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/multiclassJAN_plotConfig_v2"
+    plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/multiclassJAN_plotConfig_v2"
     #plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/chi2_ttX_JAN_rest_plotConfig_v2"
     #plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/wo_reco_plotConfig_v2"
     #plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/multiclassJAN_plotConfig_only_reco_variables"
@@ -87,7 +87,7 @@ def main(pyrootdir, opts):
     #plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/multiclassJAN_plotConfig_v2_opt"
     #plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/chi2_ttX_JAN_rest_plotConfig_v2_opt"
     #plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/wo_reco_plotConfig_v2_opt"
-    plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/multiclassJAN_plotConfig_only_reco_variables_opt"
+    #plot_cfg        = "legacyTTZ/cnnPlots_Comparison_chi2_ttX/multiclassJAN_plotConfig_only_reco_variables_opt"
     syst_cfg        = "legacyTTZ/systs_v2"
     replace_cfg     = None
 
@@ -143,14 +143,14 @@ def main(pyrootdir, opts):
     #               "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/cnnData/new_ntuples/Comparison_chi2_ttX/JAN_ttZ_ttH/v2_opt_combined"}
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
     #               "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/cnnData/new_ntuples/Comparison_chi2_ttX/chi2_ttZ_ttH/v2_opt_combined"}
-    #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-    #               "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/cnnData/new_ntuples/Comparison_chi2_ttX/multiclassJAN/v2_opt_combined"}
+    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+                   "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/cnnData/new_ntuples/Comparison_chi2_ttX/multiclassJAN/v2_opt_combined"}
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
     #               "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/cnnData/new_ntuples/Comparison_chi2_ttX/chi2_ttX_JAN_rest/v2_opt_combined"}
     #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
     #               "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/cnnData/new_ntuples/Comparison_chi2_ttX/wo_reco/v2_opt_combined"}
-    dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                   "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/cnnData/new_ntuples/Comparison_chi2_ttX/multiclassJAN/only_reco_variables_combined"}
+    #dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
+    #               "checkpointFiles":  "/nfs/dust/cms/user/larmbrus/combined_ttZ_ttH/cnnData/new_ntuples/Comparison_chi2_ttX/multiclassJAN/only_reco_variables_combined"}
 
     # path to datacardMaker directory
     datacardmaker = "/nfs/dust/cms/user/lreuter/forPhilip/datacardMaker"
