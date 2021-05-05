@@ -31,7 +31,7 @@ class SampleDictionary:
 
 class Sample:
     def __init__(self, name, color = ROOT.kBlack, path = '', selection = '',
-            nick = '', origName = '', up = 0, down = None, samDict = "",
+            nick = '', origName = '', up = None, down = None, samDict = "",
             addsamples = None, plot = True, vetoEventWeights = None,
             readTrees = True, filterFile = "NONE", checknevents = -1, 
             treename = 'MVATree',typ="bkg"):

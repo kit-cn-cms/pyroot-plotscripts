@@ -539,7 +539,7 @@ class scriptWriter:
                         nEventsInFile = tree.GetEntries()
                     else:
                         continue
-
+                # print("\tnEventes in file '{}': {}".format(nEventsInFile, filename))
                 SaveTreeInformation[filename] = nEventsInFile                
                 # if the file is larger than self.maxevents it is analyzed in portions of nevents
                 if nEventsInFile > maxEvents:
@@ -616,7 +616,18 @@ class scriptWriter:
         origName = str(sample.origName) #ttcc
         suffix = writeOptions.get("suffix", "")
         skipevents = writeOptions.get("skipEvents", 0)
-        variation = processname.split(origName,1)[1]
+        variation = ""
+        if sample.unc_up:
+            print("detected up variation!")
+            variation = sample.unc_up
+        elif sample.unc_down:
+            print("detected down variation!")
+            variation = sample.unc_down
+        else:
+            print("no variation detected")
+            variation = processname.split(origName,1)[1]
+        
+        if not variation == "": print(variation)
         # check options
         if self.pp.analysis.testrun and maxevents < 100:
             maxevents = 100

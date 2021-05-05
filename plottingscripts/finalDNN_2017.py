@@ -30,7 +30,7 @@ def main(pyrootdir, opts):
     ''')
     # name of the analysis (i.e. workdir name)
 
-    name = 'test/nanoAOD_automated'
+    name = 'test/nanoAOD_automated_systs'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -55,8 +55,8 @@ def main(pyrootdir, opts):
     variable_cfg    = "legacyAnalysis_ttHH/additionalVariables"
     plot_cfg        = "legacyAnalysis/withMEM_new/withMEM_final_config_crosscheck"
     # plot_cfg        = "legacyAnalysis_ttHH/DNN_14-05-2020/combined161718_DNNs"
-    #syst_cfg        = "legacyAnalysis_ttHH/systs_2017"
-    syst_cfg        = "legacyAnalysis_ttHH/no_systs"
+    syst_cfg        = "legacyAnalysis_ttHH/systs_2017_test"
+    # syst_cfg        = "legacyAnalysis_ttHH/no_systs"
     replace_cfg     = ""
 
     #sfCorrection = {}
@@ -81,7 +81,7 @@ def main(pyrootdir, opts):
         # general options
         "usePseudoData":        True,
         "testrun":              False,  # test run with less samples
-        "stopAfterCompile":     True,   # stop script after compiling
+        "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
         "makeDataCards":        False,

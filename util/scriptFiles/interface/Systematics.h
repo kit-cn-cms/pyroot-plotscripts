@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <boost/algorithm/string.hpp>
 // Systematics enum from MiniAODHelper. Needed for the CSV helper (date 26.06.2017)
 class Systematics {
 public:

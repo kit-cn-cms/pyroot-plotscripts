@@ -69,7 +69,8 @@ void Systematics::init() {
   add( JESSubTotalScaleup,       JESSubTotalScaledown,       "JESSubTotalScale",         "SubTotalScale"       );             
   add( JESSubTotalAbsoluteup,    JESSubTotalAbsolutedown,    "JESSubTotalAbsolute",      "SubTotalAbsolute"    );                             
   add( JESSubTotalMCup,          JESSubTotalMCdown,          "JESSubTotalMC",            "SubTotalMC"          );                        
-  add( JESTotalup,               JESTotaldown,               "JESTotal",                 "Total"               );                 
+  add( JESTotalup,               JESTotaldown,               "JESTotal",                 "Total"               );
+                 
   add( JESTotalNoFlavorup,       JESTotalNoFlavordown,       "JESTotalNoFlavor",         "TotalNoFlavor"       );             
   add( JESTotalNoTimeup,         JESTotalNoTimedown,         "JESTotalNoTime",           "TotalNoTime"         );                        
   add( JESTotalNoFlavorNoTimeup, JESTotalNoFlavorNoTimedown, "JESTotalNoFlavorNoTime",   "TotalNoFlavorNoTime" );                    
@@ -99,10 +100,11 @@ bool Systematics::isInit() {
 }
 
 void Systematics::add(Systematics::Type typeUp, Systematics::Type typeDn, const std::string& name, const std::string& label) {
-  typeStringMap_[typeUp] = name+"up";
-  typeStringMap_[typeDn] = name+"down";
-  stringTypeMap_[name+"up"] = typeUp;
-  stringTypeMap_[name+"down"] = typeDn;
+  typeStringMap_[typeUp] = boost::to_upper_copy(name)+"UP";
+  typeStringMap_[typeDn] = boost::to_upper_copy(name)+"DOWN";
+  // std::cout << "adding syst '" << std::toupper(name)+"UP" << "'\n";
+  stringTypeMap_[boost::to_upper_copy(name)+"UP"] = typeUp;
+  stringTypeMap_[boost::to_upper_copy(name)+"DOWN"] = typeDn;
   typeLabelMap_[typeUp] = label;
   typeLabelMap_[typeDn] = label;
 }

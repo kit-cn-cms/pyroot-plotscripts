@@ -407,7 +407,8 @@ samples_ttbb_4FS = [
              path_ttbb,
              lumi+evenSel+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET,
              'ttbb',
-             samDict=sampleDict, readTrees=doReadTrees),
+             samDict=sampleDict, readTrees=doReadTrees,
+             treename = "Events"),
     ]
 
 

@@ -156,21 +156,35 @@ class configData:
             for sysName in variationsysts:
                 newSel = sample.selection
                 fileName=self.systematics.processes[sample.nick][sysName].expression
+                # check if entry in syst csv is a path
+                finalname = sample.name+sysName
+                finalnick = sample.nick+sysName
                 if "/" in fileName:
                     newpath=fileName
                 else:
-                    newpath=sample.path.replace("nominal",fileName)
-
+                    # if it's not a path, it's the suffix to be used
+                    # for the JES uncertainties as it is in the ntuples
+                    newpath=sample.path
+                    option_dict = {}
+                    if sysName.endswith("Up"):
+                        key = "up"
+                    elif sysName.endswith("Down"):
+                        key = "down"
+                    option_dict[key] = fileName
+                    print(option_dict)
                 systSamples.append( 
                     plotClasses.Sample( 
-                        sample.name+sysName, 
-                        sample.color, 
-                        newpath, 
-                        newSel, 
-                        sample.nick+sysName, 
+                        name = finalname, 
+                        color = sample.color, 
+                        path = newpath, 
+                        selection = newSel, 
+                        nick = finalnick, 
                         origName = sample.nick,
                         vetoEventWeights = sample.vetoEventWeights,
-                        samDict = self.pltcfg.sampleDict ))
+                        samDict = self.pltcfg.sampleDict,
+                        typ = sample.typ,
+                        treename = sample.treename,
+                        **option_dict))
 
         return systSamples
 
