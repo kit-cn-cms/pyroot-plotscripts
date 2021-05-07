@@ -54,7 +54,7 @@ def main(pyrootdir, opts):
     variable_cfg    = "legacyAnalysis/additionalVariables"
     plot_cfg        = "legacyAnalysis/withMEM_new/withMEM_final_config_CPscan_ttH"
     # plot_cfg        = "legacyAnalysis/DNN_14-05-2020/combined161718_DNNs"
-    syst_cfg        = "legacyAnalysis/systs_2017"
+    syst_cfg        = "legacyAnalysis/systs_2018_noPS"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
