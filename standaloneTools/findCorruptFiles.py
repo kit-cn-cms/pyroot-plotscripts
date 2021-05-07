@@ -4,6 +4,7 @@ import glob
 from multiprocessing import Pool
 from tqdm import *
 import os
+import subprocess
 
 class DevNull:
     def write(self, msg):
@@ -64,6 +65,7 @@ def find_broken_files(indirs = sys.argv[1:], ext = ".root"):
     print("checking following directories ")
     print("#"*40)
     #extend wildcard expressions
+    notexistent = []
     inputs = []
     for x in indirs:
         inputs += glob.glob(x)
@@ -74,6 +76,10 @@ def find_broken_files(indirs = sys.argv[1:], ext = ".root"):
             fileList += glob.glob(os.path.join(dir_+"*{}".format(ext)))
         else:
             print("ERROR: cannot process {} - it's neither a file nor a dir".format(dir_))
+            print("CAREFUL: appending it to list of notexistent files!")
+            if ".root" in dir_:
+                notexistent.append(dir_)
+
     # print(fileList)
 
     print("#"*40)
@@ -82,6 +88,14 @@ def find_broken_files(indirs = sys.argv[1:], ext = ".root"):
 
     brokenFiles = imap_unordered_bar(check_root_files_, fileList)
     brokenFiles = [x for x in brokenFiles if not x == ""]
+    brokenFiles += notexistent
+
+    # removing cutflow file from on existent root files
+    for f in notexistent:
+        print("deleting cutflow, since root file is missing: {}".format(f+".cutflow.txt"))
+        subprocess.call("rm "+f+".cutflow.txt", shell =True)
+         
+
     print("{0} files broken".format(len(brokenFiles)))
     return brokenFiles
     
