@@ -157,7 +157,7 @@ weightReplacements = {
 weightReplacements.update(generate_phasespace_corrections.main())
 
 # Lumi weight
-lumi = '35.9'
+lumi = '36.33'
 
 #tHq_XS_scale = "*(0.7927/0.07425)"
 #tHW_XS_scale = "*(0.1472/0.01517)"
