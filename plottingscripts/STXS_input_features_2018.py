@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     ''')
     # name of the analysis (i.e. workdir name)
-    name = 'STXS_input_features/2018'
+    name = 'STXS_input_features_2D/2018_onlyMEM_new'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -50,11 +50,11 @@ def main(pyrootdir, opts):
     # define MEM discriminator variable
     memexp = "(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)"
     # configs
-    config          = "legacyAnalysis/samples_2018"
+    config          = "legacyAnalysis/samples_2018_no_hdecay"
     variable_cfg    = "legacyAnalysis/additionalVariables"
     plot_cfg        = "legacyAnalysis/inputFeature_validation/ttH_legacy_inputfeatures_top10_STXS_opt_binning_2D"
     # plot_cfg        = "legacyAnalysis/DNN_14-05-2020/combined161718_DNNs"
-    syst_cfg        = "legacyAnalysis/systs_2018"
+    syst_cfg        = "legacyAnalysis/systs_2018_noPDF"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
 
@@ -206,9 +206,9 @@ def main(pyrootdir, opts):
         # pP.setDataBases(plotDataBases)
         # pP.setMEMDataBase(memDataBase)
         pP.setDNNInterface(dnnInterface)
-        pP.setMaxEvts_nom(50000)
+        pP.setMaxEvts_nom(100000)
         # pP.setMaxEvts_nom(200000)
-        pP.setMaxEvts_systs(200000)
+        pP.setMaxEvts_systs(300000)
         # pP.request_runtime = 60*60*5
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])

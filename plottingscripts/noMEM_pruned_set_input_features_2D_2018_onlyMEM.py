@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     ''')
     # name of the analysis (i.e. workdir name)
-    name = 'noMEM_pruned_set_input_features_2D/2018_onlyMEM'
+    name = 'noMEM_pruned_set_input_features_2D/2018_onlyMEM_new'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
