@@ -423,7 +423,7 @@ class DNN:
             plotConfig = {
                 "histname":     "\"ljets_{}_{}\"".format(self.category, var), 
                 "plotname":     "\"{}\"".format(variables.loc[var, "displayname"]),
-                "nbins":        variables.loc[var, "numberofbins"],
+                "nbins":        int(variables.loc[var, "numberofbins"]),
                 "minval":       variables.loc[var, "minvalue"],
                 "maxval":       variables.loc[var, "maxvalue"],
                 "expression":   "\"{}\"".format(var)}
@@ -931,7 +931,7 @@ if __name__ == "__main__":
     parser.add_option("--disableplots", dest="input_plots",default=True,action="store_false",metavar="DISABLEPLOTS",
         help = "disable plotting of input features as default setting")
     parser.add_option("-n", "--ndefaultbins", dest="ndefaultbins",default=15,metavar="NDEFAULTBINS",
-        help = "number of default bins per discriminator")
+        help = "number of default bins per discriminator", type = "int")
     parser.add_option("-v", "--variableBinning", dest = "variable_binning", action = "store_true", default = False,
         help = """enable variable binning (currently only for discriminator distributions. 
 The config will contain lists of bin edges which are equally spaced by default.""")
