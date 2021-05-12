@@ -43,7 +43,7 @@ def plots_ge4j_ge4t_classification(data = None, label = "\geq 4 jets, \geq 4 b-t
         # plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_{}_Reco_ttH_bestJABDToutput".format(name),"Reco_ttH_bestJABDToutput",50,-1.0,0.7),"Reco_ttH_bestJABDToutput",selection,label),
         # plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_{}_Reco_ttH_toplep_m".format(name),"Reco_ttH_toplep_m",50,-1.5,750.0),"Reco_ttH_toplep_m",selection,label),
         # plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_{}_Reco_ttbar_bestJABDToutput".format(name),"Reco_ttbar_bestJABDToutput",50,-0.4,0.7),"Reco_ttbar_bestJABDToutput",selection,label),
-        # plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_{}_memDBp".format(name),"MEM",50,-2,1.0),memexp,selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_ge4t_{}_memDBp".format(name),"MEM",50,-2,1.0),memexp,selection,label),
         ]
 
         
@@ -65,7 +65,7 @@ def plots_ge4j_3t_classification(data = None, label = "\geq 4 jets, 3 b-tags", \
         # plotClasses.Plot(ROOT.TH1D("ljets_ge4j_3t_{}_Reco_tHq_bestJABDToutput".format(name),"Reco_tHq_bestJABDToutput",50,-1.0,0.7),"Reco_tHq_bestJABDToutput",selection,label),
         # plotClasses.Plot(ROOT.TH1D("ljets_ge4j_3t_{}_Reco_ttH_bestJABDToutput".format(name),"Reco_ttH_bestJABDToutput",50,-1.0,0.7),"Reco_ttH_bestJABDToutput",selection,label),
         # plotClasses.Plot(ROOT.TH1D("ljets_ge4j_3t_{}_Reco_ttbar_bestJABDToutput".format(name),"Reco_ttbar_bestJABDToutput",50,-0.4,0.7),"Reco_ttbar_bestJABDToutput",selection,label),
-        # plotClasses.Plot(ROOT.TH1D("ljets_ge4j_3t_{}_memDBp".format(name),"MEM",50,-2.,1.0),memexp,selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_ge4j_3t_{}_memDBp".format(name),"MEM",50,-2.,1.0),memexp,selection,label),
         plotClasses.Plot(ROOT.TH1D("ljets_ge4j_3t_{}_N_Jets".format(name),"N_Jets",7,3.5,10.5),"N_Jets",selection,label),
         plotClasses.Plot(ROOT.TH1D("ljets_ge4j_3t_{}_Evt_HT_tags".format(name),"Evt_HT_tags",50,100.0,1000.0),"Evt_HT_tags",selection,label),
 
