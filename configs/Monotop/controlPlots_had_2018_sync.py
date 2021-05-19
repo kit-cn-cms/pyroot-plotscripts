@@ -1051,14 +1051,14 @@ def GetPlots(extension, selection, label):
     ]
     if fast:
         plots = [
-            #plotClasses.Plot(
-                #ROOT.TH1D(
-                    #"Hadr_Recoil_Pt" + extension, "#slash{U}_{T} [GeV]", len(discr_binning)-1, array('d',discr_binning)
-                #),
-                #"Hadr_Recoil_Pt",
-                #selection,
-                #label,
-            #),
+            plotClasses.Plot(
+                ROOT.TH1D(
+                    "Hadr_Recoil_Pt" + extension, "#slash{U}_{T} [GeV]", len(discr_binning)-1, array('d',discr_binning)
+                ),
+                "Hadr_Recoil_Pt",
+                selection,
+                label,
+            ),
             plotClasses.Plot(
                 ROOT.TH1D(
                     "Hadr_Recoil_Pt_generic_binning" + extension, "#slash{U}_{T} [GeV]", 20, 250, 1250
