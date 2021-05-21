@@ -1,0 +1,21 @@
+Uncertainty,Type,Construction,Up,Down,Plot,ttH,ttH_0,ttH_1,ttH_2,ttH_3,ttH_4,ttH_hbb,ttH_hnonbb,ttH_hcc,ttH_htt,ttH_hgg,ttH_hgluglu,ttH_hww,ttH_hzz,ttH_hzg,ttlf,ttbb,ttbb_SL,ttbb_DL,ttbb_5FS,ttbb_split,ttb,tt2b,ttcc,singlet,tHW_ITC,tHW_hbb,tHW_5,tHQ_ITC,tHq_hbb,tHQ_5,zjets,wjets,ttbarW,ttbarZ,diboson
+lumi_13TeV_2018,lnN,rate,-,-,-,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
+#CMS_ttHbb_bgnorm_ttcc,lnN,rate,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,x,-,,,,,,,,,,,
+#CMS_ttHbb_PU
+#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+# CMS_scale_j,shape,variation,JESup,JESdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+CMS_scaleAbsolute_j,shape,variation,JESAbsoluteup,JESAbsolutedown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleAbsolute_j_2018,shape,variation,JESAbsoluteyearup,JESAbsoluteyeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleFlavorQCD_j,shape,variation,JESFlavorQCDup,JESFlavorQCDdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleBBEC1_j,shape,variation,JESBBEC1up,JESBBEC1down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleBBEC1_j_2018,shape,variation,JESBBEC1yearup,JESBBEC1yeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleEC2_j,shape,variation,JESEC2up,JESEC2down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleEC2_j_2018,shape,variation,JESEC2yearup,JESEC2yeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleHF_j,shape,variation,JESHFup,JESHFdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleHF_j_2018,shape,variation,JESHFyearup,JESHFyeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleRelativeBal_j,shape,variation,JESRelativeBalup,JESRelativeBaldown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleRelativeSample_j_2018,shape,variation,JESRelativeSampleyearup,JESRelativeSampleyeardown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+CMS_scaleHEM1516_j,shape,variation,nominal,JESHEMdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+CMS_res_j_2018,shape,variation,JERup,JERdown,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+#CMS_resEta2_j,shape,variation,JEReta2up,JEReta2down,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
