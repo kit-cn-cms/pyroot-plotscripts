@@ -55,8 +55,8 @@ def main(pyrootdir, opts):
     variable_cfg    = "legacyAnalysis_ttHH/additionalVariables"
     plot_cfg        = "legacyAnalysis_ttHH/finalDNN/low_NJetNTag_DNN_config.py"
     # plot_cfg        = "legacyAnalysis_ttHH/DNN_14-05-2020/combined161718_DNNs"
-    #syst_cfg        = "legacyAnalysis_ttHH/systs_2017_test"
-    syst_cfg        = "legacyAnalysis_ttHH/no_systs"
+    syst_cfg        = "legacyAnalysis_ttHH/systs_2017_test"
+    # syst_cfg        = "legacyAnalysis_ttHH/no_systs"
     replace_cfg     = ""
 
     #sfCorrection = {}
@@ -74,7 +74,7 @@ def main(pyrootdir, opts):
 
     # file for rate factors
     #rateFactorsFile = pyrootdir + "/data/rate_factors_onlyinternal_powhegpythia.csv"
-    #rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_new_plotscript_2017.csv"
+    rateFactorsFile = pyrootdir + "/data/rateFactors/ratefactors_new_plotscript_2017.csv"
 
     # script options
     analysisOptions = {
@@ -211,7 +211,7 @@ def main(pyrootdir, opts):
         # pP.setMaxEvts_nom(200000)
         pP.setMaxEvts_systs(200000)
         # pP.request_runtime = 60*60*5
-        #pP.setRateFactorsFile(rateFactorsFile)
+        pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
         #pP.setSFCorrection(sfCorrection)
         #pP.setUseFriendTrees(True)

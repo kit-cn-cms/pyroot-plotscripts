@@ -13,7 +13,7 @@ import generate_phasespace_corrections
 # samples
 # input path 
 path  = "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2017/"
-path = "/nfs/dust/cms/user/esarauer/ntuples_ttHH_analysis/{sample}/ttHHv3/*/*/*tree*.root"
+path = "/nfs/dust/cms/user/esarauer/test_ntuples_weights_ttHH/{sample}/*/*/*/*tree*.root"
 
 # ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8_new_pmx/*nominal*.root'
 ttbarSamples = """TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8
@@ -24,9 +24,9 @@ ttbarPathS = ";".join(ttbarPathSlist)
 
 VJetsPathS = path+'/DYJets*madgraph*/*nominal*.root'+';'+ \
              path+'/WJets*madgraph*/*nominal*.root'
+# TTbb_4f_TTTo2L2Nu_TuneCP5-Powheg-Openloops-Pythia8
 
 ttbbsamples = """
-TTbb_4f_TTTo2L2Nu_TuneCP5-Powheg-Openloops-Pythia8
 TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8
 TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8
 """.split()
@@ -86,8 +86,8 @@ ttHpath = ";".join([path.format(sample = x) for x in ttHsamples])
 
 # need to veto muon events in electron dataset to avoid double counting and vice versa
 #sel_singleel="(N_LooseMuons==0 && N_TightElectrons==1)"# && (Triggered_HLT_Ele32_WPTight_Gsf_2017SeedsX==1 && Triggered_HLT_Ele32_WPTight_Gsf_L1DoubleEG_vX==1))"
-sel_singleel="((N_LooseMuons==0 && N_TightElectrons==1) && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX || ( Triggered_HLT_Ele32_WPTight_Gsf_L1DoubleEG_vX && Triggered_HLT_Ele32_WPTight_Gsf_2017SeedsX )))"
-sel_singlemu="(N_LooseElectrons==0 && N_TightMuons==1 && (Triggered_HLT_IsoMu27_vX))"
+sel_singleel="((N_TightMuons==0 && N_TightElectrons==1) && (Triggered_HLT_Ele28_eta2p1_WPTight_Gsf_HT150_vX || ( Triggered_HLT_Ele32_WPTight_Gsf_L1DoubleEG_vX && Triggered_HLT_Ele32_WPTight_Gsf_vX )))"
+sel_singlemu="(N_TightElectrons==0 && N_TightMuons==1 && (Triggered_HLT_IsoMu27_vX))"
 # jet tag base selection
 #sel_jettag = "(N_Jets>=4 && int(N_BTagsM)>=3)"
 sel_jettag = "(N_Jets>=4 )"
