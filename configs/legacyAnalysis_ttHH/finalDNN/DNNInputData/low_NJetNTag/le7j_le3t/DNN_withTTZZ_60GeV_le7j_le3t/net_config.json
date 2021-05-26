@@ -110,6 +110,6 @@
   "evalSelection": "1.",
   "categoryLabel": "\\leq 7 jets, \\leq 3 b-tags",
   "L2_Norm": 1e-05,
-  "JetTagCategory": "le7j_le3t_ttZZ_30GeV",
+  "JetTagCategory": "le7j_le3t_ttZZ_60GeV",
   "output_activation": "Softmax"
 }
