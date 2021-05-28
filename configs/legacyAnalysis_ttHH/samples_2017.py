@@ -71,7 +71,8 @@ ttHHsamples = ["TTHH_TuneCP5_13TeV-madgraph-pythia8"]
 path_ttHH = ";".join([path.format(sample = x) for x in ttHHsamples])
 tt4bsamples = ["TT4b_TuneCP5_13TeV_madgraph_pythia8"]
 path_tt4b = ";".join([path.format(sample = x) for x in tt4bsamples])
-
+ttZZsamples = ["TTZZTo4b_5f_LO_TuneCP5_13TeV_madgraph_pythia8"]
+path_ttzz = ";".join([path.format(sample = x) for x in ttZZsamples])
 ttHsamples = """
 ttHToNonbb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8
 ttHTobb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8
@@ -482,7 +483,13 @@ samples_5FS = [
             samDict=sampleDict, readTrees=doReadTrees, plot = False), 
     ]
 
-samples = [
+samples = [    
+    plotClasses.Sample('t#bar{t}+ZZ',ROOT.kBlue-5,
+            path_ttzz,
+            lumi+sel_MET,
+            'ttzz',
+            samDict=sampleDict, readTrees=doReadTrees,
+            treename = "Events"),
 
     plotClasses.Sample('t#bar{t}+HH',ROOT.kBlue,
             path_ttHH,
@@ -563,4 +570,4 @@ plottingsamples = [
      ]
 
 # sort subset of processes in plots. descending order
-sortedProcesses = ["ttlf", "ttcc", "ttbb", "ttbb_5FS", "ttbb_4FS"]
+sortedProcesses = ["ttzz","ttlf", "ttcc", "ttbb", "ttbb_5FS", "ttbb_4FS"]
