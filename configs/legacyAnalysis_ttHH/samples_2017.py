@@ -13,7 +13,7 @@ import generate_phasespace_corrections
 # samples
 # input path 
 path  = "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2017/"
-path = "/nfs/dust/cms/user/esarauer/test_ntuples_weights_ttHH/{sample}/*/*/*/*tree*.root"
+path = "/nfs/dust/cms/user/esarauer/test_ntuples_weights_ttHH/{sample}/ttHH_weights_v1/*/*/*tree*.root"
 
 # ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8_new_pmx/*nominal*.root'
 ttbarSamples = """TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8
