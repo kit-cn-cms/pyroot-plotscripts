@@ -1,0 +1,3 @@
+python ../../../util/dNNInterfaces/MLfoyInterface.py -c DNNInputData/low_NTag -o low_NTag_DNN_config_optimized_binning.py --optimizeBinning -f ../../../workdir/stat_only/nanoAOD_DNN_low_NTag/output_limitInput.root -t 15 
+python ../../../util/dNNInterfaces/MLfoyInterface.py -c DNNInputData/low_NJetNTag -o low_NJetNTag_DNN_config_optimized_binning.py --optimizeBinning -f ../../../workdir/stat_only/nanoAOD_DNN_low_NJetNTag/output_limitInput.root -t 15
+python ../../../util/dNNInterfaces/MLfoyInterface.py -c DNNInputData/high_NJet -o high_NJet_DNN_config_optimized_binning.py --optimizeBinning -f ../../../workdir/stat_only/nanoAOD_DNN_high_NJet/output_limitInput.root -t 15
