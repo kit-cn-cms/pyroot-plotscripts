@@ -123,12 +123,12 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 # ======= # 
 # WEIGHTS #
 # ======= #
-#defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
-defaultWeight = sel_jettag+"*Weight_GEN_nom"
+#defaultWeight = sel_jettag+"*Weight_GEN*Weight_pu69p2*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
+defaultWeight = sel_jettag+"*Weight_GEN"
 
 # pile up weights
-pileupWeightUp   = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Up*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
-pileupWeightDown = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Down*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
+pileupWeightUp   = sel_jettag+"*Weight_GEN*Weight_pu69p2Up*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
+pileupWeightDown = sel_jettag+"*Weight_GEN*Weight_pu69p2Down*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
 
 # lepton scale factors
 electronSFs = "((N_TightElectrons==1)&&(Electron_IdentificationSF[0]>0.)&&(Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0]"
@@ -201,8 +201,8 @@ kfactor_zjets = "*1.23"
 #tHq_XS_scale = "*(0.7927/0.07425)"
 #tHW_XS_scale = "*(0.1472/0.01517)"
 
-tH_SM_rwgt = "*(Weight_rwgt_12/Weight_GEN_nom)"
-tH_5_rwgt = "*(Weight_rwgt_5/Weight_GEN_nom)"
+tH_SM_rwgt = "*(Weight_rwgt_12/Weight_GEN)"
+tH_5_rwgt = "*(Weight_rwgt_5/Weight_GEN)"
 
 # nominal weight
 #nominalweight="NomWeight:=("+defaultWeight+"*"+"("+electronSFs+"+"+muonSFs+")"+"*"+"("+electronTrigger+"+"+muonTrigger+")"+")*(DoWeights==1)+(DoWeights==0)*1.0"
