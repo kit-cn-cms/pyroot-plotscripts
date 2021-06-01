@@ -152,6 +152,20 @@ electronTrigger_down = "("+sel_singleel+"&&(internalEleTriggerWeightDown>0.))*in
 muonTrigger_up = "("+sel_singlemu+"&&(Weight_MuonTriggerSF_Up>0.))*Weight_MuonTriggerSF_Up"
 muonTrigger_down = "("+sel_singlemu+"&&(Weight_MuonTriggerSF_Down>0.))*Weight_MuonTriggerSF_Down"
 
+# xs weights for the ttHH analysis
+TTToSemiLeptonic_weight = 365.46*1000/52.0
+TTTo2L2Nu_weight = 88.34*1000/42.0
+TTToHadronic_weight = 377.96*1000/68.0
+
+TTbb_4f_TTToHadronic_weight = 16.2728392124*1000/8.0
+TTbb_4f_TTToSemiLeptonic_weight = 15.7286210473*1000/12.0
+
+ttHToNonbb_weight = 0.2118*1000/8799988.0
+ttHTobb_weight = 0.2953*1000/9235000.0
+
+TTHH_weight =0.000775*1000/100477.0
+TT4b_weight =0.06687
+TTZZTo4b_weight = 0.001611*1000/9598000.0
 
 # dictionary of expressions to replace in systematics csv
 weightReplacements = {
@@ -486,21 +500,21 @@ samples_5FS = [
 samples = [    
     plotClasses.Sample('t#bar{t}+ZZ',ROOT.kBlue-5,
             path_ttzz,
-            lumi+sel_MET,
+            lumi+sel_MET+TTZZTo4b_weight,
             'ttzz',
             samDict=sampleDict, readTrees=doReadTrees,
             treename = "Events"),
 
     plotClasses.Sample('t#bar{t}+HH',ROOT.kBlue,
             path_ttHH,
-            lumi+sel_MET,
+            lumi+sel_MET+TTHH_weight,
             'ttHH',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal",
             treename = "Events"),
 
     plotClasses.Sample('t#bar{t}+4b',ROOT.kRed,
             path_tt4b,
-            lumi+sel_MET,
+            lumi+sel_MET+TT4b_weight,
             'tt4b',
             samDict=sampleDict, readTrees=doReadTrees,
             treename = "Events"),
