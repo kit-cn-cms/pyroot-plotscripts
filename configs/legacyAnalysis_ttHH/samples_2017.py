@@ -13,7 +13,7 @@ import generate_phasespace_corrections
 # samples
 # input path 
 #path  = "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2017/"
-path = "/nfs/dust/cms/user/esarauer/test_ntuples_weights_ttHH/{sample}/ttHH_weight*_v1/*/*/*tree*.root"
+path = "/nfs/dust/cms/user/esarauer/test_ntuples_weights_ttHH/{sample}/0000/tree*.root"
 
 # ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8_new_pmx/*nominal*.root'
 ttbarSamples = """TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8
@@ -79,26 +79,27 @@ ttHTobb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8
 """.split()
 ttHpath = ";".join([path.format(sample = x) for x in ttHsamples])
 
-path_xs_friends = "/nfs/dust/cms/user/esarauer/karim_for_ntuples/karim/workdir/genWeightsi/{sample}/0000/*.root"
+path_xs_friends = "/nfs/dust/cms/user/esarauer/karim_for_ntuples/karim/workdir/genWeights/{sample}/0000/*.root"
 friendTrees = {
     #"MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH/2017",
-    "xsNorm": """
-        ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8
-        ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8
-        ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8
-        ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8
-        ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8
-        TT4b_TuneCP5_13TeV_madgraph_pythia8
-        TTHH_TuneCP5_13TeV-madgraph-pythia8
-        TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8
-        TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8
-        TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8
-        TTZZTo4b_5f_LO_TuneCP5_13TeV_madgraph_pythia8
-        TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8
-        TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8
-        ttHToNonbb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8
-        ttHTobb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8
-     """
+    "XSWeight": "/nfs/dust/cms/user/esarauer/karim_for_ntuples/karim/workdir/genWeights/"
+    #"xsNorm": """
+     #   ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8
+     #   ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8
+     #   ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8
+     #   ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8
+     #   ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8
+     #   TT4b_TuneCP5_13TeV_madgraph_pythia8
+     #   TTHH_TuneCP5_13TeV-madgraph-pythia8
+     #   TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8
+     #   TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8
+     #   TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8
+     #   TTZZTo4b_5f_LO_TuneCP5_13TeV_madgraph_pythia8
+     #   TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8
+     #   TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8
+     #   ttHToNonbb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8
+     #   ttHTobb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8
+     #"""
     }
 
 # SELECTIONS
@@ -142,7 +143,7 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 # WEIGHTS #
 # ======= #
 #defaultWeight = sel_jettag+"*Weight_GEN*Weight_pu69p2*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
-defaultWeight = sel_jettag+"*Weight_GEN"+"*xsNorm"
+defaultWeight = sel_jettag+"*Weight_GEN"+"*xsNorm_nom"
 
 # pile up weights
 pileupWeightUp   = sel_jettag+"*Weight_GEN*Weight_pu69p2Up*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
@@ -504,21 +505,21 @@ samples_5FS = [
 samples = [    
     plotClasses.Sample('t#bar{t}+ZZ',ROOT.kBlue-5,
             path_ttzz,
-            lumi+sel_MET+TTZZTo4b_weight,
+            lumi+sel_MET,
             'ttzz',
             samDict=sampleDict, readTrees=doReadTrees,
             treename = "Events"),
 
     plotClasses.Sample('t#bar{t}+HH',ROOT.kBlue,
             path_ttHH,
-            lumi+sel_MET+TTHH_weight,
+            lumi+sel_MET,
             'ttHH',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal",
             treename = "Events"),
 
     plotClasses.Sample('t#bar{t}+4b',ROOT.kRed,
             path_tt4b,
-            lumi+sel_MET+TT4b_weight,
+            lumi+sel_MET,
             'tt4b',
             samDict=sampleDict, readTrees=doReadTrees,
             treename = "Events"),
