@@ -522,14 +522,19 @@ class Variable:
         '''
         verbose = 30
         final_name = self.varName
-        if not "_friendTree_" in final_name and not final_name.endswith(self.suffix):
+        if final_name.endswith(self.suffix):
+            final_name = final_name[:-(len(self.suffix)+1)]
+        else:
             final_name = "_".join([final_name, self.suffix])
         
+        if "_friendTree_" in final_name:
+            final_name = final_name.replace("_friendTree_",".")
+        
         if verbose > 10: print("initializing variable: "+str(final_name))
-        if hasattr(tree, final_name.replace("_friendTree_",".")):
+        if hasattr(tree, final_name):
             if verbose > 20: print("variable is in tree")
             self.inTree = True
-            branch = tree.GetBranch(final_name.replace("_friendTree_","."))
+            branch = tree.GetBranch(final_name)
             branchTitle = branch.GetTitle()
             if verbose > 0: print("branchTitle is "+str(branchTitle))
 

@@ -143,7 +143,7 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 # WEIGHTS #
 # ======= #
 #defaultWeight = sel_jettag+"*Weight_GEN*Weight_pu69p2*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
-defaultWeight = sel_jettag+"*Weight_GEN"+"*xsNorm_nom"
+defaultWeight = sel_jettag+"*Weight_GEN"+"*XSWeight_friendTree_xsNorm"
 
 # pile up weights
 pileupWeightUp   = sel_jettag+"*Weight_GEN*Weight_pu69p2Up*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"

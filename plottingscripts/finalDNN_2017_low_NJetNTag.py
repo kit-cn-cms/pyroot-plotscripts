@@ -214,7 +214,7 @@ def main(pyrootdir, opts):
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
         #pP.setSFCorrection(sfCorrection)
-        #pP.setUseFriendTrees(True)
+        pP.setUseFriendTrees(True)
 
         # run plotParallel
         pP.run()

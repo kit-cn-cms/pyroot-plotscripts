@@ -53,17 +53,10 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis_ttHH/samples_2017"
     variable_cfg    = "legacyAnalysis_ttHH/additionalVariables"
-<<<<<<< HEAD
-    plot_cfg        = "legacyAnalysis_ttHH/finalDNN/low_NJetNTag_DNN_config_optimized_binning.py"
-    # plot_cfg        = "legacyAnalysis_ttHH/DNN_14-05-2020/combined161718_DNNs"
-    syst_cfg        = "legacyAnalysis_ttHH/systs_2017_test"
-    #syst_cfg        = "legacyAnalysis_ttHH/no_systs"
-=======
     plot_cfg        = "legacyAnalysis_ttHH/finalDNN/low_NJetNTag_DNN_config"
     # plot_cfg        = "legacyAnalysis_ttHH/DNN_14-05-2020/combined161718_DNNs"
     syst_cfg        = "legacyAnalysis_ttHH/systs_2017_test"
     # syst_cfg        = "legacyAnalysis_ttHH/no_systs"
->>>>>>> 25fb72a29852c174a1dc5ba10a932e5d9b3a5b6d
     replace_cfg     = ""
 
     #sfCorrection = {}
@@ -221,7 +214,7 @@ def main(pyrootdir, opts):
         pP.setRateFactorsFile(rateFactorsFile)
         pP.setSampleForVariableSetup(configData.samples[nSigSamples])
         #pP.setSFCorrection(sfCorrection)
-        #pP.setUseFriendTrees(True)
+        pP.setUseFriendTrees(True)
 
         # run plotParallel
         pP.run()
