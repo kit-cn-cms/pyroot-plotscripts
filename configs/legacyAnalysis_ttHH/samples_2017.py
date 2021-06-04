@@ -13,12 +13,12 @@ import generate_phasespace_corrections
 # samples
 # input path 
 #path  = "/nfs/dust/cms/group/ttx-kit/ntuples_ttH/2017/"
-path = "/nfs/dust/cms/user/esarauer/test_ntuples_weights_ttHH/{sample}/ttHH_weight*_v1/*/*/*tree*.root"
+path = "/nfs/dust/cms/user/esarauer/test_ntuples_weights_ttHH/{sample}/0000/tree*.root"
 
 # ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8_new_pmx/*nominal*.root'
 ttbarSamples = """TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8
                 TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8
-                TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8_new_pmx""".split()
+                TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8""".split()
 ttbarPathSlist = [path.format(sample = x) for x in ttbarSamples]
 ttbarPathS = ";".join(ttbarPathSlist)
 
@@ -50,11 +50,11 @@ dibosonPathS = path+'/WW_*/*nominal*.root'+';'+ \
                path+'/WZ_*/*nominal*.root'+';'+ \
                path+'/ZZ_*/*nominal*.root'
 
-stpath = path+'/ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8_new_pmx/*nominal*.root'+';'+ \
+stpath = path+'/ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/*nominal*.root'+';'+ \
          path+'/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8*/*nominal*.root'+';'+ \
-         path+'/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8_new_pmx*/*nominal*.root'+';'+ \
+         path+'/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8*/*nominal*.root'+';'+ \
          path+'/ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8*/*nominal*.root'+';'+ \
-         path+'/ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8_new_pmx*/*nominal*.root'
+         path+'/ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8*/*nominal*.root'
 #stpath = path+"/ST*/*nominal*.root"
 
 #STH
@@ -79,9 +79,28 @@ ttHTobb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8
 """.split()
 ttHpath = ";".join([path.format(sample = x) for x in ttHsamples])
 
-#friendTrees = {
-#    "MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH/2017",
-#    }
+path_xs_friends = "/nfs/dust/cms/user/esarauer/karim_for_ntuples/karim/workdir/genWeights/{sample}/0000/*.root"
+friendTrees = {
+    #"MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH/2017",
+    "XSWeight": "/nfs/dust/cms/user/esarauer/karim_for_ntuples/karim/workdir/genWeights/"
+    #"xsNorm": """
+     #   ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8
+     #   ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8
+     #   ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8
+     #   ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8
+     #   ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8
+     #   TT4b_TuneCP5_13TeV_madgraph_pythia8
+     #   TTHH_TuneCP5_13TeV-madgraph-pythia8
+     #   TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8
+     #   TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8
+     #   TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8
+     #   TTZZTo4b_5f_LO_TuneCP5_13TeV_madgraph_pythia8
+     #   TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8
+     #   TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8
+     #   ttHToNonbb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8
+     #   ttHTobb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8
+     #"""
+    }
 
 # SELECTIONS
 
@@ -123,12 +142,12 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 # ======= # 
 # WEIGHTS #
 # ======= #
-#defaultWeight = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
-defaultWeight = sel_jettag+"*Weight_GEN_nom"
+#defaultWeight = sel_jettag+"*Weight_GEN*Weight_pu69p2*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
+defaultWeight = sel_jettag+"*Weight_GEN"+"*xsNorm_nom"
 
 # pile up weights
-pileupWeightUp   = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Up*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
-pileupWeightDown = sel_jettag+"*Weight_GEN_nom*Weight_pu69p2Down*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
+pileupWeightUp   = sel_jettag+"*Weight_GEN*Weight_pu69p2Up*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
+pileupWeightDown = sel_jettag+"*Weight_GEN*Weight_pu69p2Down*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
 
 # lepton scale factors
 electronSFs = "((N_TightElectrons==1)&&(Electron_IdentificationSF[0]>0.)&&(Electron_ReconstructionSF[0]>0.))*Electron_IdentificationSF[0]*Electron_ReconstructionSF[0]"
@@ -201,8 +220,8 @@ kfactor_zjets = "*1.23"
 #tHq_XS_scale = "*(0.7927/0.07425)"
 #tHW_XS_scale = "*(0.1472/0.01517)"
 
-tH_SM_rwgt = "*(Weight_rwgt_12/Weight_GEN_nom)"
-tH_5_rwgt = "*(Weight_rwgt_5/Weight_GEN_nom)"
+tH_SM_rwgt = "*(Weight_rwgt_12/Weight_GEN)"
+tH_5_rwgt = "*(Weight_rwgt_5/Weight_GEN)"
 
 # nominal weight
 #nominalweight="NomWeight:=("+defaultWeight+"*"+"("+electronSFs+"+"+muonSFs+")"+"*"+"("+electronTrigger+"+"+muonTrigger+")"+")*(DoWeights==1)+(DoWeights==0)*1.0"
