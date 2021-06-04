@@ -18,7 +18,7 @@ path = "/nfs/dust/cms/user/esarauer/test_ntuples_weights_ttHH/{sample}/ttHH_weig
 # ttbarPathS = path+'/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8_new_pmx/*nominal*.root'
 ttbarSamples = """TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8
                 TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8
-                TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8_new_pmx""".split()
+                TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8""".split()
 ttbarPathSlist = [path.format(sample = x) for x in ttbarSamples]
 ttbarPathS = ";".join(ttbarPathSlist)
 
@@ -50,11 +50,11 @@ dibosonPathS = path+'/WW_*/*nominal*.root'+';'+ \
                path+'/WZ_*/*nominal*.root'+';'+ \
                path+'/ZZ_*/*nominal*.root'
 
-stpath = path+'/ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8_new_pmx/*nominal*.root'+';'+ \
+stpath = path+'/ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/*nominal*.root'+';'+ \
          path+'/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8*/*nominal*.root'+';'+ \
-         path+'/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8_new_pmx*/*nominal*.root'+';'+ \
+         path+'/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8*/*nominal*.root'+';'+ \
          path+'/ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8*/*nominal*.root'+';'+ \
-         path+'/ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8_new_pmx*/*nominal*.root'
+         path+'/ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8*/*nominal*.root'
 #stpath = path+"/ST*/*nominal*.root"
 
 #STH
@@ -79,9 +79,27 @@ ttHTobb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8
 """.split()
 ttHpath = ";".join([path.format(sample = x) for x in ttHsamples])
 
-#friendTrees = {
-#    "MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH/2017",
-#    }
+path_xs_friends = "/nfs/dust/cms/user/esarauer/karim_for_ntuples/karim/workdir/genWeightsi/{sample}/0000/*.root"
+friendTrees = {
+    #"MEMDB": "/nfs/dust/cms/group/ttx-kit/Friends_MEM_ttH/2017",
+    "xsNorm": """
+        ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8
+        ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8
+        ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8
+        ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8
+        ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8
+        TT4b_TuneCP5_13TeV_madgraph_pythia8
+        TTHH_TuneCP5_13TeV-madgraph-pythia8
+        TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8
+        TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8
+        TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8
+        TTZZTo4b_5f_LO_TuneCP5_13TeV_madgraph_pythia8
+        TTbb_4f_TTToHadronic_TuneCP5-Powheg-Openloops-Pythia8
+        TTbb_4f_TTToSemiLeptonic_TuneCP5-Powheg-Openloops-Pythia8
+        ttHToNonbb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8
+        ttHTobb_M125_TuneCP5_PSweights_13TeV-powheg-pythia8
+     """
+    }
 
 # SELECTIONS
 
@@ -124,7 +142,7 @@ hzgSel='*((abs(GenHiggs_DecProd1_PDGID)==23 && abs(GenHiggs_DecProd2_PDGID)==22)
 # WEIGHTS #
 # ======= #
 #defaultWeight = sel_jettag+"*Weight_GEN*Weight_pu69p2*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
-defaultWeight = sel_jettag+"*Weight_GEN"
+defaultWeight = sel_jettag+"*Weight_GEN"+"*xsNorm"
 
 # pile up weights
 pileupWeightUp   = sel_jettag+"*Weight_GEN*Weight_pu69p2Up*internalCSVweight*sf__HT_vs_NJet__btag_NOMINAL*Weight_L1ECALPrefire"
@@ -152,20 +170,6 @@ electronTrigger_down = "("+sel_singleel+"&&(internalEleTriggerWeightDown>0.))*in
 muonTrigger_up = "("+sel_singlemu+"&&(Weight_MuonTriggerSF_Up>0.))*Weight_MuonTriggerSF_Up"
 muonTrigger_down = "("+sel_singlemu+"&&(Weight_MuonTriggerSF_Down>0.))*Weight_MuonTriggerSF_Down"
 
-# xs weights for the ttHH analysis
-TTToSemiLeptonic_weight = 365.46*1000/52.0
-TTTo2L2Nu_weight = 88.34*1000/42.0
-TTToHadronic_weight = 377.96*1000/68.0
-
-TTbb_4f_TTToHadronic_weight = 16.2728392124*1000/8.0
-TTbb_4f_TTToSemiLeptonic_weight = 15.7286210473*1000/12.0
-
-ttHToNonbb_weight = 0.2118*1000/8799988.0
-ttHTobb_weight = 0.2953*1000/9235000.0
-
-TTHH_weight =0.000775*1000/100477.0
-TT4b_weight =0.06687
-TTZZTo4b_weight = 0.001611*1000/9598000.0
 
 # dictionary of expressions to replace in systematics csv
 weightReplacements = {
