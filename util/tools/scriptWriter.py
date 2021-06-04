@@ -130,12 +130,14 @@ class scriptWriter:
             for ftName in self.pp.friendTrees:
                 for i,thistree in enumerate(TreeFileMap["files"]): 
                     sampledir, treename = os.path.split(thistree)
-                    basedir, samplename = os.path.split(sampledir)
-                    friendtree = "/".join([self.pp.friendTrees[ftName], samplename, treename])
+                    basedir, intermid = os.path.split(sampledir)
+                    samplename = os.path.basename(basedir)
+
+                    friendtree = os.path.join(self.pp.friendTrees[ftName], samplename, intermid, treename)
                     print("checking friend tree {}".format(friendtree))
                     if not os.path.exists(friendtree):
                         exit("cannot use file for variable setup because required friend tree does not exist.")
-                    TreeFileMap["trees"][i].AddFriend("{}=MVATree".format(ftName), friendtree)
+                    TreeFileMap["trees"][i].AddFriend("{}={}".format(ftName, TreeFileMap["trees"][i].GetName()), friendtree)
                     break # one Friend File should be enough, since a friend variable should be avaiable in all friends
         
 
