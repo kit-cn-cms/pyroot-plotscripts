@@ -123,9 +123,19 @@ def InitFriendTrees(friendTrees):
     for tName in friendTrees:
         tPath = friendTrees[tName]
 
-        ftInit+= "  TChain* chain_{} = new TChain(\"MVATree\");\n".format(tName)
+        ftInit+= "  TChain* chain_{} = new TChain(treename);\n".format(tName)
 
-        ftChain+= "    chain_{}->Add(TString(\"{}/\")+samplename);\n".format(tName, tPath)
+        ftChain+= """    
+        // figure out hierachy of ntuples
+        TString friendtreepath;
+        TString copy = originalfilename;
+        std::cout << "building friend tree path from " << copy.Data() << std::endl;
+        std::cout << "index of samplename: " << copy.Index(samplename.Data()) << std::endl;
+        copy.Replace(0, copy.Index(samplename.Data()), "");
+        std::cout << "\tgot " << copy.Data() << std::endl;
+        friendtreepath.Form("{path}/%s", copy.Data());
+        std::cout << "adding friend trees in " << friendtreepath.Data() << std::endl;
+        chain_{name}->Add(friendtreepath.Data());\n""".format(name = tName, path = tPath)
 
         ftAdd+= "  chain->AddFriend(chain_{}, \"{}\");\n".format(tName, tName)
     
