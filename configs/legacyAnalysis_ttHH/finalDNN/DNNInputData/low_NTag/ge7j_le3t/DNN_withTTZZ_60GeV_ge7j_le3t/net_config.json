@@ -1,5 +1,5 @@
 {
-  "shuffleSeed": 20998,
+  "shuffleSeed": 53404,
   "test_percentage": 0.1,
   "outputName": "outputLayer/Softmax",
   "trainSelection": "",
@@ -11,59 +11,59 @@
   "L1_Norm": 0.0,
   "eventClasses": [
     {
-      "sampleEvents": 24003,
+      "sampleEvents": 16580,
       "sampleWeight": 1.0,
       "sampleLabel": "ttH",
       "min": 0.14,
-      "max": 0.33,
+      "max": 0.31,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttH_dnn.h5"
     },
     {
-      "sampleEvents": 4404,
+      "sampleEvents": 2910,
       "sampleWeight": 1.0,
       "sampleLabel": "ttbb",
       "min": 0.14,
-      "max": 0.42,
+      "max": 0.35,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttbb_dnn.h5"
     },
     {
-      "sampleEvents": 1867,
+      "sampleEvents": 1206,
       "sampleWeight": 1.0,
       "sampleLabel": "ttcc",
       "min": 0.14,
-      "max": 0.45,
+      "max": 0.41,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttcc_dnn.h5"
     },
     {
-      "sampleEvents": 2721,
+      "sampleEvents": 1576,
       "sampleWeight": 1.0,
       "sampleLabel": "ttlf",
       "min": 0.14,
-      "max": 0.44,
+      "max": 0.45,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttlf_dnn.h5"
     },
     {
-      "sampleEvents": 29123,
+      "sampleEvents": 20869,
       "sampleWeight": 1.0,
       "sampleLabel": "ttHH",
       "min": 0.14,
-      "max": 0.36,
+      "max": 0.35,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttHH_dnn.h5"
     },
     {
-      "sampleEvents": 8859,
+      "sampleEvents": 5586,
       "sampleWeight": 1.0,
       "sampleLabel": "tt4b",
       "min": 0.14,
-      "max": 0.44,
+      "max": 0.47,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/tt4b_dnn.h5"
     },
     {
-      "sampleEvents": 1157,
+      "sampleEvents": 770,
       "sampleWeight": 1.0,
       "sampleLabel": "ttzz",
       "min": 0.14,
-      "max": 0.43,
+      "max": 0.39,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttzz_dnn.h5"
     }
   ],
@@ -77,7 +77,7 @@
   "batch_size": 4096,
   "earlystopping_epochs": 100,
   "inputData": "/local/scratch/ssd/esarauer/final_ttHH",
-  "Selection": "(N_Jets >= 7 and N_BTagsM <= 3)",
+  "Selection": "(Jet_Pt[0] >= 60) and (Jet_Pt[1] >= 60) and (Jet_Pt[2] >= 60) and (Jet_Pt[3] >= 60) and (N_Jets >= 7 and N_BTagsM <= 3)",
   "trainVariables": [
     "Jet_Pt[0]",
     "Jet_Pt[1]",
@@ -110,6 +110,6 @@
   "evalSelection": "1.",
   "categoryLabel": "\\geq 7 jets, \\leq 3 b-tags",
   "L2_Norm": 1e-05,
-  "JetTagCategory": "ge7j_le3t_ttZZ_60GeV",
+  "JetTagCategory": "ge7j_le3t_60GeV_ttZZ",
   "output_activation": "Softmax"
 }

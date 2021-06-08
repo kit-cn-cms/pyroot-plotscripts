@@ -1,5 +1,5 @@
 {
-  "shuffleSeed": 18570,
+  "shuffleSeed": 2980,
   "test_percentage": 0.1,
   "outputName": "outputLayer/Softmax",
   "trainSelection": "",
@@ -11,23 +11,23 @@
   "L1_Norm": 0.0,
   "eventClasses": [
     {
-      "sampleEvents": 70143,
+      "sampleEvents": 39368,
       "sampleWeight": 1.0,
       "sampleLabel": "ttH",
       "min": 0.17,
-      "max": 0.44,
+      "max": 0.41,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttH_dnn.h5"
     },
     {
-      "sampleEvents": 12675,
+      "sampleEvents": 6501,
       "sampleWeight": 1.0,
       "sampleLabel": "ttbb",
       "min": 0.17,
-      "max": 0.4,
+      "max": 0.49,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttbb_dnn.h5"
     },
     {
-      "sampleEvents": 5702,
+      "sampleEvents": 2826,
       "sampleWeight": 1.0,
       "sampleLabel": "ttcc",
       "min": 0.17,
@@ -35,23 +35,23 @@
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttcc_dnn.h5"
     },
     {
-      "sampleEvents": 10609,
+      "sampleEvents": 4538,
       "sampleWeight": 1.0,
       "sampleLabel": "ttlf",
       "min": 0.17,
-      "max": 0.45,
+      "max": 0.5,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttlf_dnn.h5"
     },
     {
-      "sampleEvents": 81959,
+      "sampleEvents": 49894,
       "sampleWeight": 1.0,
       "sampleLabel": "ttHH",
       "min": 0.17,
-      "max": 0.56,
+      "max": 0.54,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttHH_dnn.h5"
     },
     {
-      "sampleEvents": 25558,
+      "sampleEvents": 13280,
       "sampleWeight": 1.0,
       "sampleLabel": "tt4b",
       "min": 0.17,
@@ -69,7 +69,7 @@
   "batch_size": 4096,
   "earlystopping_epochs": 100,
   "inputData": "/local/scratch/ssd/esarauer/final_ttHH",
-  "Selection": "(N_Jets >= 6 and N_BTagsM <= 3)",
+  "Selection": "(Jet_Pt[0] >= 60) and (Jet_Pt[1] >= 60) and (Jet_Pt[2] >= 60) and (Jet_Pt[3] >= 60) and (N_Jets >= 6 and N_BTagsM <= 3)",
   "trainVariables": [
     "Jet_Pt[0]",
     "Jet_Pt[1]",

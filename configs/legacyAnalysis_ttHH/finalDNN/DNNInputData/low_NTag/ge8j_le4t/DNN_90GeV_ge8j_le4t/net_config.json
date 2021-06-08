@@ -1,5 +1,5 @@
 {
-  "shuffleSeed": 16426,
+  "shuffleSeed": 20129,
   "test_percentage": 0.1,
   "outputName": "outputLayer/Softmax",
   "trainSelection": "",
@@ -11,51 +11,51 @@
   "L1_Norm": 0.0,
   "eventClasses": [
     {
-      "sampleEvents": 10384,
+      "sampleEvents": 3910,
       "sampleWeight": 1.0,
       "sampleLabel": "ttH",
       "min": 0.17,
-      "max": 0.37,
+      "max": 0.35,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttH_dnn.h5"
     },
     {
-      "sampleEvents": 1685,
+      "sampleEvents": 646,
       "sampleWeight": 1.0,
       "sampleLabel": "ttbb",
       "min": 0.17,
-      "max": 0.42,
+      "max": 0.54,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttbb_dnn.h5"
     },
     {
-      "sampleEvents": 629,
+      "sampleEvents": 203,
       "sampleWeight": 1.0,
       "sampleLabel": "ttcc",
       "min": 0.17,
-      "max": 0.54,
+      "max": 0.5,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttcc_dnn.h5"
     },
     {
-      "sampleEvents": 675,
+      "sampleEvents": 213,
       "sampleWeight": 1.0,
       "sampleLabel": "ttlf",
       "min": 0.17,
-      "max": 0.51,
+      "max": 0.55,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttlf_dnn.h5"
     },
     {
-      "sampleEvents": 19195,
+      "sampleEvents": 7403,
       "sampleWeight": 1.0,
       "sampleLabel": "ttHH",
       "min": 0.17,
-      "max": 0.66,
+      "max": 0.62,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttHH_dnn.h5"
     },
     {
-      "sampleEvents": 4285,
+      "sampleEvents": 1420,
       "sampleWeight": 1.0,
       "sampleLabel": "tt4b",
       "min": 0.17,
-      "max": 0.61,
+      "max": 0.6,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/tt4b_dnn.h5"
     }
   ],
@@ -69,7 +69,7 @@
   "batch_size": 4096,
   "earlystopping_epochs": 100,
   "inputData": "/local/scratch/ssd/esarauer/final_ttHH",
-  "Selection": "(N_Jets >= 8 and N_BTagsM <= 4)",
+  "Selection": "(Jet_Pt[0] >= 90) and (Jet_Pt[1] >= 90) and (Jet_Pt[2] >= 90) and (Jet_Pt[3] >= 90) and (N_Jets >= 8 and N_BTagsM <= 4)",
   "trainVariables": [
     "Jet_Pt[0]",
     "Jet_Pt[1]",

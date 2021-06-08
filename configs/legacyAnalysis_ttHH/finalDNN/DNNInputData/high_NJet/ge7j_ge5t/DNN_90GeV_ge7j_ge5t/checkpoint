@@ -1,2 +1,2 @@
-model_checkpoint_path: "/home/esarauer/DracoMLfoy/DRACO-MLfoy/workdir/full_setup/high_NJet/DNN_90GeV_ge7j_ge5t/checkpoints//trained_model"
-all_model_checkpoint_paths: "/home/esarauer/DracoMLfoy/DRACO-MLfoy/workdir/full_setup/high_NJet/DNN_90GeV_ge7j_ge5t/checkpoints//trained_model"
+model_checkpoint_path: "/home/esarauer/DracoMLfoy/DRACO-MLfoy/workdir/2021_06_07_trainings_final/high_NJet/DNN_90GeV_ge7j_ge5t/checkpoints//trained_model"
+all_model_checkpoint_paths: "/home/esarauer/DracoMLfoy/DRACO-MLfoy/workdir/2021_06_07_trainings_final/high_NJet/DNN_90GeV_ge7j_ge5t/checkpoints//trained_model"

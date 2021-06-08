@@ -1,2 +1,2 @@
-model_checkpoint_path: "/home/esarauer/DracoMLfoy/DRACO-MLfoy/workdir/full_setup/low_NJet/DNN_90GeV_le6j_le3t/checkpoints//trained_model"
-all_model_checkpoint_paths: "/home/esarauer/DracoMLfoy/DRACO-MLfoy/workdir/full_setup/low_NJet/DNN_90GeV_le6j_le3t/checkpoints//trained_model"
+model_checkpoint_path: "/home/esarauer/DracoMLfoy/DRACO-MLfoy/workdir/2021_06_07_trainings_final/low_NJetNTag/DNN_90GeV_le6j_le3t/checkpoints//trained_model"
+all_model_checkpoint_paths: "/home/esarauer/DracoMLfoy/DRACO-MLfoy/workdir/2021_06_07_trainings_final/low_NJetNTag/DNN_90GeV_le6j_le3t/checkpoints//trained_model"

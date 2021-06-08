@@ -1,5 +1,5 @@
 {
-  "shuffleSeed": 54350,
+  "shuffleSeed": 61591,
   "test_percentage": 0.1,
   "outputName": "outputLayer/Softmax",
   "trainSelection": "",
@@ -23,7 +23,7 @@
       "sampleWeight": 1.0,
       "sampleLabel": "ttbb",
       "min": 0.17,
-      "max": 0.47,
+      "max": 0.4,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttbb_dnn.h5"
     },
     {
@@ -31,7 +31,7 @@
       "sampleWeight": 1.0,
       "sampleLabel": "ttcc",
       "min": 0.17,
-      "max": 0.45,
+      "max": 0.5,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttcc_dnn.h5"
     },
     {
@@ -39,7 +39,7 @@
       "sampleWeight": 1.0,
       "sampleLabel": "ttlf",
       "min": 0.17,
-      "max": 0.53,
+      "max": 0.51,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttlf_dnn.h5"
     },
     {
@@ -47,7 +47,7 @@
       "sampleWeight": 1.0,
       "sampleLabel": "ttHH",
       "min": 0.17,
-      "max": 0.66,
+      "max": 0.64,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/ttHH_dnn.h5"
     },
     {
@@ -55,7 +55,7 @@
       "sampleWeight": 1.0,
       "sampleLabel": "tt4b",
       "min": 0.17,
-      "max": 0.59,
+      "max": 0.57,
       "samplePath": "/local/scratch/ssd/esarauer/final_ttHH/tt4b_dnn.h5"
     }
   ],
@@ -69,7 +69,7 @@
   "batch_size": 4096,
   "earlystopping_epochs": 100,
   "inputData": "/local/scratch/ssd/esarauer/final_ttHH",
-  "Selection": "(N_Jets >= 8 and N_BTagsM <= 4)",
+  "Selection": "(Jet_Pt[0] >= 30) and (Jet_Pt[1] >= 30) and (Jet_Pt[2] >= 30) and (Jet_Pt[3] >= 30) and (N_Jets >= 8 and N_BTagsM <= 4)",
   "trainVariables": [
     "Jet_Pt[0]",
     "Jet_Pt[1]",
