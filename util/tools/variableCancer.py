@@ -650,25 +650,28 @@ class Variable:
         write chain for branch adress to CC file
         '''
         text = ""
-        if not "_friendTree_" in self.varName:
-            text = """    varname.Form("%s_%s", "{}", variation_suffix.Data());\n""".format(self.varName)
+        
+        name_in_tree = self.varName
+        if "_friendTree_" in name_in_tree:
+            name_in_tree = name_in_tree.replace("_friendTree_", ".")
+        text = """    varname.Form("%s_%s", "{}", variation_suffix.Data());\n""".format(name_in_tree)
         if self.isArray:
-            if "_friendTree_" in self.varName:
-                text += "    chain->SetBranchAddress(\""+self.varName.replace("_friendTree_",".")+"\", "+self.varName+".get());\n"
-            else:
-                text += """    chain->SetBranchAddress(varname.Data(), {}.get());\n""".format(self.varName)
+            # if "_friendTree_" in self.varName:
+            #     text += "    chain->SetBranchAddress(\""+self.varName.replace("_friendTree_",".")+"\", "+self.varName+".get());\n"
+            # else:
+            text += """    chain->SetBranchAddress(varname.Data(), {}.get());\n""".format(self.varName)
         else:
             if self.varType == "I" or self.varType == "L":
-                if "_friendTree_" in self.varName:
-                    text += "    chain->SetBranchAddress(\""+self.varName.replace("_friendTree_",".")+"\", &"+self.varName+"LONGDUMMY);\n"
-                else:
-                    text +=  """    chain->SetBranchAddress(varname.Data(), &{}LONGDUMMY);\n""".format(self.varName)
+                # if "_friendTree_" in self.varName:
+                #     text += "    chain->SetBranchAddress(\""+self.varName.replace("_friendTree_",".")+"\", &"+self.varName+"LONGDUMMY);\n"
+                # else:
+                text +=  """    chain->SetBranchAddress(varname.Data(), &{}LONGDUMMY);\n""".format(self.varName)
                 
             else:
-                if "_friendTree_" in self.varName:
-                    text += "    chain->SetBranchAddress(\""+self.varName.replace("_friendTree_",".")+"\", &"+self.varName+");\n"
-                else:
-                    text +=  """    chain->SetBranchAddress(varname.Data(), &{});\n""".format(self.varName)
+                # if "_friendTree_" in self.varName:
+                #     text += "    chain->SetBranchAddress(\""+self.varName.replace("_friendTree_",".")+"\", &"+self.varName+");\n"
+                # else:
+                text +=  """    chain->SetBranchAddress(varname.Data(), &{});\n""".format(self.varName)
                 
         return text
 

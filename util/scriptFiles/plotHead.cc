@@ -169,7 +169,7 @@ void plot(){
     TString treename = buf.c_str();
     treename.Replace(0,treename.Last('/'),"");
     TString samplename = buf.c_str();
-    for(int i=0; i<=3; i++){
+    for(int i=0; i<=1; i++){
       samplename.Replace(samplename.Last('/'), samplename.Length(), "");
       std::cout << "samplename "<<samplename<<std::endl;
     }
