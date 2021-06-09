@@ -583,9 +583,9 @@ plottingsamples = [
     plotClasses.Sample("tHW (SM)", ROOT.kBlue+1, "", "",
         "tHW", addsamples = ["tHW_hbb", "tHW_hcc", "tHW_htt", "tHW_hgg", "tHW_hgluglu", "tHW_hww", "tHW_hzz", "tHW_hzg"],
         samDict = sampleDict, readTrees = doReadTrees, typ = "bkg"),
-#    plotClasses.Sample("misc.", 18, "", "",
-#        "misc", addsamples ["ttbarZ", "ttbarW", "wjets", "zjets", "diboson"],
-#        samDict = sampleDict, readTrees = doReadTrees)
+   #plotClasses.Sample("misc.", 18, "", "",
+    #   "misc", addsamples ["ttbarZ", "ttbarW", "wjets", "zjets", "diboson"],
+    #   samDict = sampleDict, readTrees = doReadTrees)
      ]
 
 # sort subset of processes in plots. descending order
