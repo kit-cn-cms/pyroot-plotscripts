@@ -117,7 +117,7 @@ sel_MET="*(Evt_MET_Pt>20.)"
 #sel_MET="*1.0"
 
 # select events without huge MuR/MuF weights
-#sel_StrangeMuWeights='*(abs(Weight_scale_variation_muR_0p5_muF_0p5)<=100 && abs(Weight_scale_variation_muR_0p5_muF_1p0)<=100 && abs(Weight_scale_variation_muR_0p5_muF_2p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_1p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_1p0_muF_2p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_0p5)<=100 && abs(Weight_scale_variation_muR_2p0_muF_1p0)<=100 && abs(Weight_scale_variation_muR_2p0_muF_2p0)<=100)'
+sel_StrangeMuWeights='*(abs(Weight_scale_variation_muR_0p5_muF_0p5)<=10 && abs(Weight_scale_variation_muR_0p5_muF_1p0)<=10 && abs(Weight_scale_variation_muR_0p5_muF_2p0)<=10 && abs(Weight_scale_variation_muR_1p0_muF_0p5)<=10 && abs(Weight_scale_variation_muR_1p0_muF_1p0)<=10 && abs(Weight_scale_variation_muR_1p0_muF_2p0)<=10 && abs(Weight_scale_variation_muR_2p0_muF_0p5)<=10 && abs(Weight_scale_variation_muR_2p0_muF_1p0)<=10 && abs(Weight_scale_variation_muR_2p0_muF_2p0)<=10)'
 
 
 # higgs decay selections
@@ -425,7 +425,7 @@ for dec in h_decays:
 samples_ttbb_4FS = [
      plotClasses.Sample('t#bar{t}+b#bar{b} (4FS)',ROOT.kRed+3,
              path_ttbb,
-             lumi+evenSel+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET,
+             lumi+evenSel+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
              'ttbb',
              samDict=sampleDict, readTrees=doReadTrees,
              treename = "Events"),
@@ -505,14 +505,14 @@ samples_5FS = [
 samples = [    
     plotClasses.Sample('t#bar{t}+ZZ',ROOT.kBlue-5,
             path_ttzz,
-            lumi+sel_MET,
+            lumi+sel_MET+sel_StrangeMuWeights,
             'ttzz',
             samDict=sampleDict, readTrees=doReadTrees,
             treename = "Events"),
 
     plotClasses.Sample('t#bar{t}+HH',ROOT.kBlue,
             path_ttHH,
-            lumi+sel_MET,
+            lumi+sel_MET+sel_StrangeMuWeights,
             'ttHH',
             samDict=sampleDict, readTrees=doReadTrees, typ = "signal",
             treename = "Events"),
@@ -527,7 +527,7 @@ samples = [
 #      signal samples
      plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
              ttHpath,
-             lumi+sel_MET,
+             lumi+sel_MET+sel_StrangeMuWeights,
              'ttH',
              samDict=sampleDict, readTrees=doReadTrees,
             treename = "Events"),     
@@ -535,14 +535,14 @@ samples = [
     # ttbar 5FS default background samples
     plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
             ttbarPathS,
-            lumi+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET,
+            lumi+'*(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)'+sel_MET+sel_StrangeMuWeights,
             'ttlf',
             samDict=sampleDict, readTrees=doReadTrees,
             treename = "Events"),
 
     plotClasses.Sample('t#bar{t}+c#bar{c}',ROOT.kRed+1,
             ttbarPathS,
-            lumi+'*(GenEvt_I_TTPlusCC==1)'+sel_MET,
+            lumi+'*(GenEvt_I_TTPlusCC==1)'+sel_MET+sel_StrangeMuWeights,
             'ttcc',
             samDict=sampleDict, readTrees=doReadTrees,
             treename = "Events"),
