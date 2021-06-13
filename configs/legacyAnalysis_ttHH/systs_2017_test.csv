@@ -13,13 +13,11 @@ CMS_ttHbb_scaleMuF_ttHH,shape,weight,DEFAULTWEIGHT*Weight_scale_variation_muR_1p
 CMS_ttHbb_scaleMuF_ttZZ,shape,weight,DEFAULTWEIGHT*Weight_scale_variation_muR_1p0_muF_2p0*1.0*DOWEIGHTS,DEFAULTWEIGHT*Weight_scale_variation_muR_1p0_muF_0p5*1.0*DOWEIGHTS,1,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
 CMS_ttHbb_ISR_ttH,shape,weight,DEFAULTWEIGHT*GenWeight_isr_Def_up*internalNormFactors.at("GenWeight_isr_Def_up")*DOWEIGHTS,DEFAULTWEIGHT*GenWeight_isr_Def_down*internalNormFactors.at("GenWeight_isr_Def_down")*DOWEIGHTS,1,,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
 CMS_ttHbb_ISR_ttHH,shape,weight,DEFAULTWEIGHT*GenWeight_isr_Def_up*DOWEIGHTS,DEFAULTWEIGHT*GenWeight_isr_Def_down*DOWEIGHTS,1,-,-,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
-CMS_ttHbb_ISR_ttZZ,shape,weight,DEFAULTWEIGHT*GenWeight_isr_Def_up*DOWEIGHTS,DEFAULTWEIGHT*GenWeight_isr_Def_down*DOWEIGHTS,1,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
 CMS_ttHbb_ISR_ttbb,shape,weight,DEFAULTWEIGHT*(ISRUPTTBB)*DOWEIGHTS,DEFAULTWEIGHT*(ISRDOWNTTBB)*DOWEIGHTS,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,1,-,-,-,-,-,-,-,-,-
 CMS_ttHbb_ISR_ttcc,shape,weight,DEFAULTWEIGHT*(ISRUPTTCC)*DOWEIGHTS,DEFAULTWEIGHT*(ISRDOWNTTCC)*DOWEIGHTS,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,1,-,-,-,-,-,-
 CMS_ttHbb_ISR_ttlf,shape,weight,DEFAULTWEIGHT*(ISRUPTTLF)*DOWEIGHTS,DEFAULTWEIGHT*(ISRDOWNTTLF)*DOWEIGHTS,1,-,-,-,-,-,-,-,-,-,-,-,-,-,1,-,-,-,-,-,-,-,-,-,-
 CMS_ttHbb_FSR_ttH,shape,weight,DEFAULTWEIGHT*GenWeight_fsr_Def_up*internalNormFactors.at("GenWeight_fsr_Def_up")*DOWEIGHTS,DEFAULTWEIGHT*GenWeight_fsr_Def_down*internalNormFactors.at("GenWeight_fsr_Def_down")*DOWEIGHTS,1,-,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
 CMS_ttHbb_FSR_ttHH,shape,weight,DEFAULTWEIGHT*GenWeight_fsr_Def_up*DOWEIGHTS,DEFAULTWEIGHT*GenWeight_fsr_Def_down*DOWEIGHTS,1,-,-,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
-CMS_ttHbb_FSR_ttZZ,shape,weight,DEFAULTWEIGHT*GenWeight_fsr_Def_up*DOWEIGHTS,DEFAULTWEIGHT*GenWeight_fsr_Def_down*DOWEIGHTS,1,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-
 CMS_ttHbb_FSR_ttbb,shape,weight,DEFAULTWEIGHT*(FSRUPTTBB)*DOWEIGHTS,DEFAULTWEIGHT*(FSRDOWNTTBB)*DOWEIGHTS,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,1,-,-,-,-,-,-,-,-,-
 CMS_ttHbb_FSR_ttcc,shape,weight,DEFAULTWEIGHT*(FSRUPTTCC)*DOWEIGHTS,DEFAULTWEIGHT*(FSRDOWNTTCC)*DOWEIGHTS,1,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,1,-,-,-,-,-,-
 CMS_ttHbb_FSR_ttlf,shape,weight,DEFAULTWEIGHT*(FSRUPTTLF)*DOWEIGHTS,DEFAULTWEIGHT*(FSRDOWNTTLF)*DOWEIGHTS,1,-,-,-,-,-,-,-,-,-,-,-,-,-,1,-,-,-,-,-,-,-,-,-,-
