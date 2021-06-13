@@ -1,27 +1,27 @@
 variablename,minvalue,maxvalue,numberofbins,logoption,displayname
-Jet_Eta[3],-2.4,2.4,50.0,-,Jet Eta[3]
-N_Jets,5.5,11.5,6,-,N (Jets)
-Jet_Pt[1],0.0,600.0,50.0,x,Jet Pt[1]
-Jet_M[2],0.0,60.0,50.0,-,Jet M[2]
-Jet_Eta[1],-2.4,2.4,50.0,-,Jet Eta[1]
-Jet_CSV[2],0.0,1.0,50.0,-,Jet CSV[2]
-Jet_M[0],0.0,60.0,50.0,-,Jet M[0]
-Jet_CSV[0],0.0,1.0,50.0,-,Jet CSV[0]
-Jet_M[3],0.0,60.0,50.0,-,Jet M[3]
-Jet_Phi[3],-3.14159265358979,3.14159265358979,50.0,-,Jet Phi[3]
-Jet_Phi[1],-3.14159265358979,3.14159265358979,50.0,-,Jet Phi[1]
-Evt_Deta_TaggedJetsAverage,-100.0,100.0,50.0,-,x
-Jet_Pt[3],0.0,600.0,50.0,x,Jet Pt[3]
-Jet_Pt[0],0.0,600.0,50.0,x,Jet Pt[0]
-Jet_Eta[2],-2.4,2.4,50.0,-,Jet Eta[2]
-Jet_Eta[0],-2.4,2.4,50.0,-,Jet Eta[0]
-Evt_CSV_avg,0.0,1.0,50.0,-,x
-Jet_CSV[3],0.0,1.0,50.0,-,Jet CSV[3]
-Jet_M[1],0.0,60.0,50.0,-,Jet M[1]
-Jet_Pt[2],0.0,600.0,50.0,x,Jet Pt[2]
-Jet_Phi[2],-3.14159265358979,3.14159265358979,50.0,-,Jet Phi[2]
-Jet_Phi[0],-3.14159265358979,3.14159265358979,50.0,-,Jet Phi[0]
-Evt_Pt_minDrTaggedJets,-100.0,100.0,50.0,-,x
-Jet_CSV[1],0.0,1.0,50.0,-,Jet CSV[1]
-Evt_Pt_TaggedJetsAverage,-100.0,100.0,50.0,-,x
-Evt_Pt_JetsAverage,-100.0,100.0,50.0,-,x
+Jet_Eta_nom[3],-2.4,2.4,50.0,-,Jet Eta[3]
+N_Jets_nom,,,,,
+Jet_Pt_nom[1],0.0,600.0,50.0,x,Jet Pt[1]
+Jet_M_nom[2],0.0,60.0,50.0,-,Jet M[2]
+Jet_Eta_nom[1],-2.4,2.4,50.0,-,Jet Eta[1]
+Jet_CSV_nom[2],0.0,1.0,50.0,-,Jet CSV[2]
+Jet_M_nom[0],0.0,60.0,50.0,-,Jet M[0]
+Jet_CSV_nom[0],0.0,1.0,50.0,-,Jet CSV[0]
+Jet_M_nom[3],0.0,60.0,50.0,-,Jet M[3]
+Jet_Phi_nom[3],-3.14159265358979,3.14159265358979,50.0,-,Jet Phi[3]
+Jet_Phi_nom[1],-3.14159265358979,3.14159265358979,50.0,-,Jet Phi[1]
+Evt_Deta_TaggedJetsAverage_nom,-100.0,100.0,50.0,-,x
+Jet_Pt_nom[3],0.0,600.0,50.0,x,Jet Pt[3]
+Jet_Pt_nom[0],0.0,600.0,50.0,x,Jet Pt[0]
+Jet_Eta_nom[2],-2.4,2.4,50.0,-,Jet Eta[2]
+Jet_Eta_nom[0],-2.4,2.4,50.0,-,Jet Eta[0]
+Evt_CSV_avg_nom,0.0,1.0,50.0,-,x
+Jet_CSV_nom[3],0.0,1.0,50.0,-,Jet CSV[3]
+Jet_M_nom[1],0.0,60.0,50.0,-,Jet M[1]
+Jet_Pt_nom[2],0.0,600.0,50.0,x,Jet Pt[2]
+Jet_Phi_nom[2],-3.14159265358979,3.14159265358979,50.0,-,Jet Phi[2]
+Jet_Phi_nom[0],-3.14159265358979,3.14159265358979,50.0,-,Jet Phi[0]
+Evt_Pt_minDrTaggedJets_nom,-100.0,100.0,50.0,-,x
+Jet_CSV_nom[1],0.0,1.0,50.0,-,Jet CSV[1]
+Evt_Pt_TaggedJetsAverage_nom,-100.0,100.0,50.0,-,x
+Evt_Pt_JetsAverage_nom,-100.0,100.0,50.0,-,x
