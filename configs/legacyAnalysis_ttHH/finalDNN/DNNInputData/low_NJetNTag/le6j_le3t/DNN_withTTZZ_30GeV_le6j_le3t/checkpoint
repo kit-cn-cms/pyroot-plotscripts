@@ -1,0 +1,2 @@
+model_checkpoint_path: "/home/esarauer/DracoMLfoy/DRACO-MLfoy/workdir/2021_06_07_trainings_final/low_NJetNTag/DNN_withTTZZ_30GeV_le6j_le3t/checkpoints//trained_model"
+all_model_checkpoint_paths: "/home/esarauer/DracoMLfoy/DRACO-MLfoy/workdir/2021_06_07_trainings_final/low_NJetNTag/DNN_withTTZZ_30GeV_le6j_le3t/checkpoints//trained_model"

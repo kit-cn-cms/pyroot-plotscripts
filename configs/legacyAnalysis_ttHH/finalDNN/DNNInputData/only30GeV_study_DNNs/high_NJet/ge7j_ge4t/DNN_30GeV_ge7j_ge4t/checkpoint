@@ -1,0 +1,2 @@
+model_checkpoint_path: "/home/esarauer/DracoMLfoy/DRACO-MLfoy/workdir/full_setup/high_NJet/DNN_30GeV_ge7j_ge4t/checkpoints//trained_model"
+all_model_checkpoint_paths: "/home/esarauer/DracoMLfoy/DRACO-MLfoy/workdir/full_setup/high_NJet/DNN_30GeV_ge7j_ge4t/checkpoints//trained_model"

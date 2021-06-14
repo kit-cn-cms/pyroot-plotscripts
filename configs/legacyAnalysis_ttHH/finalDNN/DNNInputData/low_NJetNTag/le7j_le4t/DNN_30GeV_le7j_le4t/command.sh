@@ -1,0 +1,1 @@
+python /home/esarauer/DracoMLfoy/DRACO-MLfoy/train_scripts/train_template_30GeV.py -i /local/scratch/ssd/esarauer/final_ttHH -v variables_full_ttHH -n ttHH_2017 -S ttHH --plot -c le7j_le4t -e 1000 --printroc -o 2021_06_07_trainings_final/low_NJetNTag/DNN_30GeV -f 0.1
