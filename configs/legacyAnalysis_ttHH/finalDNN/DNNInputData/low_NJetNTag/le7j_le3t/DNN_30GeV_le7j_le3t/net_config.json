@@ -69,7 +69,7 @@
   "batch_size": 4096,
   "earlystopping_epochs": 100,
   "inputData": "/local/scratch/ssd/esarauer/final_ttHH",
-  "Selection": "(Jet_Pt_0 >= 30) and (Jet_Pt_1 >= 30) and (Jet_Pt_2 >= 30) and (Jet_Pt_3 >= 30) and (N_Jets <= 7 and N_BTagsM <= 3)",
+  "Selection": "(Jet_Pt[0] >= 30) and (Jet_Pt[1] >= 30) and (Jet_Pt[2] >= 30) and (Jet_Pt[3] >= 30) and (N_Jets <= 7 and N_BTagsM <= 3)",
   "trainVariables": [
     "Jet_Eta[3]",
     "N_Jets",
