@@ -30,7 +30,7 @@ def main(pyrootdir, opts):
     ''')
     # name of the analysis (i.e. workdir name)
 
-    name = '2020_06_08_ttHH_final/low_NJetNTag_2017'
+    name = '2020_06_08_ttHH_final/low_NJetNTag_2017_v2'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
