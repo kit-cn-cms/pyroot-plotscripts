@@ -131,6 +131,7 @@ def getAddVars():
         "LooseMuon_Phi",
         "LooseElectron_Phi",
         "Photon_Eta",
+        "Photon_Pt",
         ]
 
     return addVars

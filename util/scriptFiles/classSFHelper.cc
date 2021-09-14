@@ -89,7 +89,7 @@ float SFHelper::GetScaleFactor(std::string identifier, auto x, bool use_edge_bin
     // std::cout << "bin " << bin << std::endl;
     // std::cout << "sf " << sf << std::endl;
 
-    if (sf > 0.)
+    if (sf != 0.)
         return sf;
     else
         return 1.;

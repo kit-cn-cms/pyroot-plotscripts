@@ -674,7 +674,7 @@ class DrawHistograms:
         
         line = self.data.Clone()
         line.Divide(self.data)
-        line.GetYaxis().SetRangeUser(0.0,2.0)
+        line.GetYaxis().SetRangeUser(0.5,1.5)
         line.GetYaxis().SetTitle(self.ratio)
 
         line.SetTitle("")
