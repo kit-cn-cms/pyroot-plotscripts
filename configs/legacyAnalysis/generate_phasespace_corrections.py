@@ -83,7 +83,7 @@ def main():
 
     selection_dict = {
         "ttbb": {
-            "selection": "((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))*(isFourFSsample)",
+            "selection": "((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))",
             "phasespace_frac" : """(fracRatio_ttbb.at("{weight}"))"""
             },
         "ttcc": {
@@ -94,6 +94,7 @@ def main():
             "selection": "(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)*(!isFourFSsample)",
             "phasespace_frac" : """(fracRatio_ttlf.at("{weight}"))"""
             }
+        
     }
 
     variationdict = construct_variations(weight_names = weight_names, 
@@ -123,8 +124,8 @@ def main():
             "phasespace_frac" : """fracRatio_ttbb.at("{weight}")"""
             },
         "ttnonbb": {
-            "selection": ["(GenEvt_I_TTPlusCC==1)*(!isFourFSsample)", "(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)*(!isFourFSsample)"],
-            "phasespace_frac" : ["""(fracRatio_ttcc.at("{weight}"))""", """(fracRatio_ttlf.at("{weight}"))"""]
+            "selection": ["(GenEvt_I_TTPlusCC==1)*(!isFourFSsample)", "(GenEvt_I_TTPlusCC==0&&GenEvt_I_TTPlusBB==0)*(!isFourFSsample)", "((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))*(!isFourFSsample)"],
+            "phasespace_frac" : ["""(fracRatio_ttcc.at("{weight}"))""", """(fracRatio_ttlf.at("{weight}"))""", """fracRatio_ttbb.at("{weight}")"""]
             },
     }
     variationdict = construct_variations(weight_names = weight_names, 

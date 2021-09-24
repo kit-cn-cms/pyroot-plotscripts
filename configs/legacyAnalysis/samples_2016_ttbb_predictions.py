@@ -400,19 +400,39 @@ samples_ttbar_hf_spilt = [
      plotClasses.Sample('t#bar{t}+b',ROOT.kRed-2,
              ttbarPathS,
              lumi+evenSel+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,
-             'ttbarPlusB',
+             'ttb',
              samDict=sampleDict, readTrees=doReadTrees),
 
      plotClasses.Sample('t#bar{t}+2b',ROOT.kRed+2,
              ttbarPathS,
              lumi+evenSel+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,
-             'ttbarPlus2B',
+             'tt2b',
              samDict=sampleDict, readTrees=doReadTrees),
 
      plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,
              ttbarPathS,
              lumi+evenSel+'*(GenEvt_I_TTPlusBB==3)'+sel_MET+sel_StrangeMuWeights,
-             'ttbarPlusBBbar',
+             'ttbb',
+             samDict=sampleDict, readTrees=doReadTrees), 
+    ]
+
+samples_ttbar_hf_spilt_5FS = [
+     plotClasses.Sample('t#bar{t}+b',ROOT.kRed-2,
+             ttbarPathS,
+             lumi+evenSel+'*(GenEvt_I_TTPlusBB==1)*(!isFourFSsample)'+sel_MET+sel_StrangeMuWeights,
+             'ttb_5FS',
+             samDict=sampleDict, readTrees=doReadTrees),
+
+     plotClasses.Sample('t#bar{t}+2b',ROOT.kRed+2,
+             ttbarPathS,
+             lumi+evenSel+'*(GenEvt_I_TTPlusBB==2)*(!isFourFSsample)'+sel_MET+sel_StrangeMuWeights,
+             'tt2b_5FS',
+             samDict=sampleDict, readTrees=doReadTrees),
+
+     plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,
+             ttbarPathS,
+             lumi+evenSel+'*(GenEvt_I_TTPlusBB==3)*(!isFourFSsample)'+sel_MET+sel_StrangeMuWeights,
+             'ttbb_5FS',
              samDict=sampleDict, readTrees=doReadTrees), 
     ]
 
@@ -503,8 +523,10 @@ samples_ttnonbb = [
 # samples += samples_tH
 # samples += samples_ttbb_4FS
 # samples += samples_minor_backgrounds
-samples = samples_5FS
-#samples += samples_ttbar_hf_spilt
+# samples = samples_5FS
+samples = samples_ttbar_hf_spilt
+samples += samples_ttbar_hf_spilt_5FS
+
 # samples += samples_ttH_decay
 
 
