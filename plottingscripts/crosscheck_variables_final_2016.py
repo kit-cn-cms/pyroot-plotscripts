@@ -83,8 +83,8 @@ def main(pyrootdir, opts):
         "stopAfterCompile":     False,   # stop script after compiling
         # options to activate parts of the script
         "haddFromWildcard":     True,
-        "makeDataCards":        True,
-        "makeInputDatacards":   False, # create datacards also for all defined plots
+        "makeDataCards":        False,
+        "makeInputDatacards":   True, # create datacards also for all defined plots
         "addData":              True,  # adding real data 
         "makePlots":            True,
         # options for makePlots

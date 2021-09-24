@@ -394,19 +394,19 @@ samples_ttbb_4FS = [
 
 samples_ttbar_hf_spilt = [
      plotClasses.Sample('t#bar{t}+b',ROOT.kRed-2,
-             ttbarPathS,
+             path_ttbb,
              lumi+evenSel+'*(GenEvt_I_TTPlusBB==1)'+sel_MET+sel_StrangeMuWeights,
              'ttb',
              samDict=sampleDict, readTrees=doReadTrees),
 
      plotClasses.Sample('t#bar{t}+2b',ROOT.kRed+2,
-             ttbarPathS,
+             path_ttbb,
              lumi+evenSel+'*(GenEvt_I_TTPlusBB==2)'+sel_MET+sel_StrangeMuWeights,
              'tt2b',
              samDict=sampleDict, readTrees=doReadTrees),
 
      plotClasses.Sample('t#bar{t}+b#bar{b}',ROOT.kRed+3,
-             ttbarPathS,
+             path_ttbb,
              lumi+evenSel+'*(GenEvt_I_TTPlusBB==3)'+sel_MET+sel_StrangeMuWeights,
              'ttbb',
              samDict=sampleDict, readTrees=doReadTrees), 
