@@ -324,22 +324,34 @@ h_decays= {
 
 
 samples_tH = []
-
-
-for dec in h_decays:
-    samples_tH += [
-    plotClasses.Sample('tHW ' + dec + ' (SM)',ROOT.kBlue+3,
+samples_tH += [
+    plotClasses.Sample('tHW (SM)',ROOT.kBlue+3,
             THWpath,
-            lumi+tH_SM_rwgt+sel_MET+h_decays[dec],
-            'tHW_'+dec,
+            lumi+tH_SM_rwgt+sel_MET,
+            'tHW',
             samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
 
-    plotClasses.Sample('tHq ' + dec + ' (SM)',ROOT.kBlue+3,
+    plotClasses.Sample('tHq (SM)',ROOT.kBlue+3,
             THQpath,
-            lumi+tH_SM_rwgt+sel_MET+h_decays[dec],
-            'tHq_'+dec,
+            lumi+tH_SM_rwgt+sel_MET,
+            'tHq',
             samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
     ]
+
+# for dec in h_decays:
+#     samples_tH += [
+#     plotClasses.Sample('tHW ' + dec + ' (SM)',ROOT.kBlue+3,
+#             THWpath,
+#             lumi+tH_SM_rwgt+sel_MET+h_decays[dec],
+#             'tHW_'+dec,
+#             samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
+
+#     plotClasses.Sample('tHq ' + dec + ' (SM)',ROOT.kBlue+3,
+#             THQpath,
+#             lumi+tH_SM_rwgt+sel_MET+h_decays[dec],
+#             'tHq_'+dec,
+#             samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
+#     ]
 
 # samples_tH = [
 #     # ITC case
@@ -478,11 +490,11 @@ samples_5FS =  [
 
 samples_ttnonbb = [
      # signal samples
-    #plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
-    #        ttHpath,
-    #        lumi+sel_MET,
-    #        'ttH',
-    #        samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
+    plotClasses.Sample('t#bar{t}+H',ROOT.kBlue+1,
+           ttHpath,
+           lumi+sel_MET,
+           'ttH',
+           samDict=sampleDict, readTrees=doReadTrees, typ = "signal"),     
 
     # ttbar 5FS default background samples
     plotClasses.Sample('t#bar{t}+lf',ROOT.kRed-7,
@@ -499,7 +511,7 @@ samples_ttnonbb = [
     ]
 
 samples = []
-samples = samples_ttH_decay
+# samples = samples_ttH_decay
 samples += samples_ttnonbb
 samples += samples_tH
 samples += samples_ttbb_4FS

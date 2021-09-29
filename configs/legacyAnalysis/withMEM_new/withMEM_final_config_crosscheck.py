@@ -51,6 +51,28 @@ def plots_ge4j_ge4t_classification(data = None, label = "\geq 4 jets, \geq 4 b-t
     if data:
         add_data_plots(plots=plots,data=data)
     return plots
+
+def acceptance_variables(data = None, label = "\geq 4 jets, \geq 4 b-tags", \
+                                selection = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)", name = "ge4j_ge4t"): 
+    interfaces = []
+    plots = []
+    for i in range(4):
+        plots += [
+        
+        plotClasses.Plot(ROOT.TH1D("ljets_{}_TaggedJet_Pt_{}".format(name, i),"TaggedJet_Pt_{}".format(i),50,20.0,600.0),
+                            "TaggedJet_Pt[{}]".format(i),selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_{}_TaggedJet_Eta_{}".format(name, i),"TaggedJet_Eta_{}".format(i),50,-5,5),
+                            "TaggedJet_Eta[{}]".format(i),selection,label),
+        ]
+    plots += [
+        plotClasses.Plot(ROOT.TH1D("ljets_{}_N_BTagsM".format(name),"N_BTagsM",7,3.5,10.5),"N_BTagsM",selection,label),
+    ]
+
+
+        
+    if data:
+        add_data_plots(plots=plots,data=data)
+    return plots
     
 def plots_ge4j_3t_classification(data = None, label = "\geq 4 jets, 3 b-tags", \
                                 selection = "(N_Jets>=4&&N_BTagsM==3)&&(1.)", name = "classification"): 
@@ -782,14 +804,16 @@ def getDiscriminatorPlots(data = None, discrname = ''):
     selection = "(N_Jets>=4&&N_BTagsM==3)"
     # discriminatorPlots += plots_ge4j_ge4t_classification(data, name = "variables")
     # discriminatorPlots += plots_ge4j_3t_classification(data, name = "variables")
-    discriminatorPlots += plots_ljets_ge4j_ge4t(data)
-    discriminatorPlots += plots_ljets_ge4j_3t(data)
- 
+    # discriminatorPlots += plots_ljets_ge4j_ge4t(data)
+    # discriminatorPlots += plots_ljets_ge4j_3t(data)
+    discriminatorPlots += acceptance_variables(data, label=label, selection=selection, name="ge4j_3t")
     label = "\geq 4 jets, \geq 4 b-tags"
     selection = "(N_Jets>=4&&N_BTagsM>=4)"
-    discriminatorPlots += plots_dnn_ttH_vs_slike(data = data, discrname=discrname, category="ge4j_ge4t_classification", selection= selection, label = label )
+    discriminatorPlots += acceptance_variables(data, label=label, selection=selection, name="ge4j_ge4t")
+
+    # discriminatorPlots += plots_dnn_ttH_vs_slike(data = data, discrname=discrname, category="ge4j_ge4t_classification", selection= selection, label = label )
     
-    discriminatorPlots += plots_dnn(data, discrname)
+    # discriminatorPlots += plots_dnn(data, discrname)
     return discriminatorPlots
 
 

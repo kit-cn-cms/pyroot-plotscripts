@@ -306,20 +306,32 @@ samples_ttH_decay = [
 
 
 
-# h_decays= {
-#     "hbb": hbbSel,
-#     "hcc": hccSel,
-#     "htt": httSel,
-#     "hgg": hggSel,
-#     "hgluglu": hglugluSel,
-#     "hww": hwwSel,
-#     "hzz": hzzSel,
-#     "hzg": hzgSel
-# }
+h_decays= {
+    "hbb": hbbSel,
+    "hcc": hccSel,
+    "htt": httSel,
+    "hgg": hggSel,
+    "hgluglu": hglugluSel,
+    "hww": hwwSel,
+    "hzz": hzzSel,
+    "hzg": hzgSel
+}
 
 
 samples_tH = []
+samples_tH += [
+    plotClasses.Sample('tHW (SM)',ROOT.kBlue+3,
+            THWpath,
+            lumi+tH_SM_rwgt+sel_MET,
+            'tHW',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
 
+    plotClasses.Sample('tHq (SM)',ROOT.kBlue+3,
+            THQpath,
+            lumi+tH_SM_rwgt+sel_MET,
+            'tHq',
+            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
+    ]
 
 # for dec in h_decays:
 #     samples_tH += [
@@ -335,20 +347,6 @@ samples_tH = []
 #             'tHq_'+dec,
 #             samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
 #     ]
-
-samples_tH = [
-    plotClasses.Sample('tHW (SM)',ROOT.kBlue+3,
-            THWpath,
-            lumi+tH_SM_rwgt+sel_MET,
-            'tHW',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
-
-    plotClasses.Sample('tHq (SM)',ROOT.kBlue+3,
-            THQpath,
-            lumi+tH_SM_rwgt+sel_MET,
-            'tHq',
-            samDict=sampleDict, readTrees=doReadTrees, typ = "bkg"),
-    ]
 
 # samples_tH = [
 #     # ITC case
@@ -399,7 +397,7 @@ samples_tH = [
 samples_ttbb_4FS = [
      plotClasses.Sample('t#bar{t}+b#bar{b} (4FS)',ROOT.kRed+3,
              path_ttbb,
-             lumi+evenSel+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+             lumi+evenSel+ttbb_4FS_scale+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))*(isFourFSsample)'+sel_MET+sel_StrangeMuWeights,
              'ttbb',
              samDict=sampleDict, readTrees=doReadTrees),
     ]
@@ -470,7 +468,7 @@ samples_minor_backgrounds = [
 samples_5FS = [
     plotClasses.Sample('t#bar{t}+b#bar{b} (5FS)',ROOT.kRed+3,
             ttbarPathS,
-            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))'+sel_MET+sel_StrangeMuWeights,
+            lumi+'*((GenEvt_I_TTPlusBB==1)||(GenEvt_I_TTPlusBB==2)||(GenEvt_I_TTPlusBB==3))*(!isFourFSsample)'+sel_MET+sel_StrangeMuWeights,
             'ttbb_5FS',
             samDict=sampleDict, readTrees=doReadTrees, plot = False), 
     ]
@@ -501,7 +499,7 @@ samples = [
 samples += samples_tH
 samples += samples_ttbb_4FS
 samples += samples_minor_backgrounds
-samples += samples_5FS
+samples = samples_5FS
 #samples += samples_ttbar_hf_spilt
 # samples += samples_ttH_decay
 
