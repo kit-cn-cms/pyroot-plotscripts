@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     ''')
     # name of the analysis (i.e. workdir name)
-    name = 'withMEM_final_newJECrun/2016_ttbb_predictions'
+    name = 'withMEM_final_newJECrun/2016_ttbb_predictions_acceptance'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name

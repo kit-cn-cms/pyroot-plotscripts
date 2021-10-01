@@ -509,7 +509,7 @@ samples = []
 samples += samples_tH
 samples += samples_ttnonbb
 samples += samples_ttbb_4FS
-samples = samples_5FS
+samples += samples_5FS
 samples += samples_minor_backgrounds
 
 
