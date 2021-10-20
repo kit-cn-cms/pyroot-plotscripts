@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     ''')
     # name of the analysis (i.e. workdir name)
-    name = 'withMEM_final_crosscheck/2016_noratio'
+    name = 'withMEM_final_crosscheck/2016_5j'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -52,7 +52,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis/samples_2016"
     variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/withMEM_new/withMEM_final_config"
+    plot_cfg        = "legacyAnalysis/withMEM_new/withMEM_final_config_5j"
     # plot_cfg        = "legacyAnalysis/DNN_14-05-2020/combined161718_DNNs"
     syst_cfg        = "legacyAnalysis/systs_2016"
     # syst_cfg        = "legacyAnalysis/no_systs"
