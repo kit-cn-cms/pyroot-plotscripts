@@ -48,7 +48,7 @@ def plots_dnn_v2(data, discrname, jt_selection, jt_label):
     interf_classification_ttH_node.nhistobins = ndefaultbins
     interfaces.append(interf_classification_ttH_node)
 
-    interf_classification_ttmb_node = vhi.variableHistoInterface(variable_name  =  getDNNoutput("ttH") ,
+    interf_classification_ttmb_node = vhi.variableHistoInterface(variable_name  =  getDNNoutput("ttmb") ,
                                             label          = "ljets_"+jt_label+"_classification_ttmb_node",
                                             selection      = "()" )
     interf_classification_ttmb_node.category = ("((" + getDNNclass(1) + ")" + "&&(" + jt_selection +"))","ljets_"+jt_label+"_classification_ttH__node","")
@@ -134,6 +134,15 @@ def plots_dnn_v2(data, discrname, jt_selection, jt_label):
 
 def getDiscriminatorPlots(data = None, discrname = ''):
     discriminatorPlots = []
+    discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets==5&&N_BTagsM==3)", "5j_3t")
+    discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets>=6&&N_BTagsM==3)", "ge6j_3t")
+
+    discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets==5&&N_BTagsM>=4)", "5j_ge4t")
+    discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets>=6&&N_BTagsM>=4)", "ge6j_ge4t")
+
+    discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets==5&&N_BTagsM>=3)", "5j_ge3t")
+    discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets>=6&&N_BTagsM>=3)", "ge6j_ge3t")
+
     discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets>=5&&N_BTagsM==3)", "ge5j_3t")
     discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets>=5&&N_BTagsM>=4)", "ge5j_ge4t")
     return discriminatorPlots
