@@ -14,13 +14,36 @@ from array import array
 from copy import deepcopy
 
 
-memexp = ""
+memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
 def getDNNclass(cla):
     return "((N_Jets>=4&&N_BTagsM>=4)*(DNNPredictedClass_ge4j_ge4t_classification=={}) + ((N_Jets>=4&&N_BTagsM==3)*(DNNPredictedClass_ge4j_3t_classification=={})) )".format(cla, cla)
 
 def getDNNoutput(cla):
     return "((N_Jets>=4&&N_BTagsM>=4)*(DNNOutput_ge4j_ge4t_classification_node_{}) + ((N_Jets>=4&&N_BTagsM==3)*(DNNOutput_ge4j_3t_classification_node_{})) )".format(cla, cla)
+
+def crosscheck_variables(data = None, selection = "(N_Jets>=4&&N_BTagsM>=4)&&(1.)", name = "ge4j_ge4t"):
+    interfaces = []
+    label = name
+    plots = [
+        plotClasses.Plot(ROOT.TH1D("ljets_{}_N_Jets".format(name),"N_Jets",7,3.5,10.5),"N_Jets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_{}_N_BTagsM".format(name),"N_BTagsM",7,3.5,10.5),"N_BTagsM",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets{}_Evt_HT_tags".format(name),"Evt_HT_tags",50,100.0,1000.0),"Evt_HT_tags",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_{}_Evt_HT_jets".format(name),"H_{T}(jets)",50,200.0,1500.0),"Evt_HT_jets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_{}_memDBp".format(name),"MEM",50,-2.,1.0),memexp,selection,label),
+    ]
+
+    for i in range(4):
+        plots += [        
+        plotClasses.Plot(ROOT.TH1D("ljets_{}_TaggedJet_Pt_{}".format(name, i),"TaggedJet_Pt_{}".format(i),50,20.0,600.0),
+                            "TaggedJet_Pt[{}]".format(i),selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_{}_TaggedJet_Eta_{}".format(name, i),"TaggedJet_Eta_{}".format(i),50,-5,5),
+                            "TaggedJet_Eta[{}]".format(i),selection,label),
+        ]
+        
+    if data:
+        add_data_plots(plots=plots,data=data)
+    return plots
 
 
 def plots_dnn_v2(data, discrname, jt_selection, jt_label):
@@ -119,32 +142,31 @@ def plots_dnn_v2(data, discrname, jt_selection, jt_label):
     DNNPlots = init_plots(interfaces = interfaces, data = data)
     return DNNPlots
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 def getDiscriminatorPlots(data = None, discrname = ''):
     discriminatorPlots = []
-    discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets==5&&N_BTagsM==3)", "5j_3t")
-    discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets>=6&&N_BTagsM==3)", "ge6j_3t")
+    # discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets==5&&N_BTagsM==3)", "5j_3t")
+    # discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets>=6&&N_BTagsM==3)", "ge6j_3t")
 
-    discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets==5&&N_BTagsM>=4)", "5j_ge4t")
-    discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets>=6&&N_BTagsM>=4)", "ge6j_ge4t")
+    # discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets==5&&N_BTagsM>=4)", "5j_ge4t")
+    # discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets>=6&&N_BTagsM>=4)", "ge6j_ge4t")
 
-    discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets==5&&N_BTagsM>=3)", "5j_ge3t")
-    discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets>=6&&N_BTagsM>=3)", "ge6j_ge3t")
+    # discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets==5&&N_BTagsM>=3)", "5j_ge3t")
+    # discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets>=6&&N_BTagsM>=3)", "ge6j_ge3t")
 
-    discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets>=5&&N_BTagsM==3)", "ge5j_3t")
-    discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets>=5&&N_BTagsM>=4)", "ge5j_ge4t")
+    # discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets>=5&&N_BTagsM==3)", "ge5j_3t")
+    # discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets>=5&&N_BTagsM>=4)", "ge5j_ge4t")
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets==5&&N_BTagsM==3)", "5j_3t")
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets>=6&&N_BTagsM==3)", "ge6j_3t")
+
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets==5&&N_BTagsM>=4)", "5j_ge4t")
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets>=6&&N_BTagsM>=4)", "ge6j_ge4t")
+
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets==5&&N_BTagsM>=3)", "5j_ge3t")
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets>=6&&N_BTagsM>=3)", "ge6j_ge3t")
+
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets>=5&&N_BTagsM==3)", "ge5j_3t")
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets>=5&&N_BTagsM>=4)", "ge5j_ge4t")
+    
     return discriminatorPlots
 
 
