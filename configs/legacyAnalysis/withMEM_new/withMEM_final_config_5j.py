@@ -28,18 +28,20 @@ def crosscheck_variables(data = None, selection = "(N_Jets>=4&&N_BTagsM>=4)&&(1.
     plots = [
         plotClasses.Plot(ROOT.TH1D("ljets_{}_N_Jets".format(name),"N_Jets",7,3.5,10.5),"N_Jets",selection,label),
         plotClasses.Plot(ROOT.TH1D("ljets_{}_N_BTagsM".format(name),"N_BTagsM",7,3.5,10.5),"N_BTagsM",selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets{}_Evt_HT_tags".format(name),"Evt_HT_tags",50,100.0,1000.0),"Evt_HT_tags",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_{}_Evt_HT_tags".format(name),"Evt_HT_tags",50,100.0,1000.0),"Evt_HT_tags",selection,label),
         plotClasses.Plot(ROOT.TH1D("ljets_{}_Evt_HT_jets".format(name),"H_{T}(jets)",50,200.0,1500.0),"Evt_HT_jets",selection,label),
         plotClasses.Plot(ROOT.TH1D("ljets_{}_memDBp".format(name),"MEM",50,-2.,1.0),memexp,selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_{}_Evt_Pt_minDrTaggedJets".format(name),"Evt_Pt_minDrTaggedJets",50,0.0,800.0),"Evt_Pt_minDrTaggedJets",selection,label),
+        plotClasses.Plot(ROOT.TH1D("ljets_{}_Evt_Dr_minDrTaggedJets".format(name),"Evt_Dr_minDrTaggedJets",30,0,4.0),"Evt_Dr_minDrTaggedJets",selection,label),
     ]
 
-    for i in range(4):
-        plots += [        
-        plotClasses.Plot(ROOT.TH1D("ljets_{}_TaggedJet_Pt_{}".format(name, i),"TaggedJet_Pt_{}".format(i),50,20.0,600.0),
-                            "TaggedJet_Pt[{}]".format(i),selection,label),
-        plotClasses.Plot(ROOT.TH1D("ljets_{}_TaggedJet_Eta_{}".format(name, i),"TaggedJet_Eta_{}".format(i),50,-5,5),
-                            "TaggedJet_Eta[{}]".format(i),selection,label),
-        ]
+    # for i in range(4):
+    #     plots += [        
+    #     plotClasses.Plot(ROOT.TH1D("ljets_{}_TaggedJet_Pt_{}".format(name, i),"TaggedJet_Pt_{}".format(i),50,20.0,600.0),
+    #                         "TaggedJet_Pt[{}]".format(i),selection,label),
+    #     plotClasses.Plot(ROOT.TH1D("ljets_{}_TaggedJet_Eta_{}".format(name, i),"TaggedJet_Eta_{}".format(i),50,-5,5),
+    #                         "TaggedJet_Eta[{}]".format(i),selection,label),
+    #     ]
         
     if data:
         add_data_plots(plots=plots,data=data)
@@ -155,17 +157,30 @@ def getDiscriminatorPlots(data = None, discrname = ''):
 
     # discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets>=5&&N_BTagsM==3)", "ge5j_3t")
     # discriminatorPlots += plots_dnn_v2(data, discrname, "(N_Jets>=5&&N_BTagsM>=4)", "ge5j_ge4t")
+
+
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets==4&&N_BTagsM==3)", "4j_3t")
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets==4&&N_BTagsM>=3)", "4j_ge3t")
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets==4&&N_BTagsM>=4)", "4j_ge4t")
+
     discriminatorPlots += crosscheck_variables(data, "(N_Jets==5&&N_BTagsM==3)", "5j_3t")
-    discriminatorPlots += crosscheck_variables(data, "(N_Jets>=6&&N_BTagsM==3)", "ge6j_3t")
-
-    discriminatorPlots += crosscheck_variables(data, "(N_Jets==5&&N_BTagsM>=4)", "5j_ge4t")
-    discriminatorPlots += crosscheck_variables(data, "(N_Jets>=6&&N_BTagsM>=4)", "ge6j_ge4t")
-
     discriminatorPlots += crosscheck_variables(data, "(N_Jets==5&&N_BTagsM>=3)", "5j_ge3t")
-    discriminatorPlots += crosscheck_variables(data, "(N_Jets>=6&&N_BTagsM>=3)", "ge6j_ge3t")
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets==5&&N_BTagsM>=4)", "5j_ge4t")
+
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets>=4&&N_BTagsM==3)", "ge4j_3t")
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets>=4&&N_BTagsM>=3)", "ge4j_ge3t")
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets>=4&&N_BTagsM>=4)", "ge4j_ge4t")
 
     discriminatorPlots += crosscheck_variables(data, "(N_Jets>=5&&N_BTagsM==3)", "ge5j_3t")
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets>=5&&N_BTagsM>=3)", "ge5j_ge3t")
     discriminatorPlots += crosscheck_variables(data, "(N_Jets>=5&&N_BTagsM>=4)", "ge5j_ge4t")
+
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets>=6&&N_BTagsM==3)", "ge6j_3t")
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets>=6&&N_BTagsM>=3)", "ge6j_ge3t")
+    discriminatorPlots += crosscheck_variables(data, "(N_Jets>=6&&N_BTagsM>=4)", "ge6j_ge4t")
+
+
+
     
     return discriminatorPlots
 
