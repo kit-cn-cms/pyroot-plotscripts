@@ -38,7 +38,7 @@ def plots(data = None, selection="(N_Jets==5&&N_BTagsM>=4)", label = "5 jets, \g
         plotClasses.Plot(ROOT.TH1D(catString+"Reco_JABDT_ttH_log_toplep_m","Reco_JABDT_ttH_log_toplep_m",50,0.0,7.0),"Reco_JABDT_ttH_log_toplep_m",selection,label),
         plotClasses.Plot(ROOT.TH1D(catString+"Evt_Pt_TaggedJetsAverage","Evt_Pt_TaggedJetsAverage",50,30.0,600.0),"Evt_Pt_TaggedJetsAverage",selection,label),
         plotClasses.Plot(ROOT.TH1D(catString+"Evt_Dr_TaggedJetsAverage","average #DeltaR(tags)",50,0.5,3.5),"Evt_Dr_TaggedJetsAverage",selection,label),
-        plotClasses.Plot(ROOT.TH1D(catString+"Evt_M_TaggedJetsAverage","Evt_M_TaggedJetsAverage",50,0.,600),"Evt_M_TaggedJetsAverage",selection,label),
+        plotClasses.Plot(ROOT.TH1D(catString+"Evt_M_TaggedJetsAverage","Evt_M_TaggedJetsAverage",50,0.,100),"Evt_M_TaggedJetsAverage",selection,label),
         plotClasses.Plot(ROOT.TH1D(catString+"Evt_Pt_minDrTaggedJets","Evt_Pt_minDrTaggedJets",50,0.0,800.0),"Evt_Pt_minDrTaggedJets",selection,label),
         plotClasses.Plot(ROOT.TH1D(catString+"Evt_Pt_JetsAverage","Evt_Pt_JetsAverage",50,0.0,800.0),"Evt_Pt_JetsAverage",selection,label),
     ]
