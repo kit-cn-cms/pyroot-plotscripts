@@ -1,0 +1,18 @@
+variablename,minvalue,maxvalue,numberofbins,logoption,displayname
+memDBp,0,1,50,-,MEM
+Reco_tHq_h_pt,,,,,
+Reco_tHq_h_dr,,,,,
+Reco_JABDT_tHq_log_h_pt,,,,,
+Reco_JABDT_tHq_log_min_hdau1_pt_hdau2_pt,,,,,
+Reco_tHW_h_pt,,,,,
+Reco_tHW_h_dr,,,,,
+Reco_JABDT_tHW_log_h_pt,,,,,
+Reco_ttH_h_dr,,,,,
+Reco_ttH_h_m,,,,,
+Reco_JABDT_ttH_log_h_pt,,,,,
+Reco_JABDT_ttH_log_toplep_m,-1.5,7.5,50,-,Reco_JABDT_ttH_log_toplep_m
+Evt_Pt_TaggedJetsAverage,30,600,50,-,Evt_Pt_TaggedJetsAverage
+Evt_Dr_TaggedJetsAverage,0.5,3.5,50,-,average #DeltaR(tags)
+Evt_M_TaggedJetsAverage,5.,70,50,-,Evt_M_TaggedJetsAverage
+Evt_Pt_minDrTaggedJets,20,600,50,-,Evt_Pt_minDrTaggedJets
+Evt_Pt_JetsAverage,30,500,50,-,Evt_Pt_JetsAverage
