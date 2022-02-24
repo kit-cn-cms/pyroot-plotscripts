@@ -16,6 +16,12 @@ from copy import deepcopy
 
 memexp = '(memDBp>=0.0)*(memDBp)+(memDBp<0.0)*(0.01)+(memDBp==1.0)*(0.01)'
 
+def getDNNclass(cla):
+    return "((N_Jets==5&&N_BTagsM>=4)*(DNNPredictedClass_5j_ge4t_classification=={}) + ((N_Jets>=6&&N_BTagsM>=4)*(DNNPredictedClass_ge6j_ge4t_classification=={})) )".format(cla, cla)
+
+def getDNNoutput(cla):
+    return "((N_Jets==5&&N_BTagsM>=4)*(DNNOutput_5j_ge4t_classification_node_{}) + ((N_Jets>=6&&N_BTagsM>=4)*(DNNOutput_ge6j_ge4t_classification_node_{})) )".format(cla, cla)
+
 def plots_dnn_ttH_vs_slike_STXS(data, discrname, cat_classifier, cat_stxs, stxsproc, index, selection, label):
     ndefaultbins = 50
     interfaces = []
