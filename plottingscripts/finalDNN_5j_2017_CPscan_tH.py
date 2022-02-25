@@ -110,7 +110,7 @@ def main(pyrootdir, opts):
     # plotDataBases = [["memDB","/nfs/dust/cms/user/vdlinden/legacyTTH/memes/memTrees/2017/",True]] 
     # memDataBase = "/nfs/dust/cms/user/swieland/ttH_legacy/MEMdatabase/CodeforScriptGenerator/MEMDataBase/MEMDataBase"
     dnnInterface = {"interfacePath":    pyrootdir+"/util/dNNInterfaces/MLfoyInterface.py",
-                  "checkpointFiles":  pyrootdir+"/configs/legacyAnalysis/withMEM_new/DNNInputData/"}
+                  "checkpointFiles":  pyrootdir+"/configs/legacyAnalysis/newCats/DNNInputData/"}
     # dnnInterface = None
 
     # path to datacardMaker directory
