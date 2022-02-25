@@ -52,7 +52,7 @@ def main(pyrootdir, opts):
     # configs
     config          = "legacyAnalysis/samples_2016_CPScan_ttH"
     variable_cfg    = "legacyAnalysis/additionalVariables"
-    plot_cfg        = "legacyAnalysis/withMEM_new/withMEM_final_config_5j_CPscan_ttH"
+    plot_cfg        = "legacyAnalysis/newCats/withMEM_final_config_5j_CPscan_ttH"
     # plot_cfg        = "legacyAnalysis/DNN_14-05-2020/combined161718_DNNs"
     syst_cfg        = "legacyAnalysis/systs_2016_noPS"
     # syst_cfg        = "legacyAnalysis/no_systs"
