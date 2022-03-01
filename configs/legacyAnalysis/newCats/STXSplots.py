@@ -183,11 +183,11 @@ def getDiscriminatorPlots(data = None, discrname = ''):
     label = "5 jets, \geq 4 b-tags"
     selection = "(N_Jets==5&&N_BTagsM>=4)"
     # STXS
-    discriminatorPlots += plots_dnn_ttH_times_STXS(data = data, discrname=discrname, cat_classifier="5j_ge4t_classification", cat_stxs = "5j_ge4t_STXSnet", stxsproc = "ttHbb_STXS_0", index = 0, selection = selection, label = label )
-    discriminatorPlots += plots_dnn_ttH_times_STXS(data = data, discrname=discrname, cat_classifier="5j_ge4t_classification", cat_stxs = "5j_ge4t_STXSnet", stxsproc = "ttHbb_STXS_1", index = 1, selection = selection, label = label )
-    discriminatorPlots += plots_dnn_ttH_times_STXS(data = data, discrname=discrname, cat_classifier="5j_ge4t_classification", cat_stxs = "5j_ge4t_STXSnet", stxsproc = "ttHbb_STXS_2", index = 2, selection = selection, label = label )
-    discriminatorPlots += plots_dnn_ttH_times_STXS(data = data, discrname=discrname, cat_classifier="5j_ge4t_classification", cat_stxs = "5j_ge4t_STXSnet", stxsproc = "ttHbb_STXS_3", index = 3, selection = selection, label = label )
-    discriminatorPlots += plots_dnn_ttH_times_STXS(data = data, discrname=discrname, cat_classifier="5j_ge4t_classification", cat_stxs = "5j_ge4t_STXSnet", stxsproc = "ttHbb_STXS_4", index = 4, selection = selection, label = label )
+    discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="5j_ge4t_classification", cat_stxs = "5j_ge4t_STXSnet", stxsproc = "ttHbb_STXS_0", index = 0, selection = selection, label = label )
+    discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="5j_ge4t_classification", cat_stxs = "5j_ge4t_STXSnet", stxsproc = "ttHbb_STXS_1", index = 1, selection = selection, label = label )
+    discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="5j_ge4t_classification", cat_stxs = "5j_ge4t_STXSnet", stxsproc = "ttHbb_STXS_2", index = 2, selection = selection, label = label )
+    discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="5j_ge4t_classification", cat_stxs = "5j_ge4t_STXSnet", stxsproc = "ttHbb_STXS_3", index = 3, selection = selection, label = label )
+    discriminatorPlots += plots_dnn_ttH_vs_slike_STXS(data = data, discrname=discrname, cat_classifier="5j_ge4t_classification", cat_stxs = "5j_ge4t_STXSnet", stxsproc = "ttHbb_STXS_4", index = 4, selection = selection, label = label )
 
     label = "\geq 6 jets, \geq 4 b-tags"
     selection = "(N_Jets>=6&&N_BTagsM>=4)"
