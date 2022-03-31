@@ -1,0 +1,111 @@
+{
+  "shuffleSeed": 21346,
+  "test_percentage": 0.1,
+  "outputName": "outputLayer/Softmax",
+  "trainSelection": "",
+  "Dropout": 0.5,
+  "loss_function": "categorical_crossentropy",
+  "addSampleSuffix": "",
+  "netConfig": "ttH_SL_legacy_opt44",
+  "trainEpochs": 1000,
+  "L1_Norm": 1e-05,
+  "eventClasses": [
+    {
+      "sampleEvents": 782811,
+      "sampleWeight": 1.0,
+      "sampleLabel": "ttH",
+      "min": 0.14,
+      "max": 0.86,
+      "samplePath": "/local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM/ttH_dnn.h5"
+    },
+    {
+      "sampleEvents": 29004,
+      "sampleWeight": 1.0,
+      "sampleLabel": "ttmb",
+      "min": 0.14,
+      "max": 0.74,
+      "samplePath": "/local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM/ttmb_dnn.h5"
+    },
+    {
+      "sampleEvents": 2932,
+      "sampleWeight": 1.0,
+      "sampleLabel": "tt2b",
+      "min": 0.14,
+      "max": 0.74,
+      "samplePath": "/local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM/tt2b_dnn.h5"
+    },
+    {
+      "sampleEvents": 5926,
+      "sampleWeight": 1.0,
+      "sampleLabel": "ttcc",
+      "min": 0.14,
+      "max": 0.55,
+      "samplePath": "/local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM/ttcc_dnn.h5"
+    },
+    {
+      "sampleEvents": 4193,
+      "sampleWeight": 1.0,
+      "sampleLabel": "ttlf",
+      "min": 0.14,
+      "max": 0.59,
+      "samplePath": "/local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM/ttlf_dnn.h5"
+    },
+    {
+      "sampleEvents": 7845,
+      "sampleWeight": 1.0,
+      "sampleLabel": "tHq",
+      "min": 0.14,
+      "max": 0.93,
+      "samplePath": "/local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM/tHq_dnn.h5"
+    },
+    {
+      "sampleEvents": 22200,
+      "sampleWeight": 1.0,
+      "sampleLabel": "tHW",
+      "min": 0.14,
+      "max": 1.0,
+      "samplePath": "/local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM/tHW_dnn.h5"
+    }
+  ],
+  "layers": [
+    1024,
+    2048,
+    512,
+    512
+  ],
+  "activation_function": "leakyrelu",
+  "earlystopping_percentage": 0.05,
+  "batch_size": 4096,
+  "earlystopping_epochs": 50,
+  "inputData": "/local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM",
+  "Selection": "(N_Jets >= 6 and N_BTagsM >= 4)",
+  "trainVariables": [
+    "Evt_Pt_TaggedJetsAverage",
+    "Reco_tHq_bestJABDToutput",
+    "Evt_Pt_minDrTaggedJets",
+    "Evt_Pt_JetsAverage",
+    "Reco_ttH_toplep_m",
+    "Reco_JABDT_tHq_abs_ljet_eta",
+    "Evt_CSV_avg_tagged",
+    "N_Jets",
+    "Reco_JABDT_tHW_Jet_CSV_btop",
+    "Evt_M2_minDrTaggedJets",
+    "Evt_Deta_JetsAverage",
+    "Reco_ttbar_bestJABDToutput",
+    "Evt_HT_tags",
+    "memDBp",
+    "Evt_M_TaggedJetsAverage",
+    "Evt_Deta_TaggedJetsAverage",
+    "Reco_JABDT_tHW_top_pt__P__h_pt__P__wb_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt",
+    "Reco_ttH_bestJABDToutput",
+    "CSV[2]",
+    "Evt_CSV_avg",
+    "Evt_blr_transformed"
+  ],
+  "inputName": "inputLayer",
+  "evalSelection": "1.",
+  "categoryLabel": "\\geq 6 jets, \\geq 4 b-tags",
+  "L2_Norm": 1e-05,
+  "JetTagCategory": "ge6j_ge4t_classification",
+  "output_activation": "Softmax"
+}

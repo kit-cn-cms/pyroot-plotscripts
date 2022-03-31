@@ -1,0 +1,1 @@
+python /ceph/pkeicher/ttH_legacy/DRACO-MLfoy/train_scripts/train_template.py -o legacy_16_17_18/test_other_SL_categories -i /local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM -a ttH,ttmb,ttlf,ttcc,tHq,tHW,tt2b -v variables_ttHbb_SL_new_cats_validated_new_v2_mem -e 1000 -s -1 -RpG -n ttH_SL_legacy_opt44 -c 5j_ge4t -f 0.1

@@ -1,0 +1,21 @@
+variablename,minvalue,maxvalue,numberofbins,logoption,displayname
+Evt_Pt_TaggedJetsAverage,30,600,50,-,Evt_Pt_TaggedJetsAverage
+Reco_tHq_bestJABDToutput,-1,0.7,50,-,Reco_tHq_bestJABDToutput
+Evt_Pt_minDrTaggedJets,20,600,50,-,Evt_Pt_minDrTaggedJets
+Evt_Pt_JetsAverage,30,500,50,-,Evt_Pt_JetsAverage
+Reco_ttH_toplep_m,-1.5,750.,50,-,Reco_ttH_toplep_m
+Reco_JABDT_tHq_abs_ljet_eta,-1.5,4.5,50,-,Reco_JABDT_tHq_abs_ljet_eta
+Evt_CSV_avg_tagged,0.3,1,50,-,Evt_CSV_avg_tagged
+Reco_JABDT_tHW_Jet_CSV_btop,-1.5,1,50,-,Reco_JABDT_tHW_Jet_CSV_btop
+Evt_M2_minDrTaggedJets,0,400,50,-,"M_{2}( min #DeltaR(tag,tag) )"
+Evt_Deta_JetsAverage,0,3,50,-,Evt_Deta_JetsAverage
+Reco_ttbar_bestJABDToutput,-0.4,0.7,50,-,Reco_ttbar_bestJABDToutput
+Evt_HT_tags,100.,1000.,50,-,Evt_HT_tags
+memDBp,0,1,50,-,MEM
+Evt_M_TaggedJetsAverage,5.,70,50,-,Evt_M_TaggedJetsAverage
+Evt_Deta_TaggedJetsAverage,0,3,50,-,Evt_Deta_TaggedJetsAverage
+Reco_JABDT_tHW_top_pt__P__h_pt__P__wb_pt__DIV__Evt_HT__P__Evt_Pt_MET__P__Lep_Pt,-1.5,1.,50,-,Reco_JABDT_tHW_energy_fraction
+Reco_ttH_bestJABDToutput,-1,0.7,50,-,Reco_ttH_bestJABDToutput
+CSV[2],0.277,1,50,-,CSV[2]
+Evt_CSV_avg,0.15,1,50,-,Evt_CSV_avg
+Evt_blr_transformed,-2.5,15,50,-,Evt_blr_transformed
