@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     ''')
     # name of the analysis (i.e. workdir name)
-    name = 'finalDNN_5j/2016_CPScan_tH'
+    name = 'finalDNN_5j_noInputFeatVal/2016_CPScan_tH'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
