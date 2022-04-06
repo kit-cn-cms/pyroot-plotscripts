@@ -1,0 +1,90 @@
+{
+  "shuffleSeed": 11055,
+  "test_percentage": 0.2,
+  "outputName": "outputLayer/Softmax",
+  "trainSelection": "",
+  "Dropout": 0.5,
+  "loss_function": "categorical_crossentropy",
+  "addSampleSuffix": "",
+  "netConfig": "ttH_SL_legacy_STXS_opt44",
+  "trainEpochs": 1000,
+  "L1_Norm": 1e-05,
+  "eventClasses": [
+    {
+      "sampleEvents": 39761,
+      "sampleWeight": 1.0,
+      "sampleLabel": "ttHbb_STXS_0",
+      "min": 0.2,
+      "max": 0.98,
+      "samplePath": "/local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM/ttHbb_STXS_0_dnn.h5"
+    },
+    {
+      "sampleEvents": 70165,
+      "sampleWeight": 1.0,
+      "sampleLabel": "ttHbb_STXS_1",
+      "min": 0.2,
+      "max": 0.62,
+      "samplePath": "/local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM/ttHbb_STXS_1_dnn.h5"
+    },
+    {
+      "sampleEvents": 63496,
+      "sampleWeight": 1.0,
+      "sampleLabel": "ttHbb_STXS_2",
+      "min": 0.2,
+      "max": 0.82,
+      "samplePath": "/local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM/ttHbb_STXS_2_dnn.h5"
+    },
+    {
+      "sampleEvents": 33075,
+      "sampleWeight": 1.0,
+      "sampleLabel": "ttHbb_STXS_3",
+      "min": 0.2,
+      "max": 0.89,
+      "samplePath": "/local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM/ttHbb_STXS_3_dnn.h5"
+    },
+    {
+      "sampleEvents": 17930,
+      "sampleWeight": 1.0,
+      "sampleLabel": "ttHbb_STXS_4",
+      "min": 0.2,
+      "max": 1.0,
+      "samplePath": "/local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM/ttHbb_STXS_4_dnn.h5"
+    }
+  ],
+  "layers": [
+    2048,
+    2048,
+    64
+  ],
+  "activation_function": "leakyrelu",
+  "earlystopping_percentage": 0.05,
+  "batch_size": 1024,
+  "earlystopping_epochs": 50,
+  "inputData": "/local/scratch/ssd/swieland/h5Files/SL_16_17_18_fixedMEM",
+  "Selection": "(N_Jets == 5 and N_BTagsM >= 4)",
+  "trainVariables": [
+    "memDBp",
+    "Reco_tHq_h_pt",
+    "Reco_tHq_h_dr",
+    "Reco_JABDT_tHq_log_h_pt",
+    "Reco_JABDT_tHq_log_min_hdau1_pt_hdau2_pt",
+    "Reco_tHW_h_pt",
+    "Reco_tHW_h_dr",
+    "Reco_JABDT_tHW_log_h_pt",
+    "Reco_ttH_h_dr",
+    "Reco_ttH_h_m",
+    "Reco_JABDT_ttH_log_h_pt",
+    "Reco_JABDT_ttH_log_toplep_m",
+    "Evt_Pt_TaggedJetsAverage",
+    "Evt_Dr_TaggedJetsAverage",
+    "Evt_M_TaggedJetsAverage",
+    "Evt_Pt_minDrTaggedJets",
+    "Evt_Pt_JetsAverage"
+  ],
+  "inputName": "inputLayer",
+  "evalSelection": "1.",
+  "categoryLabel": "5 jets, \\geq 4 b-tags",
+  "L2_Norm": 1e-05,
+  "JetTagCategory": "5j_ge4t_STXSnet",
+  "output_activation": "Softmax"
+}
