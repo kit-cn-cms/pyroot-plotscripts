@@ -94,8 +94,14 @@ def getOptimizedBinEdges(label, opts, channel = None):
     if channel is None:
         channel = opts.discrname+"_"+label if not opts.discrname == "" else label
 
+    
     # open rootfile
-    rfile = ROOT.TFile.Open(opts.histogram_file)
+    try:
+        if not opts.histogram_file:
+            return []
+        rfile = ROOT.TFile.Open(opts.histogram_file)
+    except:
+        return []
     keylist = [x.GetName() for x in rfile.GetListOfKeys()]
     print("\noptimizing bin edges for channel {}".format(channel))
 
@@ -949,7 +955,7 @@ no separate plots and no separate discriminators are produced""")
         help = "enable optimization of binning. Requires some additional input information from already produced output plots")
     binningOptions.add_option("--optimizeInputVarBins",dest="optimizeInputVarBins",default=False,action="store_true",
         help = "enable optimization of binning for input feature plots. Requires some additional input information from already produced output plots")
-    binningOptions.add_option("-f",dest="histogram_file",default="output_limitInput.root",metavar="HISTFILE",
+    binningOptions.add_option("-f",dest="histogram_file",default=None,metavar="HISTFILE",
         help = "root file with histograms for binning optimization")
     binningOptions.add_option("-p",dest="considered_processes",default="ttbarOther,ttbarPlusB,ttbarPlus2B,ttbarPlusBBbar,ttbarPlusCCbar",metavar="PROCESSES",
         help = "comma separated list of processes to be considered during at the binning optimization")
