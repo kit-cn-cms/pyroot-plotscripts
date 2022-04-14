@@ -29,7 +29,7 @@ def main(pyrootdir, opts):
     # ========================================================
     '''
     # name of the analysis (i.e. workdir name)
-    name = 'finalDNN_5j_noInputFeatVal/2018_STXS_ratio'
+    name = 'finalDNN_5j_noInputFeatVal/2018_STXS_ratio_glu100'
 
     # path to workdir subfolder where all information should be saved
     workdir = pyrootdir + "/workdir/" + name
@@ -53,7 +53,7 @@ def main(pyrootdir, opts):
     config          = "legacyAnalysis/samples_2018_STXS"
     variable_cfg    = "legacyAnalysis/additionalVariables"
     plot_cfg        = "legacyAnalysis/newCats_noInputFeatVal/STXSplots"
-    syst_cfg        = "legacyAnalysis/systs_2018_glu50"
+    syst_cfg        = "legacyAnalysis/systs_2018"
     # syst_cfg        = "legacyAnalysis/no_systs"
     replace_cfg     = "legacyAnalysis/pdf_relic_names"
     # replace_cfg     = None
