@@ -336,9 +336,16 @@ class plotParallel:
                 print("WARNING: unable to locate file for merge systs!")
                 print("sample: " + sample.nick)
                 continue
+
+            print("creating backup of file {}".format(file[0]))
+            fdir = os.path.dirname(file[0])
+            bu_path = os.path.join(fdir, "bu")
+            cmd = "mkdir -p {bu_path}; cp {fpath} {bu_path}".format(bu_path = bu_path, fpath = file[0])
+            bu_file = os.path.join(bu_path, os.path.basename(file[0]))
+            subprocess.call([cmd], shell = True)
             final_opts = {
                 "INFILE" : file[0],
-
+                "BACKUP" : bu_file,
                 "ORIGNAME" : sample.origName
             }
             final_opts.update(options)

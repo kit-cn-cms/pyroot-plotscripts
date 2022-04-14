@@ -753,6 +753,9 @@ combine_intermid_systs.combine_intermid_syst(   h_nominal_key   = nom_key,
         # export additional variables 
         for name in options:
             script += "export {}='{}'\n".format(name, options[name])
+        # first copy the backup file in case jobs have to be resubmitted
+
+        script += "\ncp ${BACKUP} ${INFILE}\n"
         script += "\npython {}".format(script_path)
 
         # writing script to file and chmodding

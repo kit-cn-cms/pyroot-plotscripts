@@ -49,6 +49,8 @@ def plotInterface(jobData, skipPlotParallel = False, maxTries = 10, nTries = 0, 
         jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "makeTemplates", submitOptions = submitOptions)
     elif nTries < maxTries:
         print("resubmitting plotParallel scripts as single jobs")
+        if submitOptions.get("RequestMemory", 0) < 2500:
+            submitOptions["RequestMemory"] = 2500
         jobIDs = nafSubmit.submitArrayToNAF(jobData["scripts"], "makeTemplates_resubmit", submitOptions = submitOptions)
     else:
         print("plotParallel did not work after "+str(maxTries)+" tries - ABORTING")
@@ -115,7 +117,8 @@ def haddInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries = 0):
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "hadding")
     elif nTries < maxTries:
         print("resubmitting haddParallel scripts as single jobs")
-        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "hadding_resubmit")
+        options = {"RequestMemory": 2500}
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, "hadding_resubmit", submitOptions = options)
     else:
         print("hadding did not work after "+str(maxTries)+" tries - ABORTING")
         sys.exit(1)
@@ -188,7 +191,8 @@ def checkHistoInterface(jobsToSubmit, outfilesFromSubmit, maxTries = 10, nTries 
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "checkingHistos")
     elif nTries < maxTries:
         print("resubmitting rename scripts as single jobs")
-        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "checkingHistos_resubmit")
+        options = {"RequestMemory": 2500}
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "checkingHistos_resubmit", submitOptions = options)
     else:
         print("renaming did not work after "+str(maxTries)+" tries - ABORTING")
         sys.exit(1)
@@ -230,7 +234,8 @@ def mergeSystematicsInterface(jobsToSubmit, maxTries = 10, nTries = 0):
         jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "merge_systs")
     elif nTries < maxTries:
         print("resubmitting scripts to merge systematics")
-        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "merge_systs_resubmit")
+        options = {"RequestMemory": 2500, "+RequestRuntime": 60*60*8}
+        jobIDs = nafSubmit.submitArrayToNAF(jobsToSubmit, arrayName = "merge_systs_resubmit", submitOptions = options)
     else:
         print("merging did not work after "+str(maxTries)+" tries - ABORTING")
         sys.exit(1)
