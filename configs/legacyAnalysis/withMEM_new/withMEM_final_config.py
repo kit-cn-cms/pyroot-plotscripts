@@ -104,25 +104,25 @@ def plots_dnn(data, discrname):
 
     # plots for ge4j_ge4t_classification
 
-    # interf_ljets_ge4j_ge4t_classification_ttH_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge4t_classification_node_ttH",
-    #                                         label          = "ljets_ge4j_ge4t_classification_ttH_node",
-    #                                         selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_classification==0))")
-    # interf_ljets_ge4j_ge4t_classification_ttH_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_classification==0))","ljets_ge4j_ge4t_classification_ttH_node","")
-    # interf_ljets_ge4j_ge4t_classification_ttH_node.category_label = "\geq 4 jets, \geq 4 b-tags"
-    # interf_ljets_ge4j_ge4t_classification_ttH_node.minxval = 0.14
-    # interf_ljets_ge4j_ge4t_classification_ttH_node.maxxval = 0.88
-    # interf_ljets_ge4j_ge4t_classification_ttH_node.nhistobins = ndefaultbins
-    # interfaces.append(interf_ljets_ge4j_ge4t_classification_ttH_node)
+    interf_ljets_ge4j_ge4t_classification_ttH_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge4t_classification_node_ttH",
+                                            label          = "ljets_ge4j_ge4t_classification_ttH_node",
+                                            selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_classification==0))")
+    interf_ljets_ge4j_ge4t_classification_ttH_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_classification==0))","ljets_ge4j_ge4t_classification_ttH_node","")
+    interf_ljets_ge4j_ge4t_classification_ttH_node.category_label = "\geq 4 jets, \geq 4 b-tags"
+    interf_ljets_ge4j_ge4t_classification_ttH_node.minxval = 0.14
+    interf_ljets_ge4j_ge4t_classification_ttH_node.maxxval = 0.88
+    interf_ljets_ge4j_ge4t_classification_ttH_node.nhistobins = ndefaultbins
+    interfaces.append(interf_ljets_ge4j_ge4t_classification_ttH_node)
     
-    # interf_ljets_ge4j_ge4t_classification_ttmb_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge4t_classification_node_ttmb",
-    #                                         label          = "ljets_ge4j_ge4t_classification_ttmb_node",
-    #                                         selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_classification==1))")
-    # interf_ljets_ge4j_ge4t_classification_ttmb_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_classification==1))","ljets_ge4j_ge4t_classification_ttmb_node","")
-    # interf_ljets_ge4j_ge4t_classification_ttmb_node.category_label = "\geq 4 jets, \geq 4 b-tags"
-    # interf_ljets_ge4j_ge4t_classification_ttmb_node.minxval = 0.14
-    # interf_ljets_ge4j_ge4t_classification_ttmb_node.maxxval = 0.79
-    # interf_ljets_ge4j_ge4t_classification_ttmb_node.nhistobins = ndefaultbins
-    # interfaces.append(interf_ljets_ge4j_ge4t_classification_ttmb_node)
+    interf_ljets_ge4j_ge4t_classification_ttmb_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge4t_classification_node_ttmb",
+                                            label          = "ljets_ge4j_ge4t_classification_ttmb_node",
+                                            selection      = "((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_classification==1))")
+    interf_ljets_ge4j_ge4t_classification_ttmb_node.category = ("((N_Jets>=4&&N_BTagsM>=4)&&(1.)&&(DNNPredictedClass_ge4j_ge4t_classification==1))","ljets_ge4j_ge4t_classification_ttmb_node","")
+    interf_ljets_ge4j_ge4t_classification_ttmb_node.category_label = "\geq 4 jets, \geq 4 b-tags"
+    interf_ljets_ge4j_ge4t_classification_ttmb_node.minxval = 0.14
+    interf_ljets_ge4j_ge4t_classification_ttmb_node.maxxval = 0.79
+    interf_ljets_ge4j_ge4t_classification_ttmb_node.nhistobins = ndefaultbins
+    interfaces.append(interf_ljets_ge4j_ge4t_classification_ttmb_node)
     
     interf_ljets_ge4j_ge4t_classification_tt2b_node = vhi.variableHistoInterface(variable_name  = "DNNOutput_ge4j_ge4t_classification_node_tt2b",
                                             label          = "ljets_ge4j_ge4t_classification_tt2b_node",
