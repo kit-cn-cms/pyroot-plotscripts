@@ -82,9 +82,9 @@ of the root file
 """
 keyOptions       = optparse.OptionGroup(parser, "Key Options")
 
-keyOptions.add_option("-k","--nominalkey", dest="nominalKey", default="$PROCESS_$CHANNEL",
+keyOptions.add_option("-k","--nominalkey", dest="nominalKey", default=None,
         help="KEY of the systematics histograms", type = "str")
-keyOptions.add_option("-s","--systematickey", dest="systematicKey", default="$PROCESS_$CHANNEL_$SYSTEMATIC",
+keyOptions.add_option("-s","--systematickey", dest="systematicKey", default=None,
         help="KEY of the nominal histograms", type = "str")
 keyOptions.add_option("-d","--data", dest="data", default=None, type = "str",
         help="NAME of the data in the root file, used to replace the process identifier ($PROCESS) in the nominal key to get the data sample", metavar="datakeyreplace")
@@ -131,10 +131,14 @@ styleOptions.add_option("--signallabel", dest="signallabel", default=None,
         help="Option only for COMBINE Plots: label of the signal in the legend")
 styleOptions.add_option("--signalscaling", dest="signalscaling", default=None,
         help="scale factor of the signal processes, -1 to scale with background integral")
+styleOptions.add_option("--signalcolor", dest="signalcolor", default=None,
+        help="color code of the signal processes, defaults to ROOT.kBlue")
 styleOptions.add_option("--lumilabel", dest="lumilabel", default=None,
         help="print luminosity label on canvas")
 styleOptions.add_option("--yLabel", dest="yLabel", default=None,
         help="axis label of y-axis")
+styleOptions.add_option("--xLabel", dest="xLabel", default=None,
+        help="axis label of x-axis")
 styleOptions.add_option("--cmslabel", dest="cmslabel", default=None,
         help="print CMS label on canvas")
 styleOptions.add_option("--splitlegend", dest="splitlegend",  default=None,
@@ -269,14 +273,15 @@ combineIden = "$FLAG"
 
 combineflag             = getParserConfigDefaultValue(parser=options.combineflag,config="combineflag",
                                             plotoptions=plotoptions,defaultvalue=None)
-options.nominalKey      = getParserConfigDefaultValue(parser = None, config = "nominalKey",
+options.nominalKey      = getParserConfigDefaultValue(parser = options.nominalKey, config = "nominalKey",
                                             plotoptions=plotoptions,defaultvalue="$PROCESS_$CHANNEL")
-options.systematicKey   = getParserConfigDefaultValue(parser = None, config = "systematicKey",
+options.systematicKey   = getParserConfigDefaultValue(parser = options.systematicKey, config = "systematicKey",
                                             plotoptions=plotoptions,defaultvalue="$PROCESS_$CHANNEL_$SYSTEMATIC")
 
 binEdges                = None
 outputName              = None
-xLabel                  = ""
+xLabel                  = getParserConfigDefaultValue(parser = options.xLabel, config = "xLabel",
+                                            plotoptions=plotoptions,defaultvalue="")
 if combineflag:
     options.nominalKey  = "$FLAG/$CHANNEL/$PROCESS"
     options.data        = "data"
@@ -306,7 +311,7 @@ if combineflag:
         binFile = ROOT.TFile(binFileName)
         print("loading " + binKey)
         binHist = binFile.Get(binKey)
-        xLabel = binHist.GetTitle()
+        xLabel = xLabel if not xLabel == "" else binHist.GetTitle()
         binEdges = []
         for i in range(binHist.GetNbinsX()+1):
             binEdges.append( binHist.GetBinLowEdge(i+1) )
@@ -336,11 +341,15 @@ addStatErrorband = getParserConfigDefaultValue(
 
 # load samples
 print "start loading  samples" 
+signalcolor   = getParserConfigDefaultValue(parser=options.signalcolor,config="signalcolor",
+                                            plotoptions=plotoptions,defaultvalue=ROOT.kBlue)
 for sample in samples:
     color   = samples[sample]["info"]['color']
     typ     = samples[sample]["info"]['typ']
     label   = samples[sample]["info"]['label']
     entry   = None
+    if typ == "signal":
+        color = signalcolor 
     if samples[sample]['plot'] == False:
         continue
     if combineflag:
@@ -371,6 +380,8 @@ for sample in plottingsamples:
     typ         = plottingsamples[sample]['typ']
     if combineflag and typ=="signal":
         continue
+    if typ == "signal":
+        color = signalcolor 
     label       = plottingsamples[sample]['label']
     addsamples  = plottingsamples[sample].get('addSamples', [])
     print(PlotList)
@@ -395,6 +406,7 @@ else no signal
 """
 
 background = None
+
 if combineflag:
     totalsignalkey  = nominalKey.replace(procIden, "total_signal")
     totalsignal     = rootFile.Get(totalsignalkey)
@@ -410,11 +422,11 @@ if combineflag:
     if combineflag=="shapes_fit_s":
         bkgKey = nominalKey.replace(procIden, "total")
         PlotList["total_signal"] = Plots.Plot(totalsignal,"total_signal",label=signallabel,
-                                        typ="bkg", OverUnderFlowInc=True)
+                                        typ="bkg", OverUnderFlowInc=True, color = signalcolor)
     else:
         bkgKey = nominalKey.replace(procIden, "total_background")
         PlotList["total_signal"] = Plots.Plot(totalsignal,"total_signal",label=signallabel,
-                                        typ="signal", OverUnderFlowInc=True)
+                                        typ="signal", OverUnderFlowInc=True, color = signalcolor)
     # from total background or total background+signal prediction histogram in mlfit file, get the error band
     if not xLabel == "":
         PlotList["total_signal"].hist.SetTitle(xLabel)
@@ -503,7 +515,7 @@ DrawHistogramObject = Plots.DrawHistograms(PlotList,options.channelName,
                                 normalize=normalize,splitlegend=splitlegend,
                                 combineflag=combineflag,shape=shape,
                                 sortedProcesses=sortedProcesses,
-                                yLabel=yLabel)
+                                yLabel=yLabel, xLabel = xLabel)
 
 DrawHistogramObject.drawHistsOnCanvas()
 
