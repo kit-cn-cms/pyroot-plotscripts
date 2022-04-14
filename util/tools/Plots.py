@@ -425,7 +425,7 @@ class DrawHistograms:
     def __init__(self, PlotList, canvasName, data=None, ratio=False, signalscaling=1, 
                     errorband=None, background=None, displayname=None, logoption=False, shape=False,
                     normalize=False, combineflag=False, splitlegend=False, datalabel="data",
-                    sortedProcesses=False, yLabel="Events expected"):
+                    sortedProcesses=False, yLabel="Events expected", xLabel = None):
         self.PlotList       = PlotList
         self.canvasName     = canvasName
         self.data           = data 
@@ -450,6 +450,7 @@ class DrawHistograms:
             self.sortedProcesses = ["total_signal"]
 
         self.yLabel          = yLabel
+        self.xLabel          = xLabel
     # ===============================================
     # DRAW HISTOGRAMS ON CANVAS
     # ===============================================
@@ -536,7 +537,7 @@ class DrawHistograms:
         """
         firstHist.GetYaxis().SetTitle(self.GetyTitle())
         firstHist.GetYaxis().SetTitleSize(firstHist.GetYaxis().GetTitleSize()*1.2)
-        canvaslabel=firstHist.GetTitle()
+        canvaslabel=firstHist.GetTitle() if self.xLabel == None else self.xLabel
 
 
         if self.ratio:
@@ -783,6 +784,7 @@ class DrawHistograms:
 
         line.GetYaxis().SetTitleOffset(0.5)
         line.GetYaxis().SetNdivisions(505)
+        line.GetYaxis().CenterTitle()
         for i in range(line.GetNbinsX()+1):
             line.SetBinContent(i, 1)
             line.SetBinError(i, 1)
