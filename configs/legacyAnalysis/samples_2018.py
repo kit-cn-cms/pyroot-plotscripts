@@ -493,12 +493,12 @@ samples_ttnonbb = [
             samDict=sampleDict, readTrees=doReadTrees),
     ]
 
-# samples = samples_ttH_decay
-# samples += samples_tH
-# samples += samples_ttnonbb
-# samples += samples_ttbb_4FS
-samples = samples_5FS
-# samples += samples_minor_backgrounds
+samples = samples_ttH_decay
+samples += samples_tH
+samples += samples_ttnonbb
+samples += samples_ttbb_4FS
+samples += samples_5FS
+samples += samples_minor_backgrounds
 
 
 #samples += samples_ttbb_decay_modes_5FS

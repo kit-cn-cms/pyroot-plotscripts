@@ -483,13 +483,12 @@ samples = [
             samDict=sampleDict, readTrees=doReadTrees),
     ]
 
-
-# samples += samples_tH
-# samples += samples_ttbb_4FS
-# samples += samples_minor_backgrounds
-samples = samples_5FS
+samples += samples_ttH_decay
+samples += samples_tH
+samples += samples_ttbb_4FS
+samples += samples_minor_backgrounds
+samples += samples_5FS
 #samples += samples_ttbar_hf_spilt
-# samples += samples_ttH_decay
 
 
 
